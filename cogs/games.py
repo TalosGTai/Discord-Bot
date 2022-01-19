@@ -1,5 +1,3 @@
-from this import d
-from turtle import update
 import session
 from discord.ext import commands
 from discord.utils import get
@@ -21,24 +19,15 @@ class Games(commands.Cog):
         Пример: .duel GTai 
         '''
         author = ctx.message.author.name
-        user2_exist = False
+        user1 = session.find_user(author, session.all_users)
+        user2 = session.find_user(hero, session.all_users)
         dina_duel = False
 
-        # нахождение пользователей
-        for user in session.all_users:
-            if user.name == author:
-                user1 = user
-            elif user.name == hero:
-                user2 = user
-                user2_exist = True
-                if user2.name == 'Dina':
-                    dina_duel = True
-
         # Проверка дуэли с ботом или самим собой
-        if dina_duel:
+        if user2 and user2.name == 'Dina':
             await ctx.send(f'Рано тебе ещё с ведьмачкой тягаться, смерд')
-            print(f'Рано тебе ещё с ведьмачкой тягаться, смерд')
-        elif user2_exist and user1.name == user2.name:
+            print(f'Покушение на Дину')
+        elif user2 and user1.name == user2.name:
             await ctx.send(f'С собой сражаться бессмысленно')
         else:
             # w1 - % победы 1ого игрока
@@ -78,7 +67,7 @@ class Games(commands.Cog):
                 if w1 < w2:
                     money_win *= (w2/w1)
 
-                money_win = int(money_win * 100) / 100
+                money_win = self.update_money(user1.money, money_win)
 
                 print(f'{user1.name} одержал победу в дуэли над {user2.name}')
                 await ctx.send(f'{user1.name} одержал победу в дуэли над {user2.name}')
@@ -90,7 +79,7 @@ class Games(commands.Cog):
                 user2.duel = self.update_stat(user2.duel, True)
 
                 if w2 < w1:
-                    money_win *= (w2/w1)
+                    money_win *= (w1/w2)
 
                 money_win = self.update_money(user1.money, money_win)
 
@@ -147,12 +136,10 @@ class Games(commands.Cog):
         '''
         author = ctx.message.author.name
 
-        for user in session.all_users:
-            if user.name == hero:
-                print(f'{author} запросил статы {user.name}')
-                print(f'{user.duel_stats()}')
-                await ctx.send(f'Статы {user.name}\n{user.duel_stats()}')
-                break
+        user = session.find_user(author, session.all_users)
+        print(f'{author} запросил статы {user.name}')
+        print(f'{user.duel_stats()}')
+        await ctx.send(f'Статы {user.name}\n{user.duel_stats()}')
 
 
     # изменение статы дуэлей

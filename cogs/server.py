@@ -8,7 +8,7 @@ import datetime as DT
 
 
 class Server(commands.Cog):
-    '''Команды для модераторов'''
+    '''Команды для управления'''
     def __init__(self, client) -> None:
         self.client = client
         self.update_rate.start()

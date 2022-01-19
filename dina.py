@@ -13,7 +13,7 @@ import os
 
 
 bot = commands.Bot(command_prefix = settings['prefix'])
-Users = []
+
 
 # Events
 @bot.event
@@ -38,15 +38,13 @@ async def on_member_remove(member):
 @bot.event
 async def on_message(message):
     #print(f'{message.author}: {message.content}')
-    new_author = True
+    author = message.author.name
 
-    for obj in session.all_users:
-        if obj.name == message.author.name:
-            obj.count_messages += 1
-            new_author = False
-            break
+    new_user = session.find_user(author, session.all_users)
     
-    if new_author:
+    if new_user:
+        new_user.count_messages += 1
+    else:
         # create new author with start stats
         new_user = users_stats.User(message.author.name)
         session.all_users.append(new_user)

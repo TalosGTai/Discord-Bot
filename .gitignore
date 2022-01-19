@@ -2,3 +2,8 @@ config.py
 users_stats.txt
 users_stats.py
 session.py
+__pycache__/config.cpython-38.pyc
+__pycache__/session.cpython-38.pyc
+__pycache__/users_stats.cpython-38.pyc
+cogs/__pycache__/info.cpython-38.pyc
+cogs/__pycache__/server.cpython-38.pyc

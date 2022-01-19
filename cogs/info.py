@@ -1,6 +1,5 @@
 import session
 from discord.ext import commands
-import datetime as DT
 
 
 class Info(commands.Cog):
@@ -14,11 +13,9 @@ class Info(commands.Cog):
         '''Рейтинг'''
         author = ctx.message.author.name
 
-        for user in session.all_users:
-            if user.name == author:
-                await ctx.send(f'Рейтинг пользователя {user.name} = {user.rate}')
-                print(f'{author} запросил свой рейтинг.')
-                break
+        user = session.find_user(author, session.all_users)
+        await ctx.send(f'Рейтинг пользователя {user.name} = {user.rate}')
+        print(f'{author} запросил свой рейтинг.')
     
 
     @commands.command()
@@ -26,12 +23,10 @@ class Info(commands.Cog):
         '''Количество монет'''
         author = ctx.message.author.name
 
-        for user in session.all_users:
-            if user.name == author:
-                money = int(user.money * 100) / 100
-                await ctx.send(f'Всего {money} монет')
-                print(f'{author} запросил кол-во своих монет.')
-                break
+        user = session.find_user(author, session.all_users)
+        money = user.money_two_digits()
+        await ctx.send(f'Всего {money} монет')
+        print(f'{author} запросил кол-во своих монет.')
 
 
     @commands.command()
@@ -39,16 +34,11 @@ class Info(commands.Cog):
         '''Количество дней на сервере'''
         author = ctx.message.author.name
 
-        for user in session.all_users:
-            if user.name == author:
-                d = user.live_server.split('-')
-                dd = DT.date(int(d[0]), int(d[1]), int(d[2]))
-                cur_date = (DT.date.today() - dd)
-                day = int(cur_date.days)
+        user = session.find_user(author, session.all_users)
+        day = user.date_to_days()
 
-                await ctx.send(f'{author} с нами {day} {user.get_days(day)}')
-                print(f'{author} запросил количество дней на сервере.')
-                break
+        await ctx.send(f'{author} с нами {day} {user.get_days(day)}')
+        print(f'{author} запросил количество дней на сервере.')
 
 
     @commands.command()
@@ -56,11 +46,9 @@ class Info(commands.Cog):
         '''Вся информация о себе'''
         author = ctx.message.author.name
 
-        for user in session.all_users:
-            if user.name == author:
-                await ctx.send(f'{user.user_info()}')
-                print(f'{author} запросил инфо о себе.')
-                break
+        user = session.find_user(author, session.all_users)
+        await ctx.send(f'{user.user_info()}')
+        print(f'{author} запросил инфо о себе.')
 
 
 def setup(client):
