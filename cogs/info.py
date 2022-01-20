@@ -14,7 +14,7 @@ class Info(commands.Cog):
         author = ctx.message.author.name
 
         user = session.find_user(author, session.all_users)
-        await ctx.send(f'Рейтинг пользователя {user.name} = {user.rate}')
+        await ctx.send(f'Рейтинг {user.name} = {user.rate}')
         print(f'{author} запросил свой рейтинг.')
     
 
@@ -24,8 +24,8 @@ class Info(commands.Cog):
         author = ctx.message.author.name
 
         user = session.find_user(author, session.all_users)
-        money = user.money_two_digits()
-        await ctx.send(f'Всего {money} монет')
+        user.money_two_digits()
+        await ctx.send(f'У {user.name} {user.money} монет')
         print(f'{author} запросил кол-во своих монет.')
 
 

@@ -10,6 +10,7 @@ class Games(commands.Cog):
         self.client = client
 
 
+    @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
     @commands.command()
     async def duel(self, ctx, hero):
         '''Вызов на дуэль другого игрока
@@ -21,7 +22,6 @@ class Games(commands.Cog):
         author = ctx.message.author.name
         user1 = session.find_user(author, session.all_users)
         user2 = session.find_user(hero, session.all_users)
-        dina_duel = False
 
         # Проверка дуэли с ботом или самим собой
         if user2 and user2.name == 'Dina':
@@ -142,10 +142,6 @@ class Games(commands.Cog):
         await ctx.send(f'Статы {user.name}\n{user.duel_stats()}')
 
 
-    # изменение статы дуэлей
-    # winner - True/False
-    # True - победа
-    # False - поражение
     def update_stat(self, stat, game):
         s = list(stat.split('-'))
         all_games = int(s[0]) + 1
@@ -160,9 +156,6 @@ class Games(commands.Cog):
         return res
 
 
-    # проверка условий с выигрышем монет
-    # user_money - монеты пользователя
-    # money_win - выигрышное количество монет
     def update_money(self, user_money, money_win):
         # проверка на отрицательное количество монет
         if user_money - money_win < 0:

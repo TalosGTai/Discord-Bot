@@ -60,10 +60,11 @@ class Stats(commands.Cog):
                 hero = user
                 break
 
-        hero.count_done_help += 1
+        hero.count_req_help += 1
         print(
             f'{author} увеличил количество запросов помощи у {hero.name} на 1')
         await ctx.send(f'{author} увеличил количество запросов помощи у {hero.name} на 1')
+
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
@@ -82,7 +83,7 @@ class Stats(commands.Cog):
                 hero = user
                 break
 
-        hero.count_done_help = int(count)
+        hero.count_req_help = int(count)
         print(
             f'{author} установил значение количество запросов помощи у {hero.name} равным {count}')
         await ctx.send(f'{author} установил значение количество запросов помощи у {hero.name} равным {count}')
@@ -112,7 +113,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def set_req_help(self, ctx, hero, count):
+    async def set_done_help(self, ctx, hero, count):
         '''Изменение характеристики запросы помощи
 
         Шаблон: .add_done_help name count
@@ -129,8 +130,8 @@ class Stats(commands.Cog):
 
         hero.count_done_help = int(count)
         print(
-            f'{author} установил значение количество запросов помощи у {hero.name} равным {count}')
-        await ctx.send(f'{author} установил значение количество запросов помощи у {hero.name} равным {count}')
+            f'{author} установил значение количество помощи у {hero.name} равным {count}')
+        await ctx.send(f'{author} установил значение количество помощи у {hero.name} равным {count}')
 
 
     @commands.command()
@@ -189,6 +190,22 @@ class Stats(commands.Cog):
                 await ctx.send(f'{user.user_info()}')
                 print(f'{author} запросил информацию {hero}')
                 break
+
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def all_add_money(self, ctx, money):
+        '''Добавить всем участникам денег
+        
+        Пример: .all_add_money 100
+        '''
+        author = ctx.message.author.name
+
+        for user in session.all_users:
+            user.money += money
+        
+        await ctx.send(f'Монетки подъехали')
+        print(f'{author} дал всем {money} монет')
 
 
     @commands.command()
