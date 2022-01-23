@@ -1,4 +1,4 @@
-import session
+import session, functions
 from discord.ext import commands
 
 
@@ -13,9 +13,8 @@ class Info(commands.Cog):
         '''Рейтинг'''
         author = ctx.message.author.name
 
-        user = session.find_user(author, session.all_users)
+        user = functions.find_user(author, session.all_users)
         await ctx.send(f'Рейтинг {user.name} = {user.rate}')
-        print(f'{author} запросил свой рейтинг.')
     
 
     @commands.command()
@@ -23,10 +22,9 @@ class Info(commands.Cog):
         '''Количество монет'''
         author = ctx.message.author.name
 
-        user = session.find_user(author, session.all_users)
-        user.money_two_digits()
+        user = functions.find_user(author, session.all_users)
+        user.money = functions.to_two_digits(user.money)
         await ctx.send(f'У {user.name} {user.money} монет')
-        print(f'{author} запросил кол-во своих монет.')
 
 
     @commands.command()
@@ -34,11 +32,10 @@ class Info(commands.Cog):
         '''Количество дней на сервере'''
         author = ctx.message.author.name
 
-        user = session.find_user(author, session.all_users)
+        user = functions.find_user(author, session.all_users)
         day = user.date_to_days()
 
         await ctx.send(f'{author} с нами {day} {user.get_days(day)}')
-        print(f'{author} запросил количество дней на сервере.')
 
 
     @commands.command()
@@ -46,9 +43,8 @@ class Info(commands.Cog):
         '''Вся информация о себе'''
         author = ctx.message.author.name
 
-        user = session.find_user(author, session.all_users)
+        user = functions.find_user(author, session.all_users)
         await ctx.send(f'{user.user_info()}')
-        print(f'{author} запросил инфо о себе.')
 
 
 def setup(client):

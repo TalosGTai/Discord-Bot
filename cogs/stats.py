@@ -1,7 +1,6 @@
-import session
+import session, functions
 from discord.ext import commands
 from discord.utils import get
-
 
 class Stats(commands.Cog):
     '''Изменение/просмотр статистики участников'''
@@ -24,23 +23,19 @@ class Stats(commands.Cog):
         Отнятие у GTai 100 монет
         '''
         author = ctx.message.author.name
-
-        for user in session.all_users:
-            if user.name == hero:
-                hero = user
-                break
+        user = functions.find_user(hero, session.all_users)
         
-        if author == hero.name and author != 'GTai':
-            await ctx.send(f'Себе в свой карман класть нельзя! Не шали ;_)')
+        if author == user.name and author != 'GTai':
+            await ctx.send(f'В свой карман класть нельзя! Не шали ;_)')
         else:
+            user.money += float(money)
+
             if float(money) > 0:
-                hero.money += float(money)
-                print(f'{author} добавил {money} монет пользователю {hero.name}')
-                await ctx.send(f'{author} добавил {money} монет пользователю {hero.name}')
+                print(f'{author} добавил {money} монет пользователю {user.name}')
+                await ctx.send(f'{author} добавил {money} монет пользователю {user.name}')
             else:
-                hero.money += float(money)
-                print(f'{author} отнял {money} монет у пользователя {hero.name}')
-                await ctx.send(f'{author} отнял {money} монет у пользователя {hero.name}')
+                print(f'{author} отнял {money} монет у пользователя {user.name}')
+                await ctx.send(f'{author} отнял {money} монет у пользователя {user.name}')
 
 
     @commands.command()
@@ -54,16 +49,12 @@ class Stats(commands.Cog):
         Увеличение характеристики на 1
         '''
         author = ctx.message.author.name
+        user = functions.find_user(hero, session.all_users)
 
-        for user in session.all_users:
-            if user.name == hero:
-                hero = user
-                break
-
-        hero.count_req_help += 1
+        user.count_req_help += 1
         print(
-            f'{author} увеличил количество запросов помощи у {hero.name} на 1')
-        await ctx.send(f'{author} увеличил количество запросов помощи у {hero.name} на 1')
+            f'{author} увеличил количество запросов помощи у {user.name} на 1')
+        await ctx.send(f'{author} увеличил количество запросов помощи у {user.name} на 1')
 
 
     @commands.command()
@@ -77,16 +68,12 @@ class Stats(commands.Cog):
         Установил значение равным 5
         '''
         author = ctx.message.author.name
+        user = functions.find_user(hero, session.all_users)
 
-        for user in session.all_users:
-            if user.name == hero:
-                hero = user
-                break
-
-        hero.count_req_help = int(count)
+        user.count_req_help = int(count)
         print(
-            f'{author} установил значение количество запросов помощи у {hero.name} равным {count}')
-        await ctx.send(f'{author} установил значение количество запросов помощи у {hero.name} равным {count}')
+            f'{author} установил значение количество запросов помощи у {user.name} равным {count}')
+        await ctx.send(f'{author} установил значение количество запросов помощи у {user.name} равным {count}')
 
 
     @commands.command()
@@ -100,15 +87,11 @@ class Stats(commands.Cog):
         Увеличение характеристики на 1
         '''
         author = ctx.message.author.name
+        user = functions.find_user(hero, session.all_users)
 
-        for user in session.all_users:
-            if user.name == hero:
-                hero = user
-                break
-
-        hero.count_done_help += 1
-        print(f'{author} увеличил количество помощи у {hero.name} на 1')
-        await ctx.send(f'{author} увеличил количество помощи у {hero.name} на 1')
+        user.count_done_help += 1
+        print(f'{author} увеличил количество помощи у {user.name} на 1')
+        await ctx.send(f'{author} увеличил количество помощи у {user.name} на 1')
 
 
     @commands.command()
@@ -122,22 +105,18 @@ class Stats(commands.Cog):
         Установил значение равным 5
         '''
         author = ctx.message.author.name
+        user = functions.find_user(hero, session.all_users)
 
-        for user in session.all_users:
-            if user.name == hero:
-                hero = user
-                break
-
-        hero.count_done_help = int(count)
+        user.count_done_help = int(count)
         print(
-            f'{author} установил значение количество помощи у {hero.name} равным {count}')
-        await ctx.send(f'{author} установил значение количество помощи у {hero.name} равным {count}')
+            f'{author} установил значение количество помощи у {user.name} равным {count}')
+        await ctx.send(f'{author} установил значение количество помощи у {user.name} равным {count}')
 
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def add_count_projects(self, ctx, hero):
-        '''Увеличение характеристики количество проектов
+        '''Увеличение количества проектов
 
         Шаблон: .add_count_projects name count
         
@@ -145,15 +124,11 @@ class Stats(commands.Cog):
         Увеличение характеристики на 1
         '''
         author = ctx.message.author.name
+        user = functions.find_user(hero, session.all_users)
 
-        for user in session.all_users:
-            if user.name == hero:
-                hero = user
-                break
-
-        hero.count_projects += 1
-        print(f'{author} увеличил количество проектов у {hero.name} на 1')
-        await ctx.send(f'{author} увеличил количество проектов у {hero.name} на 1')
+        user.count_projects += 1
+        print(f'{author} увеличил количество проектов у {user.name} на 1')
+        await ctx.send(f'{author} увеличил количество проектов у {user.name} на 1')
 
 
     @commands.command()
@@ -166,14 +141,11 @@ class Stats(commands.Cog):
         Пример: .set_user_date GTai 2021-04-04
         '''
         author = ctx.message.author.name
-
-        for user in session.all_users:
-            if user.name == hero:
-                hero = user
+        user = functions.find_user(hero, session.all_users)
         
-        hero.live_server = date
-        print(f'{author} изменил стартовую дату для {hero.name}')
-        await ctx.send(f'{author} изменил стартовую дату для {hero.name}')
+        user.live_server = date
+        print(f'{author} изменил стартовую дату для {user.name}')
+        await ctx.send(f'{author} изменил стартовую дату для {user.name}')
 
 
     @commands.command()
@@ -184,12 +156,9 @@ class Stats(commands.Cog):
         Пример: .get_info GTai
         '''
         author = ctx.message.author.name
-
-        for user in session.all_users:
-            if user.name == hero:
-                await ctx.send(f'{user.user_info()}')
-                print(f'{author} запросил информацию {hero}')
-                break
+        user = functions.find_user(hero, session.all_users)
+        await ctx.send(f'{user.user_info()}')
+        print(f'{author} запросил информацию {hero}')
 
 
     @commands.command()
@@ -202,10 +171,26 @@ class Stats(commands.Cog):
         author = ctx.message.author.name
 
         for user in session.all_users:
-            user.money += money
+            user.money += float(money)
         
         await ctx.send(f'Монетки подъехали')
         print(f'{author} дал всем {money} монет')
+
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def all_set_money(self, ctx, money):
+        '''Установить количество монет для всех
+        
+        Пример: .all_set_money 100
+        '''
+        author = ctx.message.author.name
+
+        for user in session.all_users:
+            user.money = float(money)
+
+        await ctx.send(f'Начало сезона! У всех {money} монет')
+        print(f'{author} начал новый сезон {money} монет')
 
 
     @commands.command()

@@ -1,7 +1,6 @@
-import session
+import session, functions
 from discord.ext import commands
 from discord.utils import get
-from random import randint
 
 
 class Games(commands.Cog):
@@ -20,76 +19,45 @@ class Games(commands.Cog):
         Пример: .duel GTai 
         '''
         author = ctx.message.author.name
-        user1 = session.find_user(author, session.all_users)
-        user2 = session.find_user(hero, session.all_users)
+        user1 = functions.find_user(author, session.all_users)
+        user2 = functions.find_user(hero, session.all_users)
 
-        # Проверка дуэли с ботом или самим собой
-        if user2 and user2.name == 'Dina':
-            await ctx.send(f'Рано тебе ещё с ведьмачкой тягаться, смерд')
-            print(f'Покушение на Дину')
-        elif user2 and user1.name == user2.name:
-            await ctx.send(f'С собой сражаться бессмысленно')
+        if int(user1.money) == 0:
+            msg = 'Монет нет, дуэли не будет\n'
+            msg += 'Нужно работать, бездельник'
+
+            await ctx.send(msg)
+        elif int(user2.money) == 0:
+            await ctx.send(f'У {hero} нет монет :(')
         else:
-            # w1 - % победы 1ого игрока
-            # w2 - % победы 2ого игрока
-            # l1 = [1; w1]
-            # l2 = [w1; 100]
-
-            all_rate = user1.rate + user2.rate
-            w1 = int(user1.rate / all_rate * 100)
-            
-            # чтобы не было дуэлей 100-0
-            if w1 == 0:
-                w1 = 1
-            elif w1 == 100:
-                w1 = 99
-
-            w2 = 100 - w1 
-            w = randint(1, 100)
-
-            # для рандом на промежтке
-            m1 = w1
-            l1 = [i for i in range(1, m1 + 1)]
-
-            money_win = min(w1, w2) * min(user2.money / 100, user1.money / 100)
-            money_win = int(money_win * 100) / 100
-
-            print('------------------------------------------------------')
-            print(f'Была произведена дуэль между {user1.name} и {user2.name}')
-            print(f'Рейтинги оппонентов {user1.rate} и {user2.rate}')
-            print(f'Вероятность побед {w1}% и {w2}%')
-            await ctx.send(f'Дуэль между {user1.name} {w1}% и {user2.name} {w2}%')
-
-            if w in l1 or int(w1) == 100:
-                user1.duel = self.update_stat(user1.duel, True)
-                user2.duel = self.update_stat(user2.duel, False)
-
-                if w1 < w2:
-                    money_win *= (w2/w1)
-
-                money_win = self.update_money(user1.money, money_win)
-
-                print(f'{user1.name} одержал победу в дуэли над {user2.name}')
-                await ctx.send(f'{user1.name} одержал победу в дуэли над {user2.name}')
-                await ctx.send(f'И выиграл {money_win} монет')
-                user1.money += money_win
-                user2.money -= money_win
+            # Проверка дуэли с ботом или самим собой
+            if user2 and user2.name == 'Dina':
+                await ctx.send(f'Рано тебе ещё с ведьмачкой тягаться, смерд')
+            elif user2 and user1.name == user2.name:
+                await ctx.send(f'С собой сражаться бессмысленно')
             else:
-                user1.duel = self.update_stat(user1.duel, False)
-                user2.duel = self.update_stat(user2.duel, True)
+                res = functions.duel_algo(user1, user2)
+                user_win = res['winner']
+                user_lose = res['loser']
+                wr1 = res['wr_w']
+                wr2 = res['wr_l']
 
-                if w2 < w1:
-                    money_win *= (w1/w2)
+                user_win.duel = functions.update_duel_stat(user_win.duel, True)
+                user_lose.duel = functions.update_duel_stat(
+                    user_lose.duel, False)
+                money_win = functions.calculate_money_win(
+                    wr1, wr2, user_win.money, user_lose.money)
+                
+                user_win.money += money_win
+                user_lose.money -= money_win
 
-                money_win = self.update_money(user1.money, money_win)
-
-                print(f'{user2.name} одержал победу в дуэли над {user1.name}')
-                await ctx.send(f'{user2.name} одержал победу в дуэли над {user1.name}')
-                await ctx.send(f'И выиграл {money_win} монет')
-                user1.money -= money_win
-                user2.money += money_win
-
-            print('------------------------------------------------------')
+                msg = 'Дуэль между {} {}% и {} {}%\n'.format(
+                    user_win.name, wr1, user_lose.name, wr2)
+                msg += '{} одержал победу в дуэли над {}\n'.format(
+                    user_win.name, user_lose.name)
+                msg += 'И выиграл {} монет'.format(money_win)
+                
+                await ctx.send(msg)
 
 
     @commands.command()
@@ -120,10 +88,14 @@ class Games(commands.Cog):
         j = len(duel_stat) - 1
         res = [duel_stat[i] for i in range(j, j - 5, -1)]
         
-        print(f'{author} запросил топ 5 рейтинг дуэли')
-        await ctx.send(f'Топ 5 лучших дуэлянтов этой эпохи:')
-        for i in range(len(res)):
-            await ctx.send(f'{i + 1} - {res[i][0]} {res[i][1]}')
+        rate_duel = 'Топ 5 лучших дуэлянтов этой эпохи:\n'
+        rate_duel += '{} - {} {}'.format(1, res[0][0], res[0][1])
+
+        for i in range(1, len(res)):
+            wr = int(100 * res[i][1]/res[i][0])
+            rate_duel += '\n{} - {} {}  {}%'.format(i + 1, res[i][0], res[i][1], wr)
+
+        await ctx.send(rate_duel)
        
 
     @commands.command()
@@ -136,40 +108,13 @@ class Games(commands.Cog):
         '''
         author = ctx.message.author.name
 
-        user = session.find_user(author, session.all_users)
-        print(f'{author} запросил статы {user.name}')
-        print(f'{user.duel_stats()}')
-        await ctx.send(f'Статы {user.name}\n{user.duel_stats()}')
+        user = functions.find_user(hero, session.all_users)
+        temp_stat = list(user.duel.split('-'))
+        all_games = int(temp_stat[0])
+        win_games = int(temp_stat[1])
+        wr = int((win_games/all_games) * 100)
 
-
-    def update_stat(self, stat, game):
-        s = list(stat.split('-'))
-        all_games = int(s[0]) + 1
-
-        if game:
-            win_games = int(s[1]) + 1
-        else:
-            win_games = int(s[1])
-
-        res = str(all_games) + '-' + str(win_games)
-        
-        return res
-
-
-    def update_money(self, user_money, money_win):
-        # проверка на отрицательное количество монет
-        if user_money - money_win < 0:
-            money_win = user_money
-        elif user_money == 0:
-            money_win = 0
-        
-        # если по процентом вышел 0, но деньги есть у пользователя
-        if money_win == 0 and user_money != 0:
-            money_win = min(user_money, 1)
-
-        money_win = int(money_win * 100) / 100
-
-        return money_win
+        await ctx.send(f'Статы {user.name}\n{user.duel_stats()}, {wr}%')
 
 
 def setup(client):

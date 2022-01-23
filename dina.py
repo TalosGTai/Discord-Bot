@@ -7,8 +7,7 @@ from discord import client
 from discord.ext import commands
 from config import settings
 from discord.guild import Guild
-import session
-import users_stats
+import session, functions, users_stats
 import os
 
 
@@ -40,7 +39,7 @@ async def on_message(message):
     #print(f'{message.author}: {message.content}')
     author = message.author.name
 
-    new_user = session.find_user(author, session.all_users)
+    new_user = functions.find_user(author, session.all_users)
     
     if new_user:
         new_user.count_messages += 1
@@ -51,5 +50,6 @@ async def on_message(message):
 
     # так как on_message перекрывает все команды
     await bot.process_commands(message)
+
 
 bot.run(settings['token'])
