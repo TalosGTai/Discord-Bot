@@ -14,7 +14,10 @@ class Info(commands.Cog):
         author = ctx.message.author.name
 
         user = functions.find_user(author, session.all_users)
+        user.count_messages -= 1
+
         await ctx.send(f'Рейтинг {user.name} = {user.rate}')
+        await ctx.message.delete()
     
 
     @commands.command()
@@ -23,8 +26,11 @@ class Info(commands.Cog):
         author = ctx.message.author.name
 
         user = functions.find_user(author, session.all_users)
+        user.count_messages -= 1
         user.money = functions.to_two_digits(user.money)
+        
         await ctx.send(f'У {user.name} {user.money} монет')
+        await ctx.message.delete()
 
 
     @commands.command()
@@ -33,9 +39,11 @@ class Info(commands.Cog):
         author = ctx.message.author.name
 
         user = functions.find_user(author, session.all_users)
-        day = user.date_to_days()
+        user.count_messages -= 1
+        day = functions.date_to_days(user.live_server)
 
-        await ctx.send(f'{author} с нами {day} {user.get_days(day)}')
+        await ctx.send(f'{author} с нами {day} {functions.get_days(day)}')
+        await ctx.message.delete()
 
 
     @commands.command()
@@ -44,7 +52,10 @@ class Info(commands.Cog):
         author = ctx.message.author.name
 
         user = functions.find_user(author, session.all_users)
+        user.count_messages -= 1
+
         await ctx.send(f'{user.user_info()}')
+        await ctx.message.delete()
 
 
 def setup(client):

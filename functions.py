@@ -1,18 +1,5 @@
 from random import randint
-
-# +1 win and +1 game
-def duel_update_stat(stat, game):
-    s = list(stat.split('-'))
-    all_games = int(s[0]) + 1
-
-    if game:
-        win_games = int(s[1]) + 1
-    else:
-        win_games = int(s[1])
-
-    res = str(all_games) + '-' + str(win_games)
-
-    return res
+import datetime as DT
 
 
 def duel_algo(user1, user2):
@@ -48,19 +35,20 @@ def calculate_money_win(wr1, wr2, money1, money2):
     money_win = min(wr1, wr2) * min(money1 / 100, money2 / 100)
     
     if wr1 < wr2:
-        money_win *= (wr2/wr1)
+        money_win *= 1.1
     
     return to_two_digits(money_win)
 
 
+# +1 win and +1 game
 def update_duel_stat(stat, game):
-    s = list(stat.split('-'))
-    all_games = int(s[0]) + 1
+    pass
+    all_games = int(stat[0]) + 1
 
     if game:
-        win_games = int(s[1]) + 1
+        win_games = int(stat[1]) + 1
     else:
-        win_games = int(s[1])
+        win_games = int(stat[1])
 
     res = str(all_games) + '-' + str(win_games)
 
@@ -81,6 +69,50 @@ def update_money(user_money, money_win):
 # convert number to two digits
 def to_two_digits(num):
     return int(num * 100) / 100
+
+
+# Количество дней от даты до текущего дня
+def date_to_days(user_date):
+    date = user_date.split('-')
+    date = DT.date(int(date[0]), int(date[1]), int(date[2]))
+    days = abs(int((DT.date.today() - date).days))
+
+    return days
+
+
+# окончания для даты (дня, дней)
+def get_days(day):
+    days = {
+        0: 'дней',
+        1: 'день',
+        2: 'дня',
+        3: 'дня',
+        4: 'дня',
+        5: 'дней',
+        6: 'дней',
+        7: 'дней',
+        8: 'дней',
+        9: 'дней',
+        10: 'дней',
+        11: 'дней',
+        12: 'дней',
+        13: 'дней',
+        14: 'дней',
+        15: 'дней',
+        16: 'дней',
+        17: 'дней',
+        18: 'дней',
+        19: 'дней',
+        20: 'дней',
+    }
+
+    day = day % 100
+
+    if day in days.keys():
+        return days[day]
+    else:
+        day = day % 10
+        return days[day]
 
 
 def find_user(name, all_users):

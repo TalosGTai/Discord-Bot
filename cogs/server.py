@@ -1,6 +1,5 @@
 from email.mime import application
 from http import client
-import discord
 import session
 from discord.ext import commands, tasks
 from discord.utils import get
@@ -29,8 +28,8 @@ class Server(commands.Cog):
     async def save(self):
         '''Сохранение всей статистики'''
 
-        result = session.create_in_one(session.all_users)
-        session.save_txt(result)
+        # session.all_users
+        session.save_db(session.all_users)
         print(f'{DT.datetime.now().hour}:{DT.datetime.now().minute}: Все данные сохранены.')
 
 
@@ -42,8 +41,7 @@ class Server(commands.Cog):
         for user in session.all_users:
             user.update_rate()
 
-        result = session.create_in_one(session.all_users)
-        session.save_txt(result)
+        session.save_db(session.all_users)
 
         print('Обновлены все рейтинги.')
         print(f'{DT.datetime.now().hour}:{DT.datetime.now().minute}: Все данные сохранены.')

@@ -31,11 +31,14 @@ class Stats(commands.Cog):
             user.money += float(money)
 
             if float(money) > 0:
-                print(f'{author} добавил {money} монет пользователю {user.name}')
-                await ctx.send(f'{author} добавил {money} монет пользователю {user.name}')
+                msg = f'{author} добавил {money} монет пользователю {user.name}'
+                print(msg)
+                await ctx.send(msg)
             else:
-                print(f'{author} отнял {money} монет у пользователя {user.name}')
-                await ctx.send(f'{author} отнял {money} монет у пользователя {user.name}')
+                msg = f'{author} отнял {money} монет у пользователя {user.name}'
+                print(msg)
+                await ctx.send(msg)
+        await ctx.message.delete()
 
 
     @commands.command()
@@ -50,11 +53,12 @@ class Stats(commands.Cog):
         '''
         author = ctx.message.author.name
         user = functions.find_user(hero, session.all_users)
-
         user.count_req_help += 1
-        print(
-            f'{author} увеличил количество запросов помощи у {user.name} на 1')
-        await ctx.send(f'{author} увеличил количество запросов помощи у {user.name} на 1')
+        msg = f'{author} увеличил количество запросов помощи у {user.name} на 1'
+
+        print(msg)
+        await ctx.send(msg)
+        await ctx.message.delete()
 
 
     @commands.command()
@@ -69,11 +73,12 @@ class Stats(commands.Cog):
         '''
         author = ctx.message.author.name
         user = functions.find_user(hero, session.all_users)
-
         user.count_req_help = int(count)
-        print(
-            f'{author} установил значение количество запросов помощи у {user.name} равным {count}')
-        await ctx.send(f'{author} установил значение количество запросов помощи у {user.name} равным {count}')
+        msg = f'{author} установил значение количество запросов помощи у {user.name} равным {count}'
+
+        print(msg)
+        await ctx.send(msg)
+        await ctx.message.delete()
 
 
     @commands.command()
@@ -88,10 +93,12 @@ class Stats(commands.Cog):
         '''
         author = ctx.message.author.name
         user = functions.find_user(hero, session.all_users)
-
         user.count_done_help += 1
-        print(f'{author} увеличил количество помощи у {user.name} на 1')
-        await ctx.send(f'{author} увеличил количество помощи у {user.name} на 1')
+        msg = f'{author} увеличил количество помощи у {user.name} на 1'
+
+        print(msg)
+        await ctx.send(msg)
+        await ctx.message.delete()
 
 
     @commands.command()
@@ -106,11 +113,12 @@ class Stats(commands.Cog):
         '''
         author = ctx.message.author.name
         user = functions.find_user(hero, session.all_users)
-
         user.count_done_help = int(count)
-        print(
-            f'{author} установил значение количество помощи у {user.name} равным {count}')
-        await ctx.send(f'{author} установил значение количество помощи у {user.name} равным {count}')
+        msg = f'{author} установил значение количество помощи у {user.name} равным {count}'
+
+        print(msg)
+        await ctx.send(msg)
+        await ctx.message.delete()
 
 
     @commands.command()
@@ -125,10 +133,11 @@ class Stats(commands.Cog):
         '''
         author = ctx.message.author.name
         user = functions.find_user(hero, session.all_users)
-
         user.count_projects += 1
+
         print(f'{author} увеличил количество проектов у {user.name} на 1')
         await ctx.send(f'{author} увеличил количество проектов у {user.name} на 1')
+        await ctx.message.delete()
 
 
     @commands.command()
@@ -146,6 +155,7 @@ class Stats(commands.Cog):
         user.live_server = date
         print(f'{author} изменил стартовую дату для {user.name}')
         await ctx.send(f'{author} изменил стартовую дату для {user.name}')
+        await ctx.message.delete()
 
 
     @commands.command()
@@ -157,8 +167,9 @@ class Stats(commands.Cog):
         '''
         author = ctx.message.author.name
         user = functions.find_user(hero, session.all_users)
+
         await ctx.send(f'{user.user_info()}')
-        print(f'{author} запросил информацию {hero}')
+        await ctx.message.delete()
 
 
     @commands.command()
@@ -173,8 +184,10 @@ class Stats(commands.Cog):
         for user in session.all_users:
             user.money += float(money)
         
+        # фразы
         await ctx.send(f'Монетки подъехали')
         print(f'{author} дал всем {money} монет')
+        await ctx.message.delete()
 
 
     @commands.command()
@@ -189,8 +202,70 @@ class Stats(commands.Cog):
         for user in session.all_users:
             user.money = float(money)
 
-        await ctx.send(f'Начало сезона! У всех {money} монет')
+        # добавить речь
+        await ctx.send(f'Начало сезона! ')
         print(f'{author} начал новый сезон {money} монет')
+        await ctx.message.delete()
+
+
+    @commands.command()
+    @commands.has_permissions(kick_members=True)
+    async def duel_top(self, ctx):
+        '''Топ 5 дуэлянтов этой эпохи
+        
+        Сюда попадают лучшие из лучших
+        Участвуй в дуэлях, выигрывай и станешь одним из них!
+        
+        Попасть можно только от 30 дуэлей
+        '''
+        author = ctx.message.author.name
+        duel_stat = []
+        for user in session.all_users:
+            all_games = user.duel_all_games
+            win_games = user.duel_win_games
+            if win_games != 0:
+                percent_win = int((win_games/all_games) * 100)
+            else:
+                percent_win = 0
+
+            duel_stat.append((user.name, user.duel_all_games,
+                             user.duel_win_games, percent_win))
+
+        duel_stat = sorted(duel_stat, key=lambda user: user[3])
+
+        j = len(duel_stat) - 1
+        res = [duel_stat[i] for i in range(j, j - 5, -1)]
+
+        rate_duel = 'Топ 5 лучших дуэлянтов этой эпохи:\n'
+
+        for i in range(len(res)):
+            wr = int(100 * res[i][2]/res[i][1])
+            rate_duel += '{} - {} {}-{} {}%\n'.format(
+                i + 1, res[i][0], res[i][1], res[i][2], wr)
+
+        await ctx.send(rate_duel)
+        await ctx.message.delete()
+
+
+    @commands.command()
+    @commands.has_permissions(kick_members=True)
+    async def duel_info(self, ctx, hero):
+        '''Статистика в дуэлях
+        
+        Шаблон: .duel_info name
+        Пример: .duel_info GTai
+        '''
+        author = ctx.message.author.name
+
+        user = functions.find_user(hero, session.all_users)
+        all_games = int(user.duel_all_games)
+        win_games = int(user.duel_win_games)
+        wr = int((win_games/all_games) * 100)
+        msg = f'Статы {user.name} в игре Дуэль'
+        msg += f'\n{user.duel_stats()}, {wr}%'
+        
+        await ctx.send(msg)
+        await ctx.message.delete()
 
 
     @commands.command()

@@ -1,6 +1,5 @@
 from asyncio import events
 from typing import AsyncContextManager
-import discord
 from discord import guild
 from discord import member
 from discord import client

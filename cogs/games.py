@@ -20,20 +20,37 @@ class Games(commands.Cog):
         '''
         author = ctx.message.author.name
         user1 = functions.find_user(author, session.all_users)
+        user1.count_messages -= 1
         user2 = functions.find_user(hero, session.all_users)
+
+        # фразы
+        '''
+        if can_duel(user1):
+            if can_duel(user2):
+                # main code
+                pass
+            else:
+                msg = user2.name + ' уже отдыхает сегодня'
+        else:
+            msg = user1.name + ' тебе пора сегодня отдохнуть 15/15'
+        '''
 
         if int(user1.money) == 0:
             msg = 'Монет нет, дуэли не будет\n'
+            # добавить разные фразы
             msg += 'Нужно работать, бездельник'
 
             await ctx.send(msg)
         elif int(user2.money) == 0:
+            # добавить разные фразы
             await ctx.send(f'У {hero} нет монет :(')
         else:
             # Проверка дуэли с ботом или самим собой
             if user2 and user2.name == 'Dina':
+                # добавить разные фразы
                 await ctx.send(f'Рано тебе ещё с ведьмачкой тягаться, смерд')
             elif user2 and user1.name == user2.name:
+                # добавить разные фразы
                 await ctx.send(f'С собой сражаться бессмысленно')
             else:
                 res = functions.duel_algo(user1, user2)
@@ -42,9 +59,11 @@ class Games(commands.Cog):
                 wr1 = res['wr_w']
                 wr2 = res['wr_l']
 
-                user_win.duel = functions.update_duel_stat(user_win.duel, True)
-                user_lose.duel = functions.update_duel_stat(
-                    user_lose.duel, False)
+                user_win.duel_all_games += 1
+                user_win.duel_win_games += 1
+                user_lose.duel_all_games += 1
+                user_lose.duel_win_games -= 1
+                
                 money_win = functions.calculate_money_win(
                     wr1, wr2, user_win.money, user_lose.money)
                 
@@ -58,63 +77,23 @@ class Games(commands.Cog):
                 msg += 'И выиграл {} монет'.format(money_win)
                 
                 await ctx.send(msg)
+                await ctx.message.delete()
 
 
-    @commands.command()
-    @commands.has_permissions(kick_members=True)
-    async def duel_top(self, ctx):
-        '''Топ 5 дуэлянтов этой эпохи
+    #@commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
+    #@commands.command()
+    async def luck_number(self, ctx):
+        '''Угадай число
         
-        Сюда попадают лучшие из лучших
-        Участвуй в дуэлях, выигрывай и станешь одним из них!
-        
-        Попасть можно только от 30 дуэлей
+        Правила игры очень просты:
+            • загадано целое число от 1 до 100 (включительно)
+            • у тебя 6 попыток
+            • при каждой попытке ты будешь знать больше/меньше
+            исходного числа ты находишься
+
+        P.S. в строке должно находится только число (без посторонних символов)
         '''
-        author = ctx.message.author.name
-        duel_stat = []
-        for user in session.all_users:
-            temp_stats = list(user.duel.split('-'))
-            all_games = int(temp_stats[0])
-            win_games = int(temp_stats[1])
-            if win_games != 0:
-                percent_win = int((win_games/all_games) * 100)
-            else:
-                percent_win = 0
-
-            duel_stat.append((user.name, user.duel, percent_win))
-
-        duel_stat = sorted(duel_stat, key=lambda user: user[2])
-        
-        j = len(duel_stat) - 1
-        res = [duel_stat[i] for i in range(j, j - 5, -1)]
-        
-        rate_duel = 'Топ 5 лучших дуэлянтов этой эпохи:\n'
-        rate_duel += '{} - {} {}'.format(1, res[0][0], res[0][1])
-
-        for i in range(1, len(res)):
-            wr = int(100 * res[i][1]/res[i][0])
-            rate_duel += '\n{} - {} {}  {}%'.format(i + 1, res[i][0], res[i][1], wr)
-
-        await ctx.send(rate_duel)
-       
-
-    @commands.command()
-    @commands.has_permissions(kick_members=True)
-    async def duel_info(self, ctx, hero):
-        '''Статистика в дуэлях
-        
-        Шаблон: .duel_info name
-        Пример: .duel_info GTai
-        '''
-        author = ctx.message.author.name
-
-        user = functions.find_user(hero, session.all_users)
-        temp_stat = list(user.duel.split('-'))
-        all_games = int(temp_stat[0])
-        win_games = int(temp_stat[1])
-        wr = int((win_games/all_games) * 100)
-
-        await ctx.send(f'Статы {user.name}\n{user.duel_stats()}, {wr}%')
+        pass
 
 
 def setup(client):
