@@ -28,9 +28,9 @@ class Server(commands.Cog):
     async def save(self):
         '''Сохранение всей статистики'''
 
-        # session.all_users
         session.save_db(session.all_users)
-        print(f'{DT.datetime.now().hour}:{DT.datetime.now().minute}: Все данные сохранены.')
+        msg = f'{DT.datetime.now().hour}:{DT.datetime.now().minute}: Все данные сохранены.'
+        print(msg)
 
 
     @commands.command()

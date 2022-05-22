@@ -8,7 +8,7 @@ from config import settings
 from discord.guild import Guild
 import session, functions, users_stats
 import os
-
+import db_functions
 
 bot = commands.Bot(command_prefix = settings['prefix'])
 
@@ -46,6 +46,7 @@ async def on_message(message):
         # create new author with start stats
         new_user = users_stats.User(message.author.name)
         session.all_users.append(new_user)
+        db_functions.create_user(new_user)
 
     # так как on_message перекрывает все команды
     await bot.process_commands(message)

@@ -43,6 +43,38 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
+    async def add_rate(self, ctx, hero, count):
+        '''Добавить/отнять бонусный рейтинг
+        
+        Шаблон: .add_rate name count
+
+        Пример1: .add_rate GTai 5
+        Добавление GTai 5 рейтинга
+
+        Пример2: .add_rate GTai -10
+        Отнятие у GTai 10 рейтинга
+        '''
+        author = ctx.message.author.name
+        user = functions.find_user(hero, session.all_users)
+
+        if author == user.name and author != 'GTai':
+            await ctx.send(f'Себе нельзя изменять! Не шали ;_)')
+        else:
+            user.bonus_rate += float(count)
+
+            if float(count) > 0:
+                msg = f'{author} добавил {count} рейтинга пользователю {user.name}'
+                print(msg)
+                await ctx.send(msg)
+            else:
+                msg = f'{author} отнял {count} рейтинга у пользователя {user.name}'
+                print(msg)
+                await ctx.send(msg)
+        await ctx.message.delete()
+
+
+    @commands.command()
+    @commands.has_permissions(kick_members=True)
     async def add_req_help(self, ctx, hero):
         '''Увеличение характеристики запросы помощи
 
@@ -219,6 +251,7 @@ class Stats(commands.Cog):
         Попасть можно только от 30 дуэлей
         '''
         author = ctx.message.author.name
+
         duel_stat = []
         for user in session.all_users:
             all_games = user.duel_all_games

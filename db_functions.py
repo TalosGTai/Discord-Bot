@@ -13,6 +13,69 @@ def select_user(db, name):
     return result[0]
 
 
+def get_last_insert_id(db):
+    cursor = db.cursor()
+    sql = 'SELECT LAST_INSERT_ID() from users'
+    cursor.execute(sql)
+    cur_id = cursor.lastrowid
+    cursor.close()
+
+    return cur_id
+
+
+def get_last_user_id(db):
+    cursor = db.cursor()
+    sql = 'SELECT MAX(idUser) from users'
+    cursor.execute(sql)
+    cur_id = cursor.fetchone()
+    cursor.close()
+
+    return cur_id[0]
+
+
+def insert_users(db, values, new_id):
+    cursor = db.cursor()
+
+    sql = "INSERT INTO users \
+    (name, money, idStats, date_registr) \
+    VALUES ( %s, %s, %s, %s)"
+    #val = (GTai, 12040, 1, 2021-10-10)
+
+    val = (values[0], values[1], new_id, values[2])
+    cursor.execute(sql, val)
+
+    db.commit()
+    cursor.close()
+
+
+def insert_stats(db, values, new_id):
+    cursor = db.cursor()
+
+    sql = "INSERT INTO stats \
+    (count_msg, req_help, done_help, count_proj, bonus_rate, rate, idDuel) \
+    VALUES ( %s, %s, %s, %s, %s, %s, %s)"
+    #val = (1557, 0, 2, 0, 0, 47.91, id)
+
+    values.append(new_id)
+    cursor.execute(sql, values)
+    db.commit()
+    cursor.close()
+
+
+def insert_duel(db, values, new_id):
+    cursor = db.cursor()
+
+    sql = "INSERT INTO duel \
+    (idStats, all_games, win_games) \
+    VALUES ( %s, %s, %s)"
+    #val = (1, 100, 60)
+
+    val = (new_id, values[0], values[1])
+    cursor.execute(sql, val)
+    db.commit()
+    cursor.close()
+
+
 def update_users(db, name, values):
     idStat = select_user(db, name)
     val = [values[1], idStat]
@@ -113,4 +176,18 @@ def update_algo(values):
         update_stats(db.db, name, stats[i])
         update_duel(db.db, name, duel[i])
     
+    db.close_connect()
+
+
+def create_user(user):
+    db = mydb()
+    db.open_connect()
+
+    users, stats, duel = divide_values(user)
+    new_id = get_last_user_id(db) + 1
+
+    insert_users(db, users, new_id)
+    insert_stats(db, stats, new_id)
+    insert_duel(db, duel, new_id)
+
     db.close_connect()
