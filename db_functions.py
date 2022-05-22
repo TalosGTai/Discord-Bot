@@ -148,12 +148,12 @@ def values_to_duel(i, values):
     return t
 
 
-def divide_values(values):
+def divide_values(values, count):
     users = []
     stats = []
     duels = []
 
-    for i in range(len(values)):
+    for i in range(count):
         t1 = values_to_users(i, values)
         t2 = values_to_stats(i, values)
         t3 = values_to_duel(i, values)
@@ -168,7 +168,7 @@ def divide_values(values):
 def update_algo(values):
     db = mydb()
     db.open_connect()
-    users, stats, duel = divide_values(values)
+    users, stats, duel = divide_values(values, len(values))
 
     for i in range(len(users)):
         name = users[i][0]
@@ -183,7 +183,7 @@ def create_user(user):
     db = mydb()
     db.open_connect()
 
-    users, stats, duel = divide_values(user)
+    users, stats, duel = divide_values(user, 1)
     new_id = get_last_user_id(db) + 1
 
     insert_users(db, users, new_id)
