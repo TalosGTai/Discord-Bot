@@ -6,11 +6,12 @@ from discord import client
 from discord.ext import commands
 from config import settings
 from discord.guild import Guild
-import session, functions, users_stats
+import discord
+import session, functions, users_stats, db_functions
 import os
-import db_functions
 
-bot = commands.Bot(command_prefix = settings['prefix'])
+#bot = commands.Bot(command_prefix=settings['prefix'], intents=discord.Intents.all())
+bot = commands.Bot(command_prefix=settings['prefix'])
 
 
 # Events

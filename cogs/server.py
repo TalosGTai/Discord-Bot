@@ -4,6 +4,7 @@ import session
 from discord.ext import commands, tasks
 from discord.utils import get
 import datetime as DT
+import functions
 
 
 class Server(commands.Cog):
@@ -29,7 +30,10 @@ class Server(commands.Cog):
         '''Сохранение всей статистики'''
 
         session.save_db(session.all_users)
-        msg = f'{DT.datetime.now().hour}:{DT.datetime.now().minute}: Все данные сохранены.'
+        minutes = functions.time_format(str(DT.datetime.now().minute))
+        hours = functions.time_format(str(DT.datetime.now().hour))
+        msg = f'{hours}:{minutes}: Все данные сохранены.'
+        
         print(msg)
 
 
@@ -42,9 +46,23 @@ class Server(commands.Cog):
             user.update_rate()
 
         session.save_db(session.all_users)
+        minutes = functions.time_format(str(DT.datetime.now().minute))
+        hours = functions.time_format(str(DT.datetime.now().hour))
+        msg = 'Обновлены все рейтинги.' + '\n'
+        msg += f'{hours}:{minutes}: Все данные сохранены.'
 
-        print('Обновлены все рейтинги.')
-        print(f'{DT.datetime.now().hour}:{DT.datetime.now().minute}: Все данные сохранены.')
+        print(msg)
+
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def send(self, ctx, msg, msg_channel):
+        '''Отправка сообщения'''
+
+        for guild in self.client.guilds:
+            for channel in guild.channels:
+                if channel.name == msg_channel:
+                    await channel.send(msg)
 
 
 def setup(client):

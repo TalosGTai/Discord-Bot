@@ -73,20 +73,19 @@ class Stats(commands.Cog):
         await ctx.message.delete()
 
 
-    @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def add_req_help(self, ctx, hero):
-        '''Увеличение характеристики запросы помощи
+    async def add_req_help(self, ctx, hero, count):
+        '''Увеличение/уменьшние характеристики запросы помощи
 
-        Шаблон: .add_done_help name
+        Шаблон: .add_done_help name count
         
-        Пример: .add_done_help GTai
+        Пример: .add_done_help GTai 1
         Увеличение характеристики на 1
         '''
         author = ctx.message.author.name
         user = functions.find_user(hero, session.all_users)
-        user.count_req_help += 1
-        msg = f'{author} увеличил количество запросов помощи у {user.name} на 1'
+        user.count_req_help += count
+        msg = f'{author} изменил количество запросов помощи у {user.name} на {count}'
 
         print(msg)
         await ctx.send(msg)
@@ -115,18 +114,18 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def add_done_help(self, ctx, hero):
-        '''Увеличение характеристики помощь
+    async def add_done_help(self, ctx, hero, count):
+        '''Увеличение/уменьшние характеристики помощь
 
-        Шаблон: .add_done_help name
+        Шаблон: .add_done_help name count
         
-        Пример: .add_done_help GTai
+        Пример: .add_done_help GTai 1
         Увеличение характеристики на 1
         '''
         author = ctx.message.author.name
         user = functions.find_user(hero, session.all_users)
-        user.count_done_help += 1
-        msg = f'{author} увеличил количество помощи у {user.name} на 1'
+        user.count_done_help += count
+        msg = f'{author} изменил количество помощи у {user.name} на {count}'
 
         print(msg)
         await ctx.send(msg)
@@ -155,20 +154,21 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def add_count_projects(self, ctx, hero):
+    async def add_count_projects(self, ctx, hero, count):
         '''Увеличение количества проектов
 
         Шаблон: .add_count_projects name count
         
-        Пример: .add_count_projects GTai
+        Пример: .add_count_projects GTai 1
         Увеличение характеристики на 1
         '''
         author = ctx.message.author.name
         user = functions.find_user(hero, session.all_users)
         user.count_projects += 1
+        msg = f'{author} увеличил количество проектов у {user.name} на 1'
 
-        print(f'{author} увеличил количество проектов у {user.name} на 1')
-        await ctx.send(f'{author} увеличил количество проектов у {user.name} на 1')
+        print(msg)
+        await ctx.send(msg)
         await ctx.message.delete()
 
 
@@ -183,10 +183,11 @@ class Stats(commands.Cog):
         '''
         author = ctx.message.author.name
         user = functions.find_user(hero, session.all_users)
-        
         user.live_server = date
-        print(f'{author} изменил стартовую дату для {user.name}')
-        await ctx.send(f'{author} изменил стартовую дату для {user.name}')
+        msg = f'{author} изменил стартовую дату для {user.name}'
+
+        print(msg)
+        await ctx.send(msg)
         await ctx.message.delete()
 
 
