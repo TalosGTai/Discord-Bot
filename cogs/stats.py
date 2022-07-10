@@ -198,7 +198,6 @@ class Stats(commands.Cog):
         
         Пример: .get_info GTai
         '''
-        author = ctx.message.author.name
         user = functions.find_user(hero, session.all_users)
 
         await ctx.send(f'{user.user_info()}')
@@ -251,8 +250,6 @@ class Stats(commands.Cog):
         
         Попасть можно только от 30 дуэлей
         '''
-        author = ctx.message.author.name
-
         duel_stat = []
         for user in session.all_users:
             all_games = user.duel_all_games
@@ -289,8 +286,6 @@ class Stats(commands.Cog):
         Шаблон: .duel_info name
         Пример: .duel_info GTai
         '''
-        author = ctx.message.author.name
-
         user = functions.find_user(hero, session.all_users)
         all_games = int(user.duel_all_games)
         win_games = int(user.duel_win_games)

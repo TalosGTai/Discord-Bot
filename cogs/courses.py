@@ -8,6 +8,10 @@ from functions import ege_25_text_1
 from functions import ege_25_text_2
 from functions import ege_26_text_1
 from functions import ege_26_text_2
+from functions import krugosvetka_pro_text_1
+from functions import krugosvetka_pro_text_2
+from functions import c_university_text_1
+from functions import c_university_text_2
 
 
 class COURSES(commands.Cog):
@@ -31,9 +35,10 @@ class COURSES(commands.Cog):
         description = ege_24_text_2(owner)
         embed_2 = discord.Embed(description=description, color=color)
         
-        #await ctx.message.delete()
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
+        await ctx.message.delete()
+
 
     @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
     @commands.command()
@@ -52,9 +57,10 @@ class COURSES(commands.Cog):
         description = ege_25_text_2(owner)
         embed_2 = discord.Embed(description=description, color=color)
 
-        #await ctx.message.delete()
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
+        await ctx.message.delete()
+
 
     @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
     @commands.command()
@@ -73,9 +79,9 @@ class COURSES(commands.Cog):
         description = ege_26_text_2(owner)
         embed_2 = discord.Embed(description=description, color=color)
 
-        #await ctx.message.delete()
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
+        await ctx.message.delete()
 
 
     @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
@@ -87,12 +93,12 @@ class COURSES(commands.Cog):
         author = 'GTai — Всеотец'
         owner = await self.client.fetch_user(172383544201445376)
 
-        title, description, color = ege_26_text_1()
+        title, description, color = krugosvetka_pro_text_1()
         embed_1 = discord.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
 
-        description = ege_26_text_2(owner)
+        description = krugosvetka_pro_text_2(owner)
         embed_2 = discord.Embed(description=description, color=color)
 
         #await ctx.message.delete()
@@ -109,12 +115,12 @@ class COURSES(commands.Cog):
         author = 'GTai — Всеотец'
         owner = await self.client.fetch_user(172383544201445376)
 
-        title, description, color = ege_26_text_1()
+        title, description, color = c_university_text_1()
         embed_1 = discord.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
 
-        description = ege_26_text_2(owner)
+        description = c_university_text_2(owner)
         embed_2 = discord.Embed(description=description, color=color)
 
         #await ctx.message.delete()
