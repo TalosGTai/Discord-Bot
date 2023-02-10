@@ -10,7 +10,7 @@ class Games(commands.Cog):
 
 
     @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
-    @commands.command()
+    @commands.command(name='дуэль', aliases=['драка', 'файт', 'fight', 'attack', 'атака'])
     async def duel(self, ctx, hero):
         '''Вызов на дуэль другого игрока
         

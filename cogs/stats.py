@@ -32,12 +32,11 @@ class Stats(commands.Cog):
 
             if float(money) > 0:
                 msg = f'{author} добавил {money} монет пользователю {user.name}'
-                print(msg)
                 await ctx.send(msg)
             else:
                 msg = f'{author} отнял {money} монет у пользователя {user.name}'
-                print(msg)
                 await ctx.send(msg)
+        print(msg)
         await ctx.message.delete()
 
 
@@ -64,12 +63,11 @@ class Stats(commands.Cog):
 
             if float(count) > 0:
                 msg = f'{author} добавил {count} рейтинга пользователю {user.name}'
-                print(msg)
                 await ctx.send(msg)
             else:
                 msg = f'{author} отнял {count} рейтинга у пользователя {user.name}'
-                print(msg)
                 await ctx.send(msg)
+        print(msg)
         await ctx.message.delete()
 
 
@@ -124,7 +122,7 @@ class Stats(commands.Cog):
         '''
         author = ctx.message.author.name
         user = functions.find_user(hero, session.all_users)
-        user.count_done_help += count
+        user.count_done_help += int(count)
         msg = f'{author} изменил количество помощи у {user.name} на {count}'
 
         print(msg)

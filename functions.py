@@ -29,18 +29,19 @@ def duel_algo(user1, user2):
 
     return res
 
+
 # Формула расчёт денег на победу
 def calculate_money_win(wr1, wr2, money1, money2):
     money_win = min(wr1, wr2) * min(money1 / 100, money2 / 100)
-    
+
     if wr1 < wr2:
         money_win *= 1.1
-    
+
     return to_two_digits(money_win)
+
 
 # +1 win and +1 game
 def update_duel_stat(stat, game):
-    pass
     all_games = int(stat[0]) + 1
 
     if game:
@@ -52,6 +53,7 @@ def update_duel_stat(stat, game):
 
     return res
 
+
 # check < 0 and to view: xxx.xx
 def update_money(user_money, money_win):
     # проверка на отрицательное количество монет
@@ -62,17 +64,20 @@ def update_money(user_money, money_win):
 
     return money_win
 
+
 # convert number to two digits
 def to_two_digits(num):
     return int(num * 100) / 100
+
 
 # Количество дней от даты до текущего дня
 def date_to_days(user_date):
     date = user_date.split('-')
     date = DT.date(int(date[0]), int(date[1]), int(date[2]))
-    days = abs(int((DT.date.today() - date).days))
+    days = abs(int((date - DT.date.today()).days))
 
     return days
+
 
 # окончания для даты (дня, дней)
 def get_days(day):
@@ -108,21 +113,32 @@ def get_days(day):
         day = day % 10
         return days[day]
 
+
 # на вход подаётся число (х или хх) -> xx
 def time_format(time):
     if len(time) == 1:
         time = '0' + time
-    
+
     return time
+
 
 # who = Dina/hero/
 def some_phrases(who):
     match(who):
         case 'Dina':
             pass
-            #sentences = []'')
+            # sentences = []'')
         case 'hero':
             pass
+
+
+# delete \
+def delete_reverse_slash(s):
+    if s.find('\\') == -1:
+        return s
+    else:
+        return s[:s.find('\\'):] + s[s.find('\\') + 1::]
+
 
 # title, description, color
 def ege_24_text_1():
@@ -147,6 +163,7 @@ def ege_24_text_1():
 
     return (title_msg, description_msg, color_msg)
 
+
 def ege_24_text_2(owner):
     text = 'Чтобы получить доступ к Курсу нужно:\n'
     text += '1. Перевести на карту сбербанка 290р. с текстом сообщения: "Инфа24"\n'
@@ -156,6 +173,7 @@ def ege_24_text_2(owner):
     text += f'Скрин и эмэйл отправь мне ({owner.mention}) в личные сообщения'
 
     return text
+
 
 # title, description, color
 def ege_25_text_1():
@@ -179,6 +197,7 @@ def ege_25_text_1():
 
     return (title_msg, description_msg, color_msg)
 
+
 def ege_25_text_2(owner):
     text = 'Чтобы получить доступ к Курсу нужно:\n'
     text += '1. Перевести на карту сбербанка 360р. с текстом сообщения: "Инфа25"\n'
@@ -188,6 +207,7 @@ def ege_25_text_2(owner):
     text += f'Скрин и эмэйл отправь мне ({owner.mention}) в личные сообщения'
 
     return text
+
 
 # title, description, color
 def ege_26_text_1():
@@ -222,6 +242,7 @@ def ege_26_text_2(owner):
 
     return text
 
+
 # title, description, color
 def ege_27_text_1():
     title_msg = 'Видео-курс 27 Задание ЕГЭ Информатика'
@@ -255,12 +276,13 @@ def ege_27_text_2(owner):
 
     return text
 
+
 # title, description, color
 def krugosvetka_pro_text_1():
     title_msg = 'Мастер-группа Кругосветка PRO ЕГЭ Информатика'
 
     description_msg = 'Хочешь высокие баллы? Тогда это то, что тебе нужно!\n'
-    discription_msg += '80+, 90+ или 100 баллов станут реальностью 😉\n\n'
+    description_msg += '80+, 90+ или 100 баллов станут реальностью 😉\n\n'
     description_msg += 'Кругосветка — это отличная возможность подготовиться к ЕГЭ!\n'
     description_msg += 'Совместно с ребятами, которые как и ты заинтересованы в успешной \n'
     description_msg += 'подготовке к экзамену, в приятной и комфортной атмосфере время \n'
@@ -283,7 +305,7 @@ def krugosvetka_pro_text_1():
     description_msg += '💻Как это проходит:\n'
     description_msg += 'Все занятия проходят на YouTube в виде закрытых стримов\n'
     description_msg += 'с использованием онлайн-доски (для хранения всех записей)\n\n'
-    #description_msg += '' на 5 месяцев
+
     color_msg = 0x5ACFF5
 
     return (title_msg, description_msg, color_msg)
@@ -306,7 +328,7 @@ def c_university_text_1():
     title_msg = 'Видео-курс Си для ВУЗа'
 
     description_msg = 'Хочешь шарить в ВУЗе?\n'
-    discription_msg += '80+, 90+ или 100 баллов станут реальностью 😉\n\n'
+    description_msg += '80+, 90+ или 100 баллов станут реальностью 😉\n\n'
     description_msg += 'Кругосветка — это отличная возможность подготовиться к ЕГЭ!\n'
     description_msg += 'Что входит в курс:\n\n'
     description_msg += '• 2 занятия в неделю. Все занятия записываются и у тебя \n'
@@ -326,7 +348,7 @@ def c_university_text_1():
     description_msg += '💻Как это проходит:\n'
     description_msg += 'Все занятия проходят на YouTube в виде закрытых стримов\n'
     description_msg += 'с использованием онлайн-доски (для хранения всех записей)\n\n'
-    #description_msg += '' на 5 месяцев
+
     color_msg = 0x5ACFF5
 
     return (title_msg, description_msg, color_msg)
@@ -342,6 +364,20 @@ def c_university_text_2(owner):
     text += f'Скрин и эмэйл отправь мне ({owner.mention}) в личные сообщения'
 
     return text
+
+
+def trainer_2_text():
+    title_msg = 'Курс-тренажёр по 2ому заданию ЕГЭ Информатика'
+
+    description_msg = 'Бесплатный курс по подготовке и тренировке 2ого задания из ЕГЭ.\n'
+    description_msg += '• Научу как с 0 делать этот номер\n'
+    description_msg += '• 50+ заданий\n'
+    description_msg += '• Задания из реальных ЕГЭ прошлых лет\n'
+    description_msg += '• Видео-разборы заданий\n\n'
+    description_msg += 'Для прохождения курса перейди по ссылке -> https://stepik.org/course/126074'
+    color_msg = 0x5ACFF5
+
+    return (title_msg, description_msg, color_msg)
 
 
 def find_user(name, all_users):

@@ -10,8 +10,8 @@ import discord
 import session, functions, users_stats, db_functions
 import os
 
-#bot = commands.Bot(command_prefix=settings['prefix'], intents=discord.Intents.all())
-bot = commands.Bot(command_prefix=settings['prefix'])
+bot = commands.Bot(command_prefix=settings['prefix'], \
+                   intents=discord.Intents().all(), test_guilds=[settings['server']])
 
 
 # Events
@@ -35,10 +35,21 @@ async def on_member_remove(member):
 
 
 @bot.event
+async def on_command_error(ctx, error):
+    print(error)
+
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author}, у тебя недостаточно прав для выполнения данной команды!')
+    elif isinstance(error, commands.UserInputError):
+        await ctx.send(f'Правильное использование команды:\n \'{ctx.prefix}{ctx.command.name}\'' + \
+            f' ({ctx.command.brief})')
+
+
+@bot.event
 async def on_message(message):
     #print(f'{message.author}: {message.content}')
     author = message.author.name
-
+    author = functions.delete_reverse_slash(author)
     new_user = functions.find_user(author, session.all_users)
     
     if new_user:

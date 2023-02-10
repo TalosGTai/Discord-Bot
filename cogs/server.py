@@ -52,17 +52,7 @@ class Server(commands.Cog):
         msg += f'{hours}:{minutes}: Все данные сохранены.'
 
         print(msg)
-
-
-    @commands.command()
-    @commands.has_permissions(administrator=True)
-    async def send(self, ctx, msg, msg_channel):
-        '''Отправка сообщения'''
-
-        for guild in self.client.guilds:
-            for channel in guild.channels:
-                if channel.name == msg_channel:
-                    await channel.send(msg)
+        await ctx.message.delete()
 
 
 def setup(client):

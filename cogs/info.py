@@ -8,7 +8,7 @@ class Info(commands.Cog):
         self.client = client
 
 
-    @commands.command()
+    @commands.command(name='rate', aliases=['рейт', 'рэйт', 'рейтинг'])
     async def rate(self, ctx):
         '''Рейтинг'''
         author = ctx.message.author.name
@@ -20,7 +20,8 @@ class Info(commands.Cog):
         await ctx.message.delete()
     
 
-    @commands.command()
+    @commands.command(name='money', \
+        aliases=['мани', 'деньги', 'бабки', 'бабосы', 'бабло', 'монеты', 'монет'])
     async def money(self, ctx):
         '''Количество монет'''
         author = ctx.message.author.name
@@ -46,7 +47,7 @@ class Info(commands.Cog):
         await ctx.message.delete()
 
 
-    @commands.command()
+    @commands.command(name='info', aliases=['инфо', 'себе', 'я', 'me'])
     async def info(self, ctx):
         '''Вся информация о себе'''
         author = ctx.message.author.name
