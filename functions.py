@@ -1,5 +1,6 @@
 from random import randint
 import datetime as DT
+from db_functions import get_question_from_db
 
 
 def duel_algo(user1, user2):
@@ -378,6 +379,37 @@ def trainer_2_text():
     color_msg = 0x5ACFF5
 
     return (title_msg, description_msg, color_msg)
+
+
+def embed_task_msg(number_task: int, row: dict) -> tuple[str, str, int]:
+    title_msg = f'Задача из {number_task}ого номера ЕГЭ по Информатике'
+
+    description_msg = f"Тип задания: {row['type']}\n"
+    description_msg += f"Сложность задания: {row['complexity']}\n"
+    description_msg += 'Условие:\n'
+    description_msg += f"{row['condition']}"
+    color_msg = 0x53377A
+
+    return (title_msg, description_msg, color_msg)
+
+
+def embed_days_to_ege(t_ege: tuple[tuple[int, str], tuple[int, str],
+    tuple[int, str]]) -> tuple[str, str, int]:
+    new_line = '\n'
+    title = "Дней до экзаменов"
+    description = f'до ЕГЭ по инфе {t_ege[0][0]}/{t_ege[0][0] + 1} {t_ege[0][1]}' + new_line
+    description += f'до ЕГЭ по матеше {t_ege[1][0]} {t_ege[1][1]}' + new_line
+    description += f'до ЕГЭ по русичу {t_ege[2][0]} {t_ege[2][1]}'
+    color = 0x00690a
+
+    return (title, description, color)
+
+
+def embed_question() -> tuple[str, int]:
+    description = get_question_from_db()
+    color = 0x003d03
+
+    return (description, color)
 
 
 def find_user(name, all_users):

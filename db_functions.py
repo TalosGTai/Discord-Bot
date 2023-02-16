@@ -1,5 +1,5 @@
 from connect_db import mydb
-import session
+import session, random
 
 def select_user(db, name):
     cursor = db.cursor()
@@ -223,6 +223,100 @@ def create_user(user):
     insert_duel(db.db, duel[0], new_id)
 
     db.close_connect()
+
+
+# количество записей в таблице
+def get_count_records_in_table(table: str, db) -> int:
+    cursor = db.cursor()
+
+    sql = f"SELECT count({'id_'+table}) \
+    FROM {table}"
+
+    cursor.execute(sql)
+    result = cursor.fetchone()
+
+    return int(result[0])
+
+
+def get_number_random_question(table: str, db) -> int:
+    count_questions = get_count_records_in_table(table, db)
+    rnd = random.Random()
+
+    return rnd.randint(1, count_questions)
+
+
+def get_sql_query_question(id_question: int, table: str) -> str:
+    sql = f"SELECT question FROM discord.{table} " + \
+        f"WHERE id_{table} = {id_question}"
+
+    return sql
+
+
+# количество задач в номере, определённой сложности
+def get_count_task_complexity(number_task: int, complexity: str, db) -> int:
+    cursor = db.cursor()
+
+    sql = f"SELECT count(type) FROM ege_{number_task} " + \
+        "WHERE complexity = " + "\"" + complexity + "\""
+
+    cursor.execute(sql)
+    result = cursor.fetchone()
+
+    return int(result[0])
+
+
+def get_id_random_task_complexity(number_task: int, complexity: str, db) -> int:
+    count_task = get_count_task_complexity(number_task, complexity, db)
+    rnd = random.Random()
+
+    return rnd.randint(1, count_task)
+
+
+def get_sql_query_rnd_task_complexity(number_task: int, complexity: str) -> str:
+    sql = f"SELECT ege_{number_task}.type, ege_{number_task}.complexity, " + \
+        f"ege_{number_task}.condition, ege_{number_task}.attachments, " + \
+        f"ege_{number_task}.answer " + \
+        f"FROM courses.ege_{number_task} " + \
+        f"WHERE complexity = \"{complexity}\""
+
+    return sql
+
+
+def get_dict_from_task(result: list) -> dict:
+    row = {'type': result[0], 'complexity': result[1],
+           'condition': result[2], 'attachments': result[3], 'answer': result[4]}
+
+    return row
+
+
+def get_task(number_task: int, complexity: str) -> dict:
+    db = mydb()
+    db.open_connect_courses()
+    cursor = db.db.cursor()
+    id_random_task = get_id_random_task_complexity(
+        number_task, complexity, db.db)
+    sql = get_sql_query_rnd_task_complexity(
+        number_task, complexity)
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    row = get_dict_from_task(result[id_random_task - 1])
+    db.close_connect()
+
+    return row
+
+
+def get_question_from_db() -> str:
+    db = mydb()
+    db.open_connect()
+    cursor = db.db.cursor()
+    table = 'questions'
+    id_random_question = get_number_random_question(table, db.db)
+    sql = get_sql_query_question(id_random_question, table)
+    cursor.execute(sql)
+    result = cursor.fetchone()
+    db.close_connect()
+
+    return result[0]
 
 
 # index - stat_index

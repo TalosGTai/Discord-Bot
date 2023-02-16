@@ -2,6 +2,7 @@ config.py
 users_stats.txt
 users_stats.py
 session.py
+__pycache__/
 __pycache__/config.cpython-38.pyc
 __pycache__/config.cpython-310.pyc
 __pycache__/session.cpython-38.pyc
@@ -29,3 +30,9 @@ cogs/__pycache__/games.cpython-310.pyc
 cogs/__pycache__/info.cpython-310.pyc
 cogs/__pycache__/server.cpython-310.pyc
 cogs/__pycache__/stats.cpython-310.pyc
+__pycache__/connect_db.cpython-310.pyc
+__pycache__/db_functions.cpython-310.pyc
+__pycache__/functions.cpython-310.pyc
+__pycache__/connect_db.cpython-310.pyc
+__pycache__/db_functions.cpython-310.pyc
+__pycache__/connect_db.cpython-310.pyc

@@ -1,5 +1,5 @@
-from discord.ext import commands
-import discord
+from disnake.ext import commands
+import disnake
 from functions import ege_24_text_1
 from functions import ege_24_text_2
 from functions import ege_25_text_1
@@ -12,7 +12,7 @@ from functions import c_university_text_1
 from functions import c_university_text_2
 from functions import trainer_2_text
 
-class COURSES(commands.Cog):
+class Courses(commands.Cog):
     '''Курсы'''
 
     def __init__(self, client) -> None:
@@ -28,10 +28,10 @@ class COURSES(commands.Cog):
         owner = await self.client.fetch_user(172383544201445376)
 
         title, description, color = ege_24_text_1()
-        embed_1 = discord.Embed(title=title, description=description, color=color)
+        embed_1 = disnake.Embed(title=title, description=description, color=color)
         embed_1.set_author(name=author)
         description = ege_24_text_2(owner)
-        embed_2 = discord.Embed(description=description, color=color)
+        embed_2 = disnake.Embed(description=description, color=color)
         
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
@@ -48,12 +48,12 @@ class COURSES(commands.Cog):
         owner = await self.client.fetch_user(172383544201445376)
 
         title, description, color = ege_25_text_1()
-        embed_1 = discord.Embed(
+        embed_1 = disnake.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
 
         description = ege_25_text_2(owner)
-        embed_2 = discord.Embed(description=description, color=color)
+        embed_2 = disnake.Embed(description=description, color=color)
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
@@ -70,12 +70,12 @@ class COURSES(commands.Cog):
         owner = await self.client.fetch_user(172383544201445376)
 
         title, description, color = ege_26_text_1()
-        embed_1 = discord.Embed(
+        embed_1 = disnake.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
 
         description = ege_26_text_2(owner)
-        embed_2 = discord.Embed(description=description, color=color)
+        embed_2 = disnake.Embed(description=description, color=color)
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
@@ -92,12 +92,12 @@ class COURSES(commands.Cog):
         owner = await self.client.fetch_user(172383544201445376)
 
         title, description, color = krugosvetka_pro_text_1()
-        embed_1 = discord.Embed(
+        embed_1 = disnake.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
 
         description = krugosvetka_pro_text_2(owner)
-        embed_2 = discord.Embed(description=description, color=color)
+        embed_2 = disnake.Embed(description=description, color=color)
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
@@ -114,12 +114,12 @@ class COURSES(commands.Cog):
         owner = await self.client.fetch_user(172383544201445376)
 
         title, description, color = c_university_text_1()
-        embed_1 = discord.Embed(
+        embed_1 = disnake.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
 
         description = c_university_text_2(owner)
-        embed_2 = discord.Embed(description=description, color=color)
+        embed_2 = disnake.Embed(description=description, color=color)
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
@@ -136,7 +136,7 @@ class COURSES(commands.Cog):
         owner = await self.client.fetch_user(172383544201445376)
 
         title, description, color = trainer_2_text()
-        embed_1 = discord.Embed(
+        embed_1 = disnake.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
 
@@ -145,4 +145,4 @@ class COURSES(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(COURSES(client))
+    client.add_cog(Courses(client))

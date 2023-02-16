@@ -1,5 +1,5 @@
-from discord.ext import commands
-from discord.utils import get
+from disnake.ext import commands
+import disnake
 
 
 class Dina(commands.Cog):
@@ -8,9 +8,9 @@ class Dina(commands.Cog):
     def __init__(self, client) -> None:
         self.client = client
 
-    @commands.command(name='смс', aliases=['send', 'send_msg'])
+    @commands.command(name='send_msg', aliases=['send', 'смс'])
     @commands.has_permissions(administrator=True)
-    async def send_msg(self, ctx, msg, msg_channel):
+    async def send_msg(self, ctx, msg_channel, msg):
         '''Отправить сообщение в чат
         
         Шаблон: command channel msg
@@ -21,7 +21,25 @@ class Dina(commands.Cog):
             for channel in guild.channels:
                 if channel.name == msg_channel:
                     await channel.send(msg)
-        await ctx.message.delete()
+
+
+    @commands.command(name='send_embed', aliases=['embed'])
+    @commands.has_permissions(administrator=True)
+    async def send_embed(self, ctx, msg_channel: str, title: str,
+    description: str, color: str):
+        '''Отправить сообщение в чат
+        
+        Шаблон: command channel msg
+        Пример: .send_embed "егэ-чат" "Заголовок" "текст" "0x0004eb"
+        '''
+        color = int(color, 16)
+        embed = disnake.Embed(title=title,
+                              description=description, color=color)
+
+        for guild in self.client.guilds:
+            for channel in guild.channels:
+                if channel.name == msg_channel:
+                    await channel.send(embed=embed)
 
 
     @commands.command(name='clear', aliases=['очистить', 'удалить'])

@@ -1,6 +1,5 @@
 import session, functions
-from discord.ext import commands
-from discord.utils import get
+from disnake.ext import commands
 
 class Stats(commands.Cog):
     '''Изменение/просмотр статистики участников'''

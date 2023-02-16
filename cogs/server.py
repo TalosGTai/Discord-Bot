@@ -1,16 +1,14 @@
-from email.mime import application
-from http import client
-import session
-from discord.ext import commands, tasks
-from discord.utils import get
+from discord.ext import tasks
+from disnake.ext import commands
+import session, os, functions, disnake
 import datetime as DT
-import functions
 
 
 class Server(commands.Cog):
     '''Команды для управления'''
-    def __init__(self, client) -> None:
-        self.client = client
+
+    def __init__(self, bot: commands.Bot) -> None:
+        self.bot = bot
         self.update_rate.start()
         self.save.start()
 
@@ -55,5 +53,54 @@ class Server(commands.Cog):
         await ctx.message.delete()
 
 
-def setup(client):
-    client.add_cog(Server(client))
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def load_all(self, ctx):
+        for filename in os.listdir('./cogs'):
+            if filename.endswith('.py'):
+                try:
+                    self.bot.load_extension(f'cogs.{filename[:-3]}')
+                    print(f'Разрешение {filename[:-3]} успешно загружено.')
+                except Exception:
+                    print(f'Не удалось загрузить {filename[:-3]}.')
+                self.bot.load_extension(f'cogs.{filename[:-3]}')
+        await ctx.message.delete()
+
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def load(self, ctx, extension):
+        try:
+            self.bot.load_extension(f'cogs.{extension}')
+            print(f'Разрешение {extension} успешно загружено.')
+        except Exception:
+            print(f'Не удалось загрузить {extension}.')
+            print(Exception)
+        await ctx.message.delete()
+
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def reload(self, ctx, extension):
+        try:
+            self.bot.unload_extension(f'cogs.{extension}')
+            self.bot.load_extension(f'cogs.{extension}')
+            print(f'Разрешение {extension} успешно перезагружено.')
+        except Exception:
+            print(f'Не удалось перезагрузить {extension}.')
+        await ctx.message.delete()
+
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def unload(self, ctx, extension):
+        try:
+            self.bot.unload_extension(f'cogs.{extension}')
+            print(f'Разрешение {extension} успешно выгружено.')
+        except Exception:
+            print(f'Не удалось выгрузить {extension}.')
+        await ctx.message.delete()
+
+
+def setup(bot: commands.Bot):
+    bot.add_cog(Server(bot))

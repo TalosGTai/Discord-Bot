@@ -1,5 +1,5 @@
 import session, functions
-from discord.ext import commands
+from disnake.ext import commands
 
 
 class Info(commands.Cog):

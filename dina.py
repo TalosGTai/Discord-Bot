@@ -1,25 +1,22 @@
 from asyncio import events
-from typing import AsyncContextManager
-from discord import guild
-from discord import member
-from discord import client
-from discord.ext import commands
 from config import settings
-from discord.guild import Guild
-import discord
+from disnake.ext import commands
+import os, disnake
 import session, functions, users_stats, db_functions
-import os
+
 
 bot = commands.Bot(command_prefix=settings['prefix'], \
-                   intents=discord.Intents().all(), test_guilds=[settings['server']])
+                   intents=disnake.Intents().all(), \
+                    test_guilds=[settings['server']])
 
 
-# Events
 @bot.event
 async def on_ready():
     print('Приветствую, Господин.')
+    print('Загрузка модулей.')
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
+            print(filename[:-3])
             bot.load_extension(f'cogs.{filename[:-3]}')
     print('Все модули загружены.')
 
@@ -28,6 +25,9 @@ async def on_ready():
 async def on_member_join(member):
     print(f'{member} присоединился на сервер.')
 
+    role = member.mutual_guilds[0].get_role(848161737655058463)
+    await member.add_roles(role)
+    
 
 @bot.event
 async def on_member_remove(member):
