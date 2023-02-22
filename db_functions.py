@@ -1,7 +1,8 @@
 from connect_db import mydb
 import session, random
+import disnake
 
-def select_user(db, name):
+def select_user(db, name: str):
     cursor = db.cursor()
 
     sql = "SELECT idUser \
@@ -14,7 +15,7 @@ def select_user(db, name):
     return result[0]
 
 
-def get_last_insert_id(db):
+def get_last_insert_id(db) -> int:
     cursor = db.cursor()
     sql = 'SELECT LAST_INSERT_ID() from users'
     cursor.execute(sql)
@@ -24,7 +25,7 @@ def get_last_insert_id(db):
     return cur_id
 
 
-def get_last_user_id(db):
+def get_last_user_id(db) -> int:
     cursor = db.cursor()
     sql = 'SELECT MAX(idUser) from users'
     cursor.execute(sql)
@@ -34,7 +35,7 @@ def get_last_user_id(db):
     return cur_id[0]
 
 
-def insert_users(db, values, new_id):
+def insert_users(db, values: list, new_id: int):
     cursor = db.cursor()
     
     sql = "INSERT INTO users \
@@ -49,7 +50,7 @@ def insert_users(db, values, new_id):
     print('Success insert user.')
 
 
-def insert_stats(db, values, new_id):
+def insert_stats(db, values: list, new_id: int):
     cursor = db.cursor()
 
     sql = "INSERT INTO stats \
@@ -64,7 +65,7 @@ def insert_stats(db, values, new_id):
     print('Success insert stats.')
 
 
-def insert_duel(db, values, new_id):
+def insert_duel(db, values: list, new_id: int):
     cursor = db.cursor()
 
     sql = "INSERT INTO duel \
@@ -79,7 +80,7 @@ def insert_duel(db, values, new_id):
     print('Success insert duel.')
 
 
-def update_users(db, name, values):
+def update_users(db, name: str, values: list):
     idStat = select_user(db, name)
     val = [values[1], idStat]
     cursor = db.cursor()
@@ -92,7 +93,7 @@ def update_users(db, name, values):
     db.commit()
 
 
-def update_stats(db, name, values):
+def update_stats(db, name: str, values: list):
     idStat = select_user(db, name)
     values.append(idStat)
     cursor = db.cursor()
@@ -106,7 +107,7 @@ def update_stats(db, name, values):
     db.commit()
 
 
-def update_duel(db, name, values):
+def update_duel(db, name: str, values: list):
     idStat = select_user(db, name)
     values.append(idStat)
     cursor = db.cursor()
@@ -119,7 +120,7 @@ def update_duel(db, name, values):
     db.commit()
 
 
-def values_to_users(i, values):
+def values_to_users(i: int, values: list) -> list:
     t = []
 
     if i == -1:
@@ -134,7 +135,7 @@ def values_to_users(i, values):
     return t
 
 
-def values_to_stats(i, values):
+def values_to_stats(i: int, values: list) -> list:
     t = []
 
     if i == -1:
@@ -155,7 +156,7 @@ def values_to_stats(i, values):
     return t
 
 
-def values_to_duel(i, values):
+def values_to_duel(i: int, values: list) -> list:
     t = []
 
     if i == -1:
@@ -168,7 +169,7 @@ def values_to_duel(i, values):
     return t
 
 
-def divide_values(values, count):
+def divide_values(values: list, count: int) -> tuple:
     users = []
     stats = []
     duels = []
@@ -194,7 +195,7 @@ def divide_values(values, count):
     return (users, stats, duels)
 
 
-def update_algo(values):
+def update_algo(values: list):
     db = mydb()
     db.open_connect()
     users, stats, duel = divide_values(values, len(values))
@@ -273,9 +274,9 @@ def get_id_random_task_complexity(number_task: int, complexity: str, db) -> int:
 
 
 def get_sql_query_rnd_task_complexity(number_task: int, complexity: str) -> str:
-    sql = f"SELECT ege_{number_task}.type, ege_{number_task}.complexity, " + \
-        f"ege_{number_task}.condition, ege_{number_task}.attachments, " + \
-        f"ege_{number_task}.answer " + \
+    sql = f"SELECT id_ege_{number_task}, ege_{number_task}.type," + \
+        f"ege_{number_task}.complexity, " + \
+        f"ege_{number_task}.condition, " + f"ege_{number_task}.answer " + \
         f"FROM courses.ege_{number_task} " + \
         f"WHERE complexity = \"{complexity}\""
 
@@ -283,10 +284,40 @@ def get_sql_query_rnd_task_complexity(number_task: int, complexity: str) -> str:
 
 
 def get_dict_from_task(result: list) -> dict:
-    row = {'type': result[0], 'complexity': result[1],
-           'condition': result[2], 'attachments': result[3], 'answer': result[4]}
+    row = {'id_task': result[0], 'type': result[1], 'complexity': result[2],
+           'condition': result[3], 'answer': result[4]}
 
     return row
+
+
+def check_pic_condition(row: dict) -> bool:
+    if row['condition'].count('pic') > 0:
+        return True
+    return False
+
+
+def get_pic_condition(row_task: dict) -> dict:
+    files = []
+    rows = row_task['condition'].split('\n')
+    id_task = row_task['id_task']
+    condition = ''
+    condition_lst = []
+    count_rows = 1
+
+    for row in rows:
+        if 'pic' in row:
+            path = f'S:/Programming/DB/ege_2/{id_task}.{count_rows}.png'
+            file = disnake.File(fp=path)
+            files.append(file)
+            count_rows += 1
+            condition_lst.append(condition)
+            condition = ''
+        else:
+            condition += row + '\n'
+
+    row_task['condition'] = condition_lst
+    row_task['files'] = files
+    return row_task
 
 
 def get_task(number_task: int, complexity: str) -> dict:
@@ -300,6 +331,10 @@ def get_task(number_task: int, complexity: str) -> dict:
     cursor.execute(sql)
     result = cursor.fetchall()
     row = get_dict_from_task(result[id_random_task - 1])
+
+    if check_pic_condition(row):
+        row = get_pic_condition(row)
+
     db.close_connect()
 
     return row

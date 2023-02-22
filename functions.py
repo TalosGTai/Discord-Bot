@@ -1,6 +1,7 @@
 from random import randint
 import datetime as DT
 from db_functions import get_question_from_db
+import disnake
 
 
 def duel_algo(user1, user2):
@@ -32,7 +33,7 @@ def duel_algo(user1, user2):
 
 
 # Формула расчёт денег на победу
-def calculate_money_win(wr1, wr2, money1, money2):
+def calculate_money_win(wr1, wr2, money1: float, money2: float) -> float:
     money_win = min(wr1, wr2) * min(money1 / 100, money2 / 100)
 
     if wr1 < wr2:
@@ -56,7 +57,7 @@ def update_duel_stat(stat, game):
 
 
 # check < 0 and to view: xxx.xx
-def update_money(user_money, money_win):
+def update_money(user_money: float, money_win: float) -> float:
     # проверка на отрицательное количество монет
     if user_money - money_win < 0:
         money_win = user_money
@@ -67,12 +68,12 @@ def update_money(user_money, money_win):
 
 
 # convert number to two digits
-def to_two_digits(num):
+def to_two_digits(num: float) -> float:
     return int(num * 100) / 100
 
 
 # Количество дней от даты до текущего дня
-def date_to_days(user_date):
+def date_to_days(user_date: str) -> int:
     date = user_date.split('-')
     date = DT.date(int(date[0]), int(date[1]), int(date[2]))
     days = abs(int((date - DT.date.today()).days))
@@ -81,7 +82,7 @@ def date_to_days(user_date):
 
 
 # окончания для даты (дня, дней)
-def get_days(day):
+def get_days(day: int) -> dict:
     days = {
         0: 'дней',
         1: 'день',
@@ -134,7 +135,7 @@ def some_phrases(who):
 
 
 # delete \
-def delete_reverse_slash(s):
+def delete_reverse_slash(s: str) -> str:
     if s.find('\\') == -1:
         return s
     else:
@@ -381,16 +382,28 @@ def trainer_2_text():
     return (title_msg, description_msg, color_msg)
 
 
-def embed_task_msg(number_task: int, row: dict) -> tuple[str, str, int]:
-    title_msg = f'Задача из {number_task}ого номера ЕГЭ по Информатике'
+def embed_task_msg(number_task: int, row: dict) -> list:
+    title = f'Задача из {number_task}ого номера ЕГЭ по Информатике'
+    description = f"Тип задания: {row['type']}\n"
+    description += f"Сложность задания: {row['complexity']}\n"
+    color= 0x53377A
+    embeds = []
 
-    description_msg = f"Тип задания: {row['type']}\n"
-    description_msg += f"Сложность задания: {row['complexity']}\n"
-    description_msg += 'Условие:\n'
-    description_msg += f"{row['condition']}"
-    color_msg = 0x53377A
+    if 'files' in row.keys():
+        for i in range(len(row['files'])):
+            description += row['condition'][i]
+            embed_i = disnake.Embed(color=color, description=description)
+            embed_i.set_image(file=row['files'][i])
+            embeds.append(embed_i)
+            description = ''
+    else:
+        description += 'Условие:\n'
+        description += f"{row['condition']}"
+        embed = disnake.Embed(
+            title=title, description=description, color=color)
+        embeds.append(embed)
 
-    return (title_msg, description_msg, color_msg)
+    return embeds
 
 
 def embed_days_to_ege(t_ege: tuple[tuple[int, str], tuple[int, str],
@@ -399,7 +412,10 @@ def embed_days_to_ege(t_ege: tuple[tuple[int, str], tuple[int, str],
     title = "Дней до экзаменов"
     description = f'до ЕГЭ по инфе {t_ege[0][0]}/{t_ege[0][0] + 1} {t_ege[0][1]}' + new_line
     description += f'до ЕГЭ по матеше {t_ege[1][0]} {t_ege[1][1]}' + new_line
-    description += f'до ЕГЭ по русичу {t_ege[2][0]} {t_ege[2][1]}'
+    description += f'до ЕГЭ по русичу {t_ege[2][0]} {t_ege[2][1]}' + new_line
+    description += f'до ЕГЭ по физике {t_ege[3][0]} {t_ege[3][1]}' + new_line
+    description += f'до ЕГЭ по обществу {t_ege[4][0]} {t_ege[4][1]}' + new_line
+    description += f'до ЕГЭ по истории {t_ege[5][0]} {t_ege[5][1]}'
     color = 0x00690a
 
     return (title, description, color)
@@ -410,6 +426,14 @@ def embed_question() -> tuple[str, int]:
     color = 0x003d03
 
     return (description, color)
+
+
+def find_channel_by_name(bot, source_channel: str):
+    for guild in bot.guilds:
+        for channel in guild.channels:
+            if channel.name == source_channel:
+                return channel
+    return False
 
 
 def find_user(name, all_users):
