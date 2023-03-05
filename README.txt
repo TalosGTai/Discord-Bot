@@ -6,3 +6,4 @@ run dina.py
 
 Contacts:
 Tg - Gtai_IT
+Discord - GTai#6400
