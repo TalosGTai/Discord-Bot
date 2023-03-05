@@ -58,9 +58,11 @@ class Ege(commands.Cog):
     @commands.slash_command(name='задачи_егэ_инф')
     async def tasks(self, 
      inter: disnake.ApplicationCommandInteraction,
-    number_task: int = 8, complexity: str = 'Средняя'):
+        номер: int = 8, сложность: str = 'Средняя'):
+        number_task, complexity = номер, сложность
         '''Реши задачу из любого номера ЕГЭ по Информатике'''
-        if str(inter.guild.get_channel(inter.channel.id)) == 'инфа-задачи' or \
+        channels = ['инфа-задачи', 'группа-орлы', 'группа-убийцы', 'кругосветка-pro']
+        if str(inter.guild.get_channel(inter.channel.id)) in channels or \
                 inter.author.display_name == 'GTai':
             lst_tasks = [2, 8]
             types_complexity = ['Лёгкая', 'Средняя', 'Сложная']

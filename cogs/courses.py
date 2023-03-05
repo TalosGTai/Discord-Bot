@@ -11,6 +11,8 @@ from functions import krugosvetka_pro_text_2
 from functions import c_university_text_1
 from functions import c_university_text_2
 from functions import trainer_2_text
+from functions import trainer_8_text
+
 
 class Courses(commands.Cog):
     '''Курсы'''
@@ -18,8 +20,7 @@ class Courses(commands.Cog):
     def __init__(self, client) -> None:
         self.client = client
 
-    @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
-    @commands.command(name='егэ_24', aliases=['егэ24', 'ege24', 'ege_24'])
+    @commands.slash_command(name='егэ_24')
     async def ege_24(self, ctx):
         '''Курс 24ого задания ЕГЭ по Информатике'''
         
@@ -38,8 +39,7 @@ class Courses(commands.Cog):
         await ctx.message.delete()
 
 
-    @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
-    @commands.command(name='егэ_25', liases=['егэ25', 'ege25', 'ege_25'])
+    @commands.slash_command(name='егэ_25')
     async def ege_25(self, ctx):
         '''Курс 25ого задания ЕГЭ по Информатике'''
 
@@ -60,8 +60,7 @@ class Courses(commands.Cog):
         await ctx.message.delete()
 
 
-    @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
-    @commands.command(name = 'егэ_26', aliases=['егэ26', 'ege26', 'ege_26'])
+    @commands.slash_command(name='егэ_26')
     async def ege_26(self, ctx):
         '''Курс 26ого задания ЕГЭ по Информатике'''
 
@@ -82,8 +81,7 @@ class Courses(commands.Cog):
         await ctx.message.delete()
 
 
-    @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
-    @commands.command(name='кругосветка', aliases=['кругосветкапро', 'krugosvetka', 'кругосветка_про', 'krugosvetka_pro'])
+    @commands.slash_command(name='кругосветка')
     async def krugosvetka_pro(self, ctx):
         '''Мастер-группа Кругосветка PRO ЕГЭ по Информатике'''
 
@@ -104,8 +102,7 @@ class Courses(commands.Cog):
         await ctx.message.delete()
     
 
-    @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
-    @commands.command(name='c_university', aliases=['с вуз', 'с_вуз', 'c_univer'])
+    @commands.slash_command(name='си_вуз')
     async def c_university(self, ctx):
         '''Видео-курс Си для ВУЗа'''
 
@@ -126,8 +123,7 @@ class Courses(commands.Cog):
         await ctx.message.delete()
 
 
-    @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
-    @commands.command(name='егэ_2', aliases=['егэ2', 'ege2', 'тренажёр2', 'тренажер2', 'trainer2', 'trainer_2'])
+    @commands.slash_command(name='егэ_2')
     async def trainer_2(self, ctx):
         '''Курс-тренажёр по 2ому заданию ЕГЭ Информатика'''
 
@@ -136,6 +132,41 @@ class Courses(commands.Cog):
         owner = await self.client.fetch_user(172383544201445376)
 
         title, description, color = trainer_2_text()
+        embed_1 = disnake.Embed(
+            title=title, description=description, color=color)
+        embed_1.set_author(name=author)
+
+        await user.send(embed=embed_1)
+        await ctx.message.delete()
+
+
+    @commands.slash_command(name='егэ_8')
+    async def trainer_8(self, ctx):
+        '''Курс-тренажёр по 8ому заданию ЕГЭ Информатика'''
+
+        user = ctx.message.author
+        author = 'GTai — Всеотец'
+        owner = await self.client.fetch_user(172383544201445376)
+
+        title, description, color = trainer_8_text()
+        embed_1 = disnake.Embed(
+            title=title, description=description, color=color)
+        embed_1.set_author(name=author)
+
+        await user.send(embed=embed_1)
+        await ctx.message.delete()
+
+
+    @commands.command(name='егэ_15', aliases=['егэ15', 'ege15', 'тренажёр15',\
+         'тренажер15', 'trainer15', 'trainer_15'])
+    async def trainer_15(self, ctx):
+        '''Курс-тренажёр по 15ому заданию ЕГЭ Информатика'''
+
+        user = ctx.message.author
+        author = 'GTai — Всеотец'
+        owner = await self.client.fetch_user(172383544201445376)
+
+        title, description, color = trainer_8_text()
         embed_1 = disnake.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)

@@ -371,12 +371,29 @@ def c_university_text_2(owner):
 def trainer_2_text():
     title_msg = 'Курс-тренажёр по 2ому заданию ЕГЭ Информатика'
 
-    description_msg = 'Бесплатный курс по подготовке и тренировке 2ого задания из ЕГЭ.\n'
-    description_msg += '• Научу как с 0 делать этот номер\n'
-    description_msg += '• 50+ заданий\n'
-    description_msg += '• Задания из реальных ЕГЭ прошлых лет\n'
-    description_msg += '• Видео-разборы заданий\n\n'
+    description_msg = 'Бесплатный курс по подготовке и тренировке 2ого задания из ЕГЭ.\n\n'
+    description_msg += '• Научу с 0 делать этот номер;\n'
+    description_msg += '• 50+ заданий для практики;\n'
+    description_msg += '• Задания из реальных ЕГЭ прошлых лет;\n'
+    description_msg += '• Видео-разборы заданий;\n'
+    description_msg += '• Ответы на все возникающие вопросы;\n\n'
     description_msg += 'Для прохождения курса перейди по ссылке -> https://stepik.org/course/126074'
+    color_msg = 0x5ACFF5
+
+    return (title_msg, description_msg, color_msg)
+
+
+def trainer_8_text():
+    title_msg = 'Курс-тренажёр по 8ому заданию ЕГЭ Информатика'
+
+    description_msg = 'Отличная возможность по подготовке и тренировке 8ого задания из ЕГЭ.\n\n'
+    description_msg += '• Научу с 0 делать этот номер;\n'
+    description_msg += '• 50+ заданий для практики;\n'
+    description_msg += '• Задания из реальных ЕГЭ прошлых лет;\n'
+    description_msg += '• Видео-разборы заданий;\n\n'
+    description_msg += '• Ответы на все возникающие вопросы;\n\n'
+    description_msg += 'Всего лишь за 350р. ты получишь всё это!\n'
+    description_msg += 'Для приобретения курса перейди по ссылке -> https://stepik.org/a/131347'
     color_msg = 0x5ACFF5
 
     return (title_msg, description_msg, color_msg)

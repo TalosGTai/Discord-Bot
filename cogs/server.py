@@ -2,6 +2,7 @@ from discord.ext import tasks
 from disnake.ext import commands
 import session, os, functions, disnake
 import datetime as DT
+from git.repo import Repo
 
 
 class Server(commands.Cog):
@@ -100,6 +101,13 @@ class Server(commands.Cog):
         except Exception:
             print(f'Не удалось выгрузить {extension}.')
         await ctx.message.delete()
+
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def git_update(self):
+        repo = Repo('Discord', search_parent_directories=True)
+        repo.remote('origin').fetch('--dry-run')
 
 
 def setup(bot: commands.Bot):
