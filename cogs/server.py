@@ -105,9 +105,16 @@ class Server(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(administrator=True)
-    async def git_update(self):
-        repo = Repo('Discord', search_parent_directories=True)
-        repo.remote('origin').fetch('--dry-run')
+    async def git_update(self, inter: disnake.ApplicationCommandInteraction):
+        path = 'S:/Programming/Python/Bots/Discord/dina.py'
+        repo = Repo(path, search_parent_directories=True)
+        
+        if repo.remote('origin').exists():
+            repo.remote('origin').fetch()
+            repo.remote('origin').pull()
+            print('Загружена последняя версия.')
+        else:
+            print('Репозитория не существует.')
 
 
 def setup(bot: commands.Bot):
