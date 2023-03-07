@@ -4,8 +4,8 @@ from disnake.ext import commands
 class Stats(commands.Cog):
     '''Изменение/просмотр статистики участников'''
 
-    def __init__(self, client) -> None:
-        self.client = client
+    def __init__(self,  bot: commands.Bot) -> None:
+        self.bot = bot
 
 
     @commands.command()
@@ -301,5 +301,5 @@ class Stats(commands.Cog):
         pass
 
 
-def setup(client):
-    client.add_cog(Stats(client))
+def setup(bot: commands.Bot):
+    bot.add_cog(Stats(bot))

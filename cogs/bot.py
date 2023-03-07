@@ -5,19 +5,20 @@ import disnake
 class Dina(commands.Cog):
     '''Управление Диной'''
 
-    def __init__(self, client) -> None:
-        self.client = client
+    def __init__(self, bot: commands.Bot) -> None:
+        self.bot = bot
 
     @commands.command(name='send_msg', aliases=['send', 'смс'])
     @commands.has_permissions(administrator=True)
-    async def send_msg(self, ctx, msg_channel, msg):
+    async def send_msg(self, inter: disnake.ApplicationCommandInteraction,
+     msg_channel, msg):
         '''Отправить сообщение в чат
         
         Шаблон: command channel msg
         Пример: .send_msg "егэ-чат" "Привет, красавчик ^_^"
         '''
 
-        for guild in self.client.guilds:
+        for guild in self.bot.guilds:
             for channel in guild.channels:
                 if channel.name == msg_channel:
                     await channel.send(msg)
@@ -25,8 +26,8 @@ class Dina(commands.Cog):
 
     @commands.command(name='send_embed', aliases=['embed'])
     @commands.has_permissions(administrator=True)
-    async def send_embed(self, ctx, msg_channel: str, title: str,
-    description: str, color: str):
+    async def send_embed(self, inter: disnake.ApplicationCommandInteraction,
+     msg_channel: str, title: str, description: str, color: str):
         '''Отправить сообщение в чат
         
         Шаблон: command channel msg
@@ -36,7 +37,7 @@ class Dina(commands.Cog):
         embed = disnake.Embed(title=title,
                               description=description, color=color)
 
-        for guild in self.client.guilds:
+        for guild in self.bot.guilds:
             for channel in guild.channels:
                 if channel.name == msg_channel:
                     await channel.send(embed=embed)
@@ -44,12 +45,16 @@ class Dina(commands.Cog):
 
     @commands.command(name='clear', aliases=['очистить', 'удалить'])
     @commands.has_permissions(administrator=True)
-    async def clear(self, ctx, count):
-        '''Удаление сообщений'''
+    async def clear(self, ctx, count: int):
+        '''Удаление сообщений
+        
+        Шаблон: .clear count
+        Пример: .clear 5
+        '''
 
         await ctx.channel.purge(limit=int(count))
         await ctx.message.delete()
         
 
-def setup(client):
-    client.add_cog(Dina(client))
+def setup(bot: commands.Bot):
+    bot.add_cog(Dina(bot))

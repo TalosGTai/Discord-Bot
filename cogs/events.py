@@ -1,5 +1,6 @@
 from disnake.ext import commands
 import functions
+import disnake
 
 
 class Events(commands.Cog):
@@ -8,7 +9,8 @@ class Events(commands.Cog):
     def __init__(self, client) -> None:
         self.client = client
 
-    @commands.command()
+
+    @commands.slash_command(name='дней_до_нг')
     async def ny_days(self, ctx):
         '''Дней до начала Нового Года'''
 
@@ -19,12 +21,7 @@ class Events(commands.Cog):
         new_line = '\n'
         msg = f'{days_ny} дней до Нового Года!'
 
-        #if int(days_rus) == 1:
-        #    msg = 'Всем удачки на русском!\n Будьте котиками и затащите ^_^\n'
-        #    msg += 'Ведьмачка с вами — сотка в кармане!'
-
         await ctx.send(msg)
-        await ctx.message.delete()
 
 
 def setup(client):

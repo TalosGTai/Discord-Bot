@@ -106,7 +106,7 @@ class Server(commands.Cog):
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def git_update(self, inter: disnake.ApplicationCommandInteraction):
-        path = 'S:/Programming/Python/Bots/Discord/dina.py'
+        path = 'dina.py'
         repo = Repo(path, search_parent_directories=True)
         
         if repo.remote('origin').exists():
