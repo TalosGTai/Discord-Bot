@@ -21,10 +21,10 @@ class Courses(commands.Cog):
         self.client = client
 
     @commands.slash_command(name='егэ_24')
-    async def ege_24(self, ctx):
+    async def ege_24(self, inter: disnake.ApplicationCommandInteraction):
         '''Курс 24ого задания ЕГЭ по Информатике'''
         
-        user = ctx.message.author
+        user = inter.author
         author = 'GTai — Всеотец'
         owner = await self.client.fetch_user(172383544201445376)
 
@@ -36,14 +36,13 @@ class Courses(commands.Cog):
         
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
-        await ctx.message.delete()
 
 
     @commands.slash_command(name='егэ_25')
-    async def ege_25(self, ctx):
+    async def ege_25(self, inter: disnake.ApplicationCommandInteraction):
         '''Курс 25ого задания ЕГЭ по Информатике'''
 
-        user = ctx.message.author
+        user = inter.author
         author = 'GTai — Всеотец'
         owner = await self.client.fetch_user(172383544201445376)
 
@@ -57,14 +56,13 @@ class Courses(commands.Cog):
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
-        await ctx.message.delete()
 
 
     @commands.slash_command(name='егэ_26')
-    async def ege_26(self, ctx):
+    async def ege_26(self, inter: disnake.ApplicationCommandInteraction):
         '''Курс 26ого задания ЕГЭ по Информатике'''
 
-        user = ctx.message.author
+        user = inter.author
         author = 'GTai — Всеотец'
         owner = await self.client.fetch_user(172383544201445376)
 
@@ -78,14 +76,13 @@ class Courses(commands.Cog):
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
-        await ctx.message.delete()
 
 
     @commands.slash_command(name='кругосветка')
-    async def krugosvetka_pro(self, ctx):
+    async def krugosvetka_pro(self, inter: disnake.ApplicationCommandInteraction):
         '''Мастер-группа Кругосветка PRO ЕГЭ по Информатике'''
 
-        user = ctx.message.author
+        user = inter.author
         author = 'GTai — Всеотец'
         owner = await self.client.fetch_user(172383544201445376)
 
@@ -99,14 +96,13 @@ class Courses(commands.Cog):
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
-        await ctx.message.delete()
     
 
     @commands.slash_command(name='си_вуз')
-    async def c_university(self, ctx):
+    async def c_university(self, inter: disnake.ApplicationCommandInteraction):
         '''Видео-курс Си для ВУЗа'''
 
-        user = ctx.message.author
+        user = inter.author
         author = 'GTai — Всеотец'
         owner = await self.client.fetch_user(172383544201445376)
 
@@ -120,14 +116,13 @@ class Courses(commands.Cog):
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
-        await ctx.message.delete()
 
 
     @commands.slash_command(name='егэ_2')
-    async def trainer_2(self, ctx):
+    async def trainer_2(self, inter: disnake.ApplicationCommandInteraction):
         '''Курс-тренажёр по 2ому заданию ЕГЭ Информатика'''
 
-        user = ctx.message.author
+        user = inter.author
         author = 'GTai — Всеотец'
         owner = await self.client.fetch_user(172383544201445376)
 
@@ -137,14 +132,13 @@ class Courses(commands.Cog):
         embed_1.set_author(name=author)
 
         await user.send(embed=embed_1)
-        await ctx.message.delete()
 
 
     @commands.slash_command(name='егэ_8')
-    async def trainer_8(self, ctx):
+    async def trainer_8(self, inter: disnake.ApplicationCommandInteraction):
         '''Курс-тренажёр по 8ому заданию ЕГЭ Информатика'''
 
-        user = ctx.message.author
+        user = inter.author
         author = 'GTai — Всеотец'
         owner = await self.client.fetch_user(172383544201445376)
 
@@ -152,17 +146,16 @@ class Courses(commands.Cog):
         embed_1 = disnake.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
-
+        
         await user.send(embed=embed_1)
-        await ctx.message.delete()
 
 
     @commands.command(name='егэ_15', aliases=['егэ15', 'ege15', 'тренажёр15',\
          'тренажер15', 'trainer15', 'trainer_15'])
-    async def trainer_15(self, ctx):
+    async def trainer_15(self, inter: disnake.ApplicationCommandInteraction):
         '''Курс-тренажёр по 15ому заданию ЕГЭ Информатика'''
 
-        user = ctx.message.author
+        user = inter.author
         author = 'GTai — Всеотец'
         owner = await self.client.fetch_user(172383544201445376)
 
@@ -172,7 +165,6 @@ class Courses(commands.Cog):
         embed_1.set_author(name=author)
 
         await user.send(embed=embed_1)
-        await ctx.message.delete()
 
 
 def setup(client):
