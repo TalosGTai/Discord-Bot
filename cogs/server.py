@@ -12,6 +12,7 @@ class Server(commands.Cog):
         self.bot = bot
         self.update_rate.start()
         self.save.start()
+        self.git_update_auto.start()
 
 
     @tasks.loop(minutes=30.0)
@@ -101,6 +102,19 @@ class Server(commands.Cog):
         except Exception:
             print(f'Не удалось выгрузить {extension}.')
         await ctx.message.delete()
+
+
+    @tasks.loop(hours=12)
+    async def git_update_auto(self):
+        path = 'dina.py'
+        repo = Repo(path, search_parent_directories=True)
+
+        if repo.remote('origin').exists():
+            repo.remote('origin').fetch()
+            repo.remote('origin').pull()
+            print('Загружена последняя версия.')
+        else:
+            print('Репозитория не существует.')
 
 
     @commands.command()
