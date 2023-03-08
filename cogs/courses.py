@@ -33,9 +33,11 @@ class Courses(commands.Cog):
         embed_1.set_author(name=author)
         description = ege_24_text_2(owner)
         embed_2 = disnake.Embed(description=description, color=color)
+        response = 'Полная информация была отправлена тебе в личные сообщения :)'
         
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
+        await inter.send(response)
 
 
     @commands.slash_command(name='егэ_25')
@@ -53,9 +55,11 @@ class Courses(commands.Cog):
 
         description = ege_25_text_2(owner)
         embed_2 = disnake.Embed(description=description, color=color)
+        response = 'Полная информация была отправлена тебе в личные сообщения :)'
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
+        await inter.send(response)
 
 
     @commands.slash_command(name='егэ_26')
@@ -73,9 +77,11 @@ class Courses(commands.Cog):
 
         description = ege_26_text_2(owner)
         embed_2 = disnake.Embed(description=description, color=color)
+        response = 'Полная информация была отправлена тебе в личные сообщения :)'
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
+        await inter.send(response)
 
 
     @commands.slash_command(name='кругосветка')
@@ -93,9 +99,11 @@ class Courses(commands.Cog):
 
         description = krugosvetka_pro_text_2(owner)
         embed_2 = disnake.Embed(description=description, color=color)
+        response = 'Полная информация была отправлена тебе в личные сообщения :)'
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
+        await inter.send(response)
     
 
     @commands.slash_command(name='си_вуз')
@@ -113,9 +121,11 @@ class Courses(commands.Cog):
 
         description = c_university_text_2(owner)
         embed_2 = disnake.Embed(description=description, color=color)
+        response = 'Полная информация была отправлена тебе в личные сообщения :)'
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
+        await inter.send(response)
 
 
     @commands.slash_command(name='егэ_2')
@@ -130,6 +140,7 @@ class Courses(commands.Cog):
         embed_1 = disnake.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
+        response = 'Полная информация была отправлена тебе в личные сообщения :)'
 
         await user.send(embed=embed_1)
 
@@ -146,8 +157,10 @@ class Courses(commands.Cog):
         embed_1 = disnake.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
+        response = 'Полная информация была отправлена тебе в личные сообщения :)'
         
         await user.send(embed=embed_1)
+        await inter.send(response)
 
 
     @commands.command(name='егэ_15', aliases=['егэ15', 'ege15', 'тренажёр15',\
@@ -163,8 +176,10 @@ class Courses(commands.Cog):
         embed_1 = disnake.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
+        response = 'Полная информация была отправлена тебе в личные сообщения :)'
 
         await user.send(embed=embed_1)
+        await inter.send(response)
 
 
 def setup(client):
