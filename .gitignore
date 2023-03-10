@@ -1,5 +1,6 @@
 config.py
 users_stats.txt
+connect_db
 users_stats.py
 session.py
 __pycache__/

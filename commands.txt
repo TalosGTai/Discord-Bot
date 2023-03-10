@@ -1,7 +1,7 @@
 Administrators:
-.all_add_money (value)
-.all_set_money (value)
-.dina_save
+/all_add_money (value)
+/all_set_money (value)
+/dina_save
 
 Moderators:
 .add_money (name)

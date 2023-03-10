@@ -4,7 +4,7 @@ from db_functions import get_question_from_db
 import disnake
 
 
-def duel_algo(user1, user2):
+def duel_algo(user1, user2) -> dict:
     all_rate = user1.rate + user2.rate
     w1 = int(user1.rate / all_rate * 100)
 
@@ -14,7 +14,7 @@ def duel_algo(user1, user2):
     elif w1 == 100:
         w1 = 99
 
-    w = randint(1, 100)
+    w = randint(1, 99)
     m1 = w1
     res = dict()
 
@@ -43,7 +43,7 @@ def calculate_money_win(wr1, wr2, money1: float, money2: float) -> float:
 
 
 # +1 win and +1 game
-def update_duel_stat(stat, game):
+def update_duel_stat(stat, game: bool) -> str:
     all_games = int(stat[0]) + 1
 
     if game:
@@ -117,10 +117,8 @@ def get_days(day: int) -> dict:
 
 
 # на вход подаётся число (х или хх) -> xx
-def time_format(time):
-    if len(time) == 1:
-        time = '0' + time
-
+def time_format(time: str) -> str:
+    if len(time) == 1: return '0' + time
     return time
 
 
@@ -202,7 +200,7 @@ def ege_25_text_1():
     return (title_msg, description_msg, color_msg)
 
 
-def ege_25_text_2(owner):
+def ege_25_text_2(owner) -> str:
     text = 'Чтобы получить доступ к Курсу нужно:\n'
     text += '1. Перевести на карту сбербанка 360р. с текстом сообщения: "Инфа25"\n'
     text += 'на карту: 4276 0800 1585 5878\n'
@@ -213,8 +211,7 @@ def ege_25_text_2(owner):
     return text
 
 
-# title, description, color
-def ege_26_text_1():
+def ege_26_text_1() -> tuple(str, str, int):
     title_msg = 'Видео-курс 26 Задание ЕГЭ Информатика'
 
     description_msg = 'Всё самое необходимое для решения 26ого номера в ЕГЭ.\n\n'
@@ -236,7 +233,7 @@ def ege_26_text_1():
     return (title_msg, description_msg, color_msg)
 
 
-def ege_26_text_2(owner):
+def ege_26_text_2(owner) -> str:
     text = 'Чтобы получить доступ к Курсу нужно:\n'
     text += '1. Перевести на карту сбербанка 572р. с текстом сообщения: "Инфа26"\n'
     text += 'на карту: 4276 0800 1585 5878\n'
@@ -247,8 +244,7 @@ def ege_26_text_2(owner):
     return text
 
 
-# title, description, color
-def ege_27_text_1():
+def ege_27_text_1() -> tuple(str, str, int):
     title_msg = 'Видео-курс 27 Задание ЕГЭ Информатика'
 
     description_msg = 'Всё самое необходимое по строкам для решения 27ого номера в ЕГЭ.\n\n'
@@ -270,7 +266,7 @@ def ege_27_text_1():
     return (title_msg, description_msg, color_msg)
 
 
-def ege_27_text_2(owner):
+def ege_27_text_2(owner) -> str:
     text = 'Чтобы получить доступ к Курсу нужно:\n'
     text += '1. Перевести на карту сбербанка 750р. с текстом сообщения: "Инфа26"\n'
     text += 'на карту: 4276 0800 1585 5878\n'
@@ -281,8 +277,7 @@ def ege_27_text_2(owner):
     return text
 
 
-# title, description, color
-def krugosvetka_pro_text_1():
+def krugosvetka_pro_text_1() -> tuple(str, str, int):
     title_msg = 'Мастер-группа Кругосветка PRO ЕГЭ Информатика'
 
     description_msg = 'Хочешь высокие баллы? Тогда это то, что тебе нужно!\n'
@@ -315,7 +310,7 @@ def krugosvetka_pro_text_1():
     return (title_msg, description_msg, color_msg)
 
 
-def krugosvetka_pro_text_2(owner):
+def krugosvetka_pro_text_2(owner) -> str:
     text = 'Чтобы получить доступ к Мастер-группе нужно:\n'
     text += '1. Перевести на карту сбербанка 2164р.  с текстом сообщения: "КругосветкаPRO"\n'
     text += 'номер карты: 4276 0800 1585 5878\n'
@@ -327,8 +322,7 @@ def krugosvetka_pro_text_2(owner):
     return text
 
 
-# title, description, color
-def c_university_text_1():
+def c_university_text_1() -> tuple(str, str, int):
     title_msg = 'Видео-курс Си для ВУЗа'
 
     description_msg = 'Хочешь шарить в ВУЗе?\n'
@@ -358,7 +352,7 @@ def c_university_text_1():
     return (title_msg, description_msg, color_msg)
 
 
-def c_university_text_2(owner):
+def c_university_text_2(owner) -> str:
     text = 'Чтобы получить доступ к Мастер-группе нужно:\n'
     text += '1. Перевести на карту сбербанка 2164р.  с текстом сообщения: "КругосветкаPRO"\n'
     text += 'номер карты: 4276 0800 1585 5878\n'
@@ -370,7 +364,7 @@ def c_university_text_2(owner):
     return text
 
 
-def trainer_2_text():
+def trainer_2_text() -> tuple(str, str, int):
     title_msg = 'Курс-тренажёр по 2ому заданию ЕГЭ Информатика'
 
     description_msg = 'Бесплатный курс по подготовке и тренировке 2ого задания из ЕГЭ.\n\n'
@@ -385,7 +379,7 @@ def trainer_2_text():
     return (title_msg, description_msg, color_msg)
 
 
-def trainer_8_text():
+def trainer_8_text() -> tuple(str, str, int):
     title_msg = 'Курс-тренажёр по 8ому заданию ЕГЭ Информатика'
 
     description_msg = 'Отличная возможность по подготовке и тренировке 8ого задания из ЕГЭ.\n\n'
@@ -401,7 +395,7 @@ def trainer_8_text():
     return (title_msg, description_msg, color_msg)
 
 
-def trainer_15_text():
+def trainer_15_text() -> tuple(str, str, int):
     title_msg = 'Курс-тренажёр по 15ому заданию ЕГЭ Информатика'
 
     description_msg = 'Отличная возможность по подготовке и тренировке 15ого задания из ЕГЭ.\n\n'
@@ -471,9 +465,8 @@ def find_channel_by_name(bot, source_channel: str):
     return False
 
 
-def find_user(name, all_users):
+def find_user(name: str, all_users) -> None|bool:
     for user in all_users:
         if user.name.lower() == name.lower():
             return user
-
     return False

@@ -15,7 +15,7 @@ class Ege(commands.Cog):
 
 
     @commands.slash_command(name='дней_до_егэ')
-    async def ege_days(self, ctx):
+    async def ege_days(self, inter: disnake.ApplicationCommandInteraction):
         '''Дней до начала ЕГЭ'''
 
         inf = '2023-06-19'
@@ -47,12 +47,8 @@ class Ege(commands.Cog):
         title, description, color = embed_days_to_ege(t_ege)
         embed = disnake.Embed(
             title=title, description=description, color=color)
-
-        #if int(days_rus) == 1:
-        #    msg = 'Всем удачки на русском!\n Будьте котиками и затащите ^_^\n'
-        #    msg += 'GTai с вами — сотка в кармане!'
         
-        await ctx.send(embed=embed)
+        await inter.send(embed=embed)
     
 
     @commands.slash_command(name='задачи_егэ_инф')
