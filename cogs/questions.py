@@ -6,7 +6,7 @@ from functions import embed_question, find_channel_by_name
 class Questions(commands.Cog):
     '''Вопросы от ведьмачки'''
 
-    def __init__(self, bot) -> None:
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
 
@@ -35,5 +35,14 @@ class Questions(commands.Cog):
             await inter.send(msg)
 
 
-def setup(bot):
+    @commands.slash_command(name='задай_вопрос')
+    async def question_to_dina(self, 
+    inter: disnake.ApplicationCommandInteraction, вопрос: str):
+        '''Задай вопрос ведьмачке'''
+        # test mode
+        msg = 'В процессе разработки.\n Пиши ВСЕОТЦУ, если хочешь помочь ;)'
+        await inter.send(msg)
+
+
+def setup(bot: commands.Bot):
     bot.add_cog(Questions(bot))

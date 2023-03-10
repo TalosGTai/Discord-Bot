@@ -88,7 +88,7 @@ class Games(commands.Cog):
 
 
     # @commands.slash_command(name='угадай_число')
-    async def luck_number(self, inter: disnake.ApplicationCommandInteraction):
+    async def lucky_number(self, inter: disnake.ApplicationCommandInteraction):
         '''Угадай число
         
         Правила игры очень просты:
@@ -99,6 +99,13 @@ class Games(commands.Cog):
 
         P.S. в строке должно находится только число (без посторонних символов)
         '''
+        pass
+
+
+    # @commands.slash_command(name='ограбить')
+    async def crime(self, inter: disnake.ApplicationCommandInteraction,
+        hero: str):
+        '''Ограбить игрока'''
         pass
 
 
