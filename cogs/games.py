@@ -5,8 +5,9 @@ import disnake
 
 class Games(commands.Cog):
     '''Игры'''
-    def __init__(self, client) -> None:
-        self.client = client
+
+    def __init__(self, bot: commands.Bot) -> None:
+        self.bot = bot
 
 
     @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
@@ -85,6 +86,7 @@ class Games(commands.Cog):
                     await ctx.send(msg)
         await ctx.message.delete()
 
+
     # @commands.slash_command(name='угадай_число')
     async def luck_number(self, inter: disnake.ApplicationCommandInteraction):
         '''Угадай число
@@ -100,5 +102,5 @@ class Games(commands.Cog):
         pass
 
 
-def setup(client):
-    client.add_cog(Games(client))
+def setup(bot: commands.Bot):
+    bot.add_cog(Games(bot))

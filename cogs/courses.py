@@ -12,13 +12,14 @@ from functions import c_university_text_1
 from functions import c_university_text_2
 from functions import trainer_2_text
 from functions import trainer_8_text
+from functions import trainer_15_text
 
 
 class Courses(commands.Cog):
     '''Курсы'''
 
-    def __init__(self, client) -> None:
-        self.client = client
+    def __init__(self, bot: commands.Bot) -> None:
+        self.bot = bot
 
     @commands.slash_command(name='егэ_24')
     async def ege_24(self, inter: disnake.ApplicationCommandInteraction):
@@ -26,7 +27,7 @@ class Courses(commands.Cog):
         
         user = inter.author
         author = 'GTai — Всеотец'
-        owner = await self.client.fetch_user(172383544201445376)
+        owner = await self.bot.fetch_user(172383544201445376)
 
         title, description, color = ege_24_text_1()
         embed_1 = disnake.Embed(title=title, description=description, color=color)
@@ -46,7 +47,7 @@ class Courses(commands.Cog):
 
         user = inter.author
         author = 'GTai — Всеотец'
-        owner = await self.client.fetch_user(172383544201445376)
+        owner = await self.bot.fetch_user(172383544201445376)
 
         title, description, color = ege_25_text_1()
         embed_1 = disnake.Embed(
@@ -68,7 +69,7 @@ class Courses(commands.Cog):
 
         user = inter.author
         author = 'GTai — Всеотец'
-        owner = await self.client.fetch_user(172383544201445376)
+        owner = await self.bot.fetch_user(172383544201445376)
 
         title, description, color = ege_26_text_1()
         embed_1 = disnake.Embed(
@@ -90,7 +91,7 @@ class Courses(commands.Cog):
 
         user = inter.author
         author = 'GTai — Всеотец'
-        owner = await self.client.fetch_user(172383544201445376)
+        owner = await self.bot.fetch_user(172383544201445376)
 
         title, description, color = krugosvetka_pro_text_1()
         embed_1 = disnake.Embed(
@@ -112,7 +113,7 @@ class Courses(commands.Cog):
 
         user = inter.author
         author = 'GTai — Всеотец'
-        owner = await self.client.fetch_user(172383544201445376)
+        owner = await self.bot.fetch_user(172383544201445376)
 
         title, description, color = c_university_text_1()
         embed_1 = disnake.Embed(
@@ -134,7 +135,6 @@ class Courses(commands.Cog):
 
         user = inter.author
         author = 'GTai — Всеотец'
-        owner = await self.client.fetch_user(172383544201445376)
 
         title, description, color = trainer_2_text()
         embed_1 = disnake.Embed(
@@ -143,6 +143,7 @@ class Courses(commands.Cog):
         response = 'Полная информация была отправлена тебе в личные сообщения :)'
 
         await user.send(embed=embed_1)
+        await inter.send(response)
 
 
     @commands.slash_command(name='егэ_8')
@@ -151,7 +152,6 @@ class Courses(commands.Cog):
 
         user = inter.author
         author = 'GTai — Всеотец'
-        owner = await self.client.fetch_user(172383544201445376)
 
         title, description, color = trainer_8_text()
         embed_1 = disnake.Embed(
@@ -170,9 +170,8 @@ class Courses(commands.Cog):
 
         user = inter.author
         author = 'GTai — Всеотец'
-        owner = await self.client.fetch_user(172383544201445376)
 
-        title, description, color = trainer_8_text()
+        title, description, color = trainer_15_text()
         embed_1 = disnake.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
@@ -182,5 +181,5 @@ class Courses(commands.Cog):
         await inter.send(response)
 
 
-def setup(client):
-    client.add_cog(Courses(client))
+def setup(bot: commands.Bot):
+    bot.add_cog(Courses(bot))
