@@ -39,6 +39,7 @@ class Questions(commands.Cog):
     async def question_to_dina(self, 
     inter: disnake.ApplicationCommandInteraction, вопрос: str):
         '''Задай вопрос ведьмачке'''
+        # test mode
         msg = 'В процессе разработки.\n Пиши ВСЕОТЦУ, если хочешь помочь ;)'
         await inter.send(msg)
 
