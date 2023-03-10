@@ -85,6 +85,7 @@ class Games(commands.Cog):
                     await ctx.send(msg)
         await ctx.message.delete()
 
+
     # @commands.slash_command(name='угадай_число')
     async def luck_number(self, inter: disnake.ApplicationCommandInteraction):
         '''Угадай число
