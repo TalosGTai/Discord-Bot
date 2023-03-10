@@ -10,7 +10,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def add_money(self, ctx, hero, money):
+    async def add_money(self, ctx, hero: str, money: str):
         '''Добавить/отнять монет участнику
         
         Шаблон: .add_money name money
@@ -41,7 +41,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def add_rate(self, ctx, hero, count):
+    async def add_rate(self, ctx, hero: str, count: str):
         '''Добавить/отнять бонусный рейтинг
         
         Шаблон: .add_rate name count
@@ -71,7 +71,7 @@ class Stats(commands.Cog):
 
 
     @commands.has_permissions(kick_members=True)
-    async def add_req_help(self, ctx, hero, count):
+    async def add_req_help(self, ctx, hero: str, count: str):
         '''Увеличение/уменьшние характеристики запросы помощи
 
         Шаблон: .add_done_help name count
@@ -91,7 +91,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def set_req_help(self, ctx, hero, count):
+    async def set_req_help(self, ctx, hero: str, count: str):
         '''Изменение характеристики запросы помощи
 
         Шаблон: .add_done_help name count
@@ -111,7 +111,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def add_done_help(self, ctx, hero, count):
+    async def add_done_help(self, ctx, hero: str, count: str):
         '''Увеличение/уменьшние характеристики помощь
 
         Шаблон: .add_done_help name count
@@ -131,7 +131,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def set_done_help(self, ctx, hero, count):
+    async def set_done_help(self, ctx, hero: str, count: str):
         '''Изменение характеристики запросы помощи
 
         Шаблон: .add_done_help name count
@@ -151,7 +151,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def add_count_projects(self, ctx, hero, count):
+    async def add_count_projects(self, ctx, hero: str, count: str):
         '''Увеличение количества проектов
 
         Шаблон: .add_count_projects name count
@@ -171,7 +171,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def set_user_date(self, ctx, hero, date):
+    async def set_user_date(self, ctx, hero: str, date: str):
         '''Установка начало даты пребывания на сервере
         
         Шаблон: .set_user_date name date 
@@ -203,7 +203,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(administrator=True)
-    async def all_add_money(self, ctx, money):
+    async def all_add_money(self, ctx, money: str):
         '''Добавить всем участникам денег
         
         Пример: .all_add_money 100
@@ -221,7 +221,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(administrator=True)
-    async def all_set_money(self, ctx, money):
+    async def all_set_money(self, ctx, money: str):
         '''Установить количество монет для всех
         
         Пример: .all_set_money 100
@@ -277,7 +277,7 @@ class Stats(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def duel_info(self, ctx, hero):
+    async def duel_info(self, ctx, hero: str):
         '''Статистика в дуэлях
         
         Шаблон: .duel_info name

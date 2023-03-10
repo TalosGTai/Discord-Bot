@@ -10,26 +10,26 @@ class Games(commands.Cog):
         self.bot = bot
 
 
-    @commands.cooldown(rate=1, per=1, type=commands.BucketType.user)
-    @commands.command(name='дуэль', aliases=['драка', 'файт', 'fight', 'attack', 'атака'])
-    async def duel(self, ctx, hero):
+    @commands.slash_command(name='дуэль')
+    async def duel(self, inter: disnake.ApplicationCommandInteraction, противник: str):
         '''Вызов на дуэль другого игрока
         
         Старайся вызывать более сильных противников, Геральт бы одобрил!
 
-        Пример: .duel GTai 
+        Пример: .дуэль GTai 
         '''
-        author = ctx.message.author.name
+        hero = противник
+        author = inter.author.name
         user1 = functions.find_user(author, session.all_users)
         user1.count_messages -= 1
         user2 = functions.find_user(hero, session.all_users)
         check = True
         
         if user2 == False:
+            # добавить embed
             msg = 'Не халтурь, выбери реального противника'
             check = False
         
-        # фразы
         '''
         if can_duel(user1):
             if can_duel(user2):
@@ -43,22 +43,23 @@ class Games(commands.Cog):
         
         if check:
             if int(user1.money) == 0:
+                # embed
                 msg = 'Монет нет, дуэли не будет\n'
                 # добавить разные фразы
                 msg += 'Нужно работать, бездельник'
 
-                await ctx.send(msg)
+                await inter.send(msg)
             elif int(user2.money) == 0:
                 # добавить разные фразы
-                await ctx.send(f'У {hero} нет монет :(')
+                await inter.send(f'У {hero} нет монет :(')
             else:
                 # Проверка дуэли с ботом или самим собой
                 if user2 and user2.name == 'Dina':
                     # добавить разные фразы
-                    await ctx.send(f'Рано тебе ещё с ведьмачкой тягаться, смерд')
+                    await inter.send(f'Рано тебе ещё с ведьмачкой тягаться, смерд')
                 elif user2 and user1.name == user2.name:
                     # добавить разные фразы
-                    await ctx.send(f'С собой сражаться бессмысленно')
+                    await inter.send(f'С собой сражаться бессмысленно')
                 else:
                     res = functions.duel_algo(user1, user2)
                     user_win = res['winner']
@@ -77,14 +78,14 @@ class Games(commands.Cog):
                     user_win.money += money_win
                     user_lose.money -= money_win
 
+                    # embed
                     msg = 'Дуэль между {} {}% и {} {}%\n'.format(
                         user_win.name, wr1, user_lose.name, wr2)
                     msg += '{} одержал победу в дуэли над {}\n'.format(
                         user_win.name, user_lose.name)
                     msg += 'И выиграл {} монет'.format(money_win)
                     
-                    await ctx.send(msg)
-        await ctx.message.delete()
+                    await inter.send(msg)
 
 
     # @commands.slash_command(name='угадай_число')
@@ -105,7 +106,12 @@ class Games(commands.Cog):
     # @commands.slash_command(name='ограбить')
     async def crime(self, inter: disnake.ApplicationCommandInteraction,
         hero: str):
-        '''Ограбить игрока'''
+        '''Ограбить игрока
+        
+        Ты можешь напасть попытаться ограбить игрока,
+        но есть шанс быть пойманным. 
+
+        Вероятность успеха зависит от твоих навыков '''
         pass
 
 

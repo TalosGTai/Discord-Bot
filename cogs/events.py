@@ -6,12 +6,12 @@ import disnake
 class Events(commands.Cog):
     '''События'''
 
-    def __init__(self, client) -> None:
-        self.client = client
+    def __init__(self, bot: commands.Bot) -> None:
+        self.bot = bot
 
 
     @commands.slash_command(name='дней_до_нг')
-    async def ny_days(self, ctx):
+    async def ny_days(self, inter: disnake.ApplicationCommandInteraction):
         '''Дней до начала Нового Года'''
 
         ny = '2023-12-31'
@@ -21,8 +21,8 @@ class Events(commands.Cog):
         new_line = '\n'
         msg = f'{days_ny} дней до Нового Года!'
 
-        await ctx.send(msg)
+        await inter.send(msg)
 
 
-def setup(client):
-    client.add_cog(Events(client))
+def setup(bot: commands.Bot):
+    bot.add_cog(Events(bot))
