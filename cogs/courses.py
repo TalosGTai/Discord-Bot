@@ -21,6 +21,7 @@ class Courses(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
+
     @commands.slash_command(name='егэ_24')
     async def ege_24(self, inter: disnake.ApplicationCommandInteraction):
         '''Курс 24ого задания ЕГЭ по Информатике'''
@@ -163,8 +164,6 @@ class Courses(commands.Cog):
         await inter.send(response)
 
 
-    @commands.command(name='егэ_15', aliases=['егэ15', 'ege15', 'тренажёр15',\
-         'тренажер15', 'trainer15', 'trainer_15'])
     async def trainer_15(self, inter: disnake.ApplicationCommandInteraction):
         '''Курс-тренажёр по 15ому заданию ЕГЭ Информатика'''
 

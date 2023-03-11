@@ -140,8 +140,7 @@ def delete_reverse_slash(s: str) -> str:
         return s[:s.find('\\'):] + s[s.find('\\') + 1::]
 
 
-# title, description, color
-def ege_24_text_1():
+def ege_24_text_1() -> tuple[str, str, int]:
     title_msg = 'Видео-курс 24 Задание ЕГЭ Информатика'
 
     description_msg = 'Хочешь понять строки и уметь решать все 24ые номера?\n'
@@ -176,7 +175,6 @@ def ege_24_text_2(owner):
     return text
 
 
-# title, description, color
 def ege_25_text_1():
     title_msg = 'Видео-курс 25 Задание ЕГЭ Информатика'
 
@@ -211,7 +209,7 @@ def ege_25_text_2(owner) -> str:
     return text
 
 
-def ege_26_text_1() -> tuple(str, str, int):
+def ege_26_text_1() -> tuple[str, str, int]:
     title_msg = 'Видео-курс 26 Задание ЕГЭ Информатика'
 
     description_msg = 'Всё самое необходимое для решения 26ого номера в ЕГЭ.\n\n'
@@ -244,7 +242,7 @@ def ege_26_text_2(owner) -> str:
     return text
 
 
-def ege_27_text_1() -> tuple(str, str, int):
+def ege_27_text_1() -> tuple[str, str, int]:
     title_msg = 'Видео-курс 27 Задание ЕГЭ Информатика'
 
     description_msg = 'Всё самое необходимое по строкам для решения 27ого номера в ЕГЭ.\n\n'
@@ -277,7 +275,7 @@ def ege_27_text_2(owner) -> str:
     return text
 
 
-def krugosvetka_pro_text_1() -> tuple(str, str, int):
+def krugosvetka_pro_text_1() -> tuple[str, str, int]:
     title_msg = 'Мастер-группа Кругосветка PRO ЕГЭ Информатика'
 
     description_msg = 'Хочешь высокие баллы? Тогда это то, что тебе нужно!\n'
@@ -322,7 +320,7 @@ def krugosvetka_pro_text_2(owner) -> str:
     return text
 
 
-def c_university_text_1() -> tuple(str, str, int):
+def c_university_text_1() -> tuple[str, str, int]:
     title_msg = 'Видео-курс Си для ВУЗа'
 
     description_msg = 'Хочешь шарить в ВУЗе?\n'
@@ -364,7 +362,7 @@ def c_university_text_2(owner) -> str:
     return text
 
 
-def trainer_2_text() -> tuple(str, str, int):
+def trainer_2_text() -> tuple[str, str, int]:
     title_msg = 'Курс-тренажёр по 2ому заданию ЕГЭ Информатика'
 
     description_msg = 'Бесплатный курс по подготовке и тренировке 2ого задания из ЕГЭ.\n\n'
@@ -379,7 +377,7 @@ def trainer_2_text() -> tuple(str, str, int):
     return (title_msg, description_msg, color_msg)
 
 
-def trainer_8_text() -> tuple(str, str, int):
+def trainer_8_text() -> tuple[str, str, int]:
     title_msg = 'Курс-тренажёр по 8ому заданию ЕГЭ Информатика'
 
     description_msg = 'Отличная возможность по подготовке и тренировке 8ого задания из ЕГЭ.\n\n'
@@ -395,7 +393,7 @@ def trainer_8_text() -> tuple(str, str, int):
     return (title_msg, description_msg, color_msg)
 
 
-def trainer_15_text() -> tuple(str, str, int):
+def trainer_15_text() -> tuple[str, str, int]:
     title_msg = 'Курс-тренажёр по 15ому заданию ЕГЭ Информатика'
 
     description_msg = 'Отличная возможность по подготовке и тренировке 15ого задания из ЕГЭ.\n\n'
@@ -465,7 +463,7 @@ def find_channel_by_name(bot, source_channel: str):
     return False
 
 
-def find_user(name: str, all_users) -> None|bool:
+def find_user(name: str, all_users):
     for user in all_users:
         if user.name.lower() == name.lower():
             return user

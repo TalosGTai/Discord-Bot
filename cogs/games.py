@@ -12,12 +12,8 @@ class Games(commands.Cog):
 
     @commands.slash_command(name='дуэль')
     async def duel(self, inter: disnake.ApplicationCommandInteraction, противник: str):
-        '''Вызов на дуэль другого игрока
-        
-        Старайся вызывать более сильных противников, Геральт бы одобрил!
+        '''Вызов на дуэль другого игрока'''
 
-        Пример: .дуэль GTai 
-        '''
         hero = противник
         author = inter.author.name
         user1 = functions.find_user(author, session.all_users)
@@ -90,9 +86,9 @@ class Games(commands.Cog):
 
     # @commands.slash_command(name='угадай_число')
     async def lucky_number(self, inter: disnake.ApplicationCommandInteraction):
-        '''Угадай число
+        '''Угадай число'''
         
-        Правила игры очень просты:
+        '''Правила игры очень просты:
             • загадано целое число от 1 до 100 (включительно)
             • у тебя 6 попыток
             • при каждой попытке ты будешь знать больше/меньше
@@ -106,9 +102,9 @@ class Games(commands.Cog):
     # @commands.slash_command(name='ограбить')
     async def crime(self, inter: disnake.ApplicationCommandInteraction,
         hero: str):
-        '''Ограбить игрока
+        '''Ограбить игрока'''
         
-        Ты можешь напасть попытаться ограбить игрока,
+        '''Ты можешь напасть попытаться ограбить игрока,
         но есть шанс быть пойманным. 
 
         Вероятность успеха зависит от твоих навыков '''
