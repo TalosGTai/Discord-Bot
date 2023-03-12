@@ -6,37 +6,36 @@ import disnake
 
 def duel_algo(user1, user2) -> dict:
     all_rate = user1.rate + user2.rate
-    w1 = int(user1.rate / all_rate * 100)
+    winrate_user_1 = int(user1.rate / all_rate * 100)
 
     # чтобы не было дуэлей 100-0
-    if w1 == 0:
-        w1 = 1
-    elif w1 == 100:
-        w1 = 99
+    if winrate_user_1 == 0:
+        winrate_user_1 = 1
+    elif winrate_user_1 == 100:
+        winrate_user_1 = 99
 
-    w = randint(1, 99)
-    m1 = w1
+    winrate_rnd: int = randint(1, 99)
     res = dict()
 
-    if w <= m1:
+    if winrate_rnd <= winrate_user_1:
         res['winner'] = user1
-        res['wr_w'] = w1
+        res['wr_w'] = winrate_user_1
         res['loser'] = user2
-        res['wr_l'] = 100 - w1
+        res['wr_l'] = 100 - winrate_user_1
     else:
         res['winner'] = user2
-        res['wr_w'] = 100 - w1
+        res['wr_w'] = 100 - winrate_user_1
         res['loser'] = user1
-        res['wr_l'] = w1
+        res['wr_l'] = winrate_user_1
 
     return res
 
 
 # Формула расчёт денег на победу
-def calculate_money_win(wr1, wr2, money1: float, money2: float) -> float:
-    money_win = min(wr1, wr2) * min(money1 / 100, money2 / 100)
+def calculate_money_win(winrate_user_1: int, winrate_user_2: int, money_1: float, money_2: float) -> float:
+    money_win = min(winrate_user_1, winrate_user_2) * min(money_1 / 100, money_2 / 100)
 
-    if wr1 < wr2:
+    if winrate_user_1 < winrate_user_2:
         money_win *= 1.1
 
     return to_two_digits(money_win)
@@ -122,16 +121,6 @@ def time_format(time: str) -> str:
     return time
 
 
-# who = Dina/hero/
-def some_phrases(who):
-    match(who):
-        case 'Dina':
-            pass
-            # sentences = []'')
-        case 'hero':
-            pass
-
-
 # delete \
 def delete_reverse_slash(s: str) -> str:
     if s.find('\\') == -1:
@@ -164,7 +153,7 @@ def ege_24_text_1() -> tuple[str, str, int]:
     return (title_msg, description_msg, color_msg)
 
 
-def ege_24_text_2(owner):
+def ege_24_text_2(owner) -> str:
     text = 'Чтобы получить доступ к Курсу нужно:\n'
     text += '1. Перевести на карту сбербанка 350р. с текстом сообщения: "Инфа24"\n'
     text += 'на карту: 4276 0800 1585 5878\n'
@@ -175,7 +164,7 @@ def ege_24_text_2(owner):
     return text
 
 
-def ege_25_text_1():
+def ege_25_text_1() -> dict[str, str, int]:
     title_msg = 'Видео-курс 25 Задание ЕГЭ Информатика'
 
     description_msg = 'Всё самое необходимое для решения 25ого номера в ЕГЭ.\n\n'
@@ -453,6 +442,48 @@ def embed_question() -> tuple[str, int]:
     color = 0x003d03
 
     return (description, color)
+
+
+def load_phrases(action: str) -> str:
+    match (action):
+        case 'bot':
+            f = open('../phrases/games/duel/fight_bot.txt')
+        case 'self':
+            f = open('../phrases/games/duel/fight_self.txt')
+        case 'none':
+            f = open('../phrases/games/duel/fight_none.txt')
+        case 'money-self':
+            f = open('../phrases/games/duel/money_self.txt')
+        case 'money-enemy':
+            f = open('../phrases/games/duel/money_enemy.txt')
+    
+    id_string: int = randint(0, count_strings_in_file(f) - 1)
+    phrase: str = get_string_by_id(f, id_string)
+
+    return phrase
+
+
+def count_strings_in_file(file) -> int:
+    count_strings: int = 0
+
+    for s in file:
+        count_strings += 1
+
+    return count_strings
+    
+
+def get_string_by_id(file, id_string: int) -> str:
+    cur_id: int = 0
+
+    for s in file:
+        if cur_id == id_string: return s
+        cur_id += 1
+
+
+def get_embed_by_phrase(phrase: str) -> disnake.Embed:
+    embed = disnake.Embed(description=phrase)
+
+    return embed
 
 
 def find_channel_by_name(bot, source_channel: str):
