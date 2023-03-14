@@ -13,7 +13,8 @@ class Games(commands.Cog):
 
 
     @commands.slash_command(name='дуэль')
-    async def duel(self, inter: disnake.ApplicationCommandInteraction, противник: str):
+    async def duel(self, inter: disnake.ApplicationCommandInteraction,
+        противник: str):
         '''Вызов на дуэль другого игрока'''
 
         hero = противник

@@ -47,7 +47,6 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_message(message):
-    #print(f'{message.author}: {message.content}')
     author = message.author.name
     author = functions.delete_reverse_slash(author)
     new_user = functions.find_user(author, session.all_users)

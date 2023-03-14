@@ -11,8 +11,8 @@ class Events(commands.Cog):
 
 
     @commands.slash_command(name='дней_до_нг')
-    async def ny_days(self, inter: disnake.ApplicationCommandInteraction):
-        '''Дней до начала Нового Года'''
+    async def days_ny(self, inter: disnake.ApplicationCommandInteraction):
+        '''Дней до Нового Года'''
 
         ny = '2023-12-31'
 
@@ -20,6 +20,20 @@ class Events(commands.Cog):
 
         new_line = '\n'
         msg = f'{days_ny} дней до Нового Года!'
+
+        await inter.send(msg)
+    
+    
+    @commands.slash_command(name='дней_до_Хэллоуина')
+    async def days_helloween(self, inter: disnake.ApplicationCommandInteraction):
+        '''Дней до Хэллоуина'''
+
+        ny = '2023-10-31'
+
+        days_ny = functions.date_to_days(ny)
+
+        new_line = '\n'
+        msg = f'{days_ny} дней до Хэллоуина!'
 
         await inter.send(msg)
 

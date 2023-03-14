@@ -237,7 +237,8 @@ def ege_27_text_1() -> tuple[str, str, int]:
     description_msg = 'Всё самое необходимое по строкам для решения 27ого номера в ЕГЭ.\n\n'
     description_msg += 'Что входит в курс:\n'
     description_msg += '• Нахождение делителей\n'
-    description_msg += '• Оптимизация\n'
+    description_msg += '• Последовательности\n'
+    description_msg += '• Динамическое программирование\n'
     description_msg += '• Разбор множества заданий(всё что только может попасться)\n'
     description_msg += '  + задания с последних лет из реальных ЕГЭ\n\n'
     description_msg += 'Общая длительность курса: ~2 часа.\n\n'
@@ -361,6 +362,23 @@ def trainer_2_text() -> tuple[str, str, int]:
     description_msg += '• Видео-разборы заданий;\n'
     description_msg += '• Ответы на все возникающие вопросы;\n\n'
     description_msg += 'Для прохождения курса перейди по ссылке -> https://stepik.org/course/126074'
+    color_msg = 0x5ACFF5
+
+    return (title_msg, description_msg, color_msg)
+
+
+def trainer_7_text() -> tuple[str, str, int]:
+    title_msg = 'Курс-тренажёр по 7ому заданию ЕГЭ Информатика'
+
+    description_msg = 'Отличная возможность по подготовке и тренировке 8ого задания из ЕГЭ.\n\n'
+    description_msg += '• Научу с 0 делать этот номер;\n'
+    description_msg += '• Разбор всех типов задания;\n'
+    description_msg += '• 50+ заданий для практики;\n'
+    description_msg += '• Задания из реальных ЕГЭ прошлых лет;\n'
+    description_msg += '• Видео-разборы заданий;\n\n'
+    description_msg += '• Ответы на все возникающие вопросы;\n\n'
+    description_msg += 'Всего лишь за 350р. ты получишь всё это!\n'
+    description_msg += 'Для приобретения курса перейди по ссылке -> https://stepik.org/a/131347'
     color_msg = 0x5ACFF5
 
     return (title_msg, description_msg, color_msg)
