@@ -27,8 +27,8 @@ class Actions(commands.Cog):
                     hero.money -= money
                     player.money += money
                     title = 'Передача монет'
-                    descr = f'Игрок {inter.autor.name} отдал '
-                    descr += f'{money} монте игроку {игрок}'
+                    descr = f'Игрок {inter.author.name} отдал '
+                    descr += f'{money} монет игроку {игрок}'
                     embed = disnake.Embed(title=title, description=descr)
                     await inter.send(embed=embed)
                 else:
