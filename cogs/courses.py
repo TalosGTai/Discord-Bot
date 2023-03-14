@@ -6,11 +6,14 @@ from functions import ege_25_text_1
 from functions import ege_25_text_2
 from functions import ege_26_text_1
 from functions import ege_26_text_2
+from functions import ege_27_text_1
+from functions import ege_27_text_2
 from functions import krugosvetka_pro_text_1
 from functions import krugosvetka_pro_text_2
 from functions import c_university_text_1
 from functions import c_university_text_2
 from functions import trainer_2_text
+from functions import trainer_7_text
 from functions import trainer_8_text
 from functions import trainer_15_text
 
@@ -78,6 +81,27 @@ class Courses(commands.Cog):
         embed_1.set_author(name=author)
 
         description = ege_26_text_2(owner)
+        embed_2 = disnake.Embed(description=description, color=color)
+        response = 'Полная информация была отправлена тебе в личные сообщения :)'
+
+        await user.send(embed=embed_1)
+        await user.send(embed=embed_2)
+        await inter.send(response)
+
+    
+    async def ege_27(self, inter: disnake.ApplicationCommandInteraction):
+        '''Курс 27ого задания ЕГЭ по Информатике'''
+
+        user = inter.author
+        author = 'GTai — Всеотец'
+        owner = await self.bot.fetch_user(172383544201445376)
+
+        title, description, color = ege_27_text_1()
+        embed_1 = disnake.Embed(
+            title=title, description=description, color=color)
+        embed_1.set_author(name=author)
+
+        description = ege_27_text_2(owner)
         embed_2 = disnake.Embed(description=description, color=color)
         response = 'Полная информация была отправлена тебе в личные сообщения :)'
 
@@ -155,6 +179,22 @@ class Courses(commands.Cog):
         author = 'GTai — Всеотец'
 
         title, description, color = trainer_8_text()
+        embed_1 = disnake.Embed(
+            title=title, description=description, color=color)
+        embed_1.set_author(name=author)
+        response = 'Полная информация была отправлена тебе в личные сообщения :)'
+        
+        await user.send(embed=embed_1)
+        await inter.send(response)
+
+
+    async def trainer_7(self, inter: disnake.ApplicationCommandInteraction):
+        '''Курс-тренажёр по 7ому заданию ЕГЭ Информатика'''
+
+        user = inter.author
+        author = 'GTai — Всеотец'
+
+        title, description, color = trainer_7_text()
         embed_1 = disnake.Embed(
             title=title, description=description, color=color)
         embed_1.set_author(name=author)
