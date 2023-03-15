@@ -24,7 +24,7 @@ class Events(commands.Cog):
         await inter.send(msg)
     
     
-    @commands.slash_command(name='дней_до_Хэллоуина')
+    @commands.slash_command(name='дней_до_хэллоуина')
     async def days_helloween(self, inter: disnake.ApplicationCommandInteraction):
         '''Дней до Хэллоуина'''
 
