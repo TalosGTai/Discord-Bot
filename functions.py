@@ -498,7 +498,36 @@ def get_string_by_id(file, id_string: int) -> str:
         cur_id += 1
 
 
-def get_embed_by_phrase(phrase: str) -> disnake.Embed:
+def embed_reason(member:str) -> disnake.Embed:
+    title = 'Сервер GTai'
+    msg = f'Привет {member}' + '\n'
+    msg += 'Ты от нас уходишь? Мне бы этого совсем не хотелось...' + '\n'
+    msg += 'Если тебе не хватило неформального общения и ежедвных задач, то' + '\n'
+    msg += 'они есть в нашем телеграм-канале https://t.me/gtai_ege' + '\n'
+    msg += 'Кстати, задачки и здесь можно решать ежедневные.' + '\n'
+    msg += 'Для этого нужно написать /задачи_егэ_инф и выбрать нужную' + '\m\n'
+    msg += 'Если всё же у меня не получилось тебя уговорить остаться, то напиши причину, пожалуйста.'
+    color = '0x003d03'
+    embed = disnake.Embed(title=title, description=msg, color=color)
+
+    return embed
+
+
+def embed_wrong_channel(channel, type: str) -> disnake.Embed:
+    match (type):
+        case 'question':
+            description = f'Вопросы от меня ты можешь получить на канале {channel.mention}'
+        case 'ege':
+            description = f'Задачи от меня ты можешь получить на канале {channel.mention}' + '\n'
+            description += 'просто напиши там эту же комманду ;)'
+    
+    color = '0x5c2e01'
+    embed = disnake.Embed(description=description, color=color)
+
+    return embed
+
+
+def embed_by_phrase(phrase: str) -> disnake.Embed:
     embed = disnake.Embed(description=phrase)
 
     return embed
