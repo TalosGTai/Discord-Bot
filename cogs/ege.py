@@ -3,7 +3,7 @@ from disnake.ext import commands
 from disnake.enums import ButtonStyle
 from db_functions import get_task
 from functions import date_to_days, get_days, embed_task_msg, embed_days_to_ege
-from functions import find_channel_by_name
+from functions import find_channel_by_name, embed_wrong_channel
 from row_buttons import RowButtons
 
 
@@ -58,9 +58,10 @@ class Ege(commands.Cog):
         number_task, complexity = номер, сложность
         '''Реши задачу из любого номера ЕГЭ по Информатике'''
         channels = ['инфа-задачи', 'группа-орлы', 'группа-убийцы', 'кругосветка-pro']
+        
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
                 inter.author.display_name == 'GTai':
-            lst_tasks = [2, 8]
+            lst_tasks = [2, 8, 15]
             types_complexity = ['Лёгкая', 'Средняя', 'Сложная']
             complexity = complexity[0].upper() + complexity.lower()[1::]
 
@@ -74,8 +75,9 @@ class Ege(commands.Cog):
                 await inter.send(msg)
         else:
             channel = find_channel_by_name(self.bot, 'инфа-задачи')
-            msg = f'Задачи от меня ты можешь получить на канале {channel.mention}'
-            await inter.send(msg)
+            embed = embed_wrong_channel(channel.mention, 'ege')
+            
+            await inter.send(embed=embed)
 
 
     @commands.has_permissions(administrator=True)

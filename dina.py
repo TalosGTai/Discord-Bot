@@ -1,8 +1,9 @@
-from asyncio import events
+from asyncio import events, TimeoutError
 from config import settings
 from disnake.ext import commands
 import os, disnake
 import session, functions, users_stats, db_functions
+from functions import embed_reason
 
 
 bot = commands.Bot(command_prefix=settings['prefix'], \
@@ -22,7 +23,7 @@ async def on_ready():
 
 
 @bot.event
-async def on_member_join(member):
+async def on_member_join(member: disnake.Member):
     print(f'{member} присоединился на сервер.')
 
     role = member.mutual_guilds[0].get_role(848161737655058463)
@@ -30,8 +31,14 @@ async def on_member_join(member):
     
 
 @bot.event
-async def on_member_remove(member):
+async def on_member_remove(member: disnake.Member):
     print(f'{member} покинул сервер.')
+    await member.send(embed=embed_reason(str(member)))
+
+    try:
+        msg = await bot.wait_for('message', check=check, timeout=600)
+    except TimeoutError:
+        return await member.send('время вышло')
 
 
 @bot.event

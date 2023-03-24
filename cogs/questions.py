@@ -1,6 +1,6 @@
 from disnake.ext import commands
 import disnake
-from functions import embed_question, find_channel_by_name
+from functions import embed_question, find_channel_by_name, embed_wrong_channel
 
 
 class Questions(commands.Cog):
@@ -31,7 +31,7 @@ class Questions(commands.Cog):
             await inter.channel.create_thread(name=question, message=msg[0])
         else:
             channel = find_channel_by_name(self.bot, 'вопросы-от-ведьмачки')
-            msg = f'Вопросы от меня ты можешь получить на канале {channel.mention}'
+            embed = embed_wrong_channel(channel, 'question')
             await inter.send(msg)
 
 

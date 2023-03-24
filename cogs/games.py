@@ -1,6 +1,6 @@
 import session
 from functions import find_user, load_phrases, duel_algo
-from functions import calculate_money_win, get_embed_by_phrase
+from functions import calculate_money_win, embed_by_phrase
 from disnake.ext import commands
 import disnake
 
@@ -25,26 +25,26 @@ class Games(commands.Cog):
         
         if user2 == False:
             msg = load_phrases('none')
-            embed = get_embed_by_phrase(phrase)
+            embed = embed_by_phrase(phrase)
             await inter.send(embed=embed)
         else:
             if user1.money == 0:
                 phrase = load_phrases('money-self')
-                embed = get_embed_by_phrase(phrase)
+                embed = embed_by_phrase(phrase)
                 await inter.send(embed=embed)
             elif user2.money == 0:
                 msg = load_phrases('money-enemy')
-                embed = get_embed_by_phrase(phrase)
+                embed = embed_by_phrase(phrase)
                 await inter.send(embed=embed)
             else:
                 # Проверка дуэли с ботом или самим собой
                 if user2.name == 'Dina':
                     msg = load_phrases('bot')
-                    embed = get_embed_by_phrase(phrase)
+                    embed = embed_by_phrase(phrase)
                     await inter.send(embed=embed)
                 elif user1.name == user2.name:
                     msg = load_phrases('self')
-                    embed = get_embed_by_phrase(phrase)
+                    embed = embed_by_phrase(phrase)
                     await inter.send(embed=embed)
                 else:
                     res = duel_algo(user1, user2)
