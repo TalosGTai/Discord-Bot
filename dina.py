@@ -33,10 +33,14 @@ async def on_member_join(member: disnake.Member):
 @bot.event
 async def on_member_remove(member: disnake.Member):
     print(f'{member} покинул сервер.')
-    await member.send(embed=embed_reason(str(member)))
 
     try:
-        msg = await bot.wait_for('message', check=check, timeout=600)
+        await member.send(embed=embed_reason(member.name))
+        print(f'отправила сообщение {member.name}')
+    except disnake.errors.Forbidden:
+        print(f'не могу отправить сообщение {member.name}')
+    try:
+        msg = await bot.wait_for('message', timeout=600)
     except TimeoutError:
         return await member.send('время вышло')
 

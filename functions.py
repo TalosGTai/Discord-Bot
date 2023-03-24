@@ -507,7 +507,7 @@ def embed_reason(member:str) -> disnake.Embed:
     msg += 'Кстати, задачки и здесь можно решать ежедневные.' + '\n'
     msg += 'Для этого нужно написать /задачи_егэ_инф и выбрать нужную' + '\m\n'
     msg += 'Если всё же у меня не получилось тебя уговорить остаться, то напиши причину, пожалуйста.'
-    color = '0x003d03'
+    color = 0x003d03
     embed = disnake.Embed(title=title, description=msg, color=color)
 
     return embed
@@ -521,7 +521,7 @@ def embed_wrong_channel(channel, type: str) -> disnake.Embed:
             description = f'Задачи от меня ты можешь получить на канале {channel.mention}' + '\n'
             description += 'просто напиши там эту же комманду ;)'
     
-    color = '0x5c2e01'
+    color = 0x5c2e01
     embed = disnake.Embed(description=description, color=color)
 
     return embed
