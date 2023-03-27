@@ -3,7 +3,7 @@ from config import settings
 from disnake.ext import commands
 import os, disnake
 import session, functions, users_stats, db_functions
-from functions import embed_reason, embeds_welcome
+from functions import embed_reason, embeds_welcome, write_to_file
 
 
 bot = commands.Bot(command_prefix=settings['prefix'], \
@@ -42,6 +42,7 @@ async def on_member_remove(member: disnake.Member):
         print(f'не могу отправить сообщение {member.name}')
     try:
         msg = await bot.wait_for('message', timeout=600)
+        write_to_file('reasons_to_leave', msg)
     except TimeoutError:
         return await member.send('время вышло')
 

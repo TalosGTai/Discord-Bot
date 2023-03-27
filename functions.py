@@ -578,11 +578,27 @@ def embed_welcome_it(bot, member: disnake.Member) -> disnake.Embed:
     return embed
 
 
-
 def embed_by_phrase(phrase: str) -> disnake.Embed:
     embed = disnake.Embed(description=phrase)
 
     return embed
+
+
+def write_to_file(file_name: str, msg: str):
+    file_strings = get_strings_from_file(file_name, msg)
+    file_strings += [msg]
+    f = open(f'logs/{file_name}.txt')
+    f.readlines(file_strings)
+    f.close()
+
+
+def get_strings_from_file(file_name: str) -> list[str]:
+    f = open(f'logs/{file_name}.txt')
+    file_strings = f.readlines()
+    file_strings[-1] += '\n'
+    f.close()
+
+    return file_strings
 
 
 def find_channel_by_name(bot, source_channel: str):
