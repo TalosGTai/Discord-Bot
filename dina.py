@@ -27,7 +27,7 @@ async def on_member_join(member: disnake.Member):
     print(f'{member} присоединился на сервер.')
 
     role = member.mutual_guilds[0].get_role(848161737655058463)
-    member.send(embeds=embeds_welcome)
+    await member.send(embeds=embeds_welcome(bot, member))
     await member.add_roles(role)
     
 

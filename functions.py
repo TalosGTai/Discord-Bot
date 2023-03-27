@@ -528,7 +528,16 @@ def embed_wrong_channel(channel, type: str) -> disnake.Embed:
 
 
 def embeds_welcome(bot, member: disnake.Member) -> list[disnake.Embed]:
-    return [embed_welcome_ege(bot, member), embed_welcome_it(bot, member)]
+    title = 'Добро пожаловать на сервер'
+    descr = f'{member.mention}, очень рада приветствовать тебя на нашем сервере!' + '\n'
+    descr += 'Здесь ты сможешь полезно и кайфово провести время.' + '\n'
+    descr += 'Новые знакомства и знания ждут тебя впереди!' + '\n'
+    descr += 'Наслаждайся :smiling_imp: '
+    color = 0x33081d
+    
+    embed = disnake.Embed(title=title, description=descr, color=color)
+
+    return [embed, embed_welcome_ege(bot, member), embed_welcome_it(bot, member)]
 
 
 def embed_welcome_ege(bot, member: disnake.Member) -> disnake.Embed:
@@ -536,14 +545,13 @@ def embed_welcome_ege(bot, member: disnake.Member) -> disnake.Embed:
     channel_inf_courses = find_channel_by_name(bot, 'о-курсах-егэ')
     channel_inf_links = find_channel_by_name(bot, 'полезные-ссылки-егэ')
 
-    title = 'Добро пожаловать на сервер'
-    descr = f'{member.name}, очень рада приветствовать тебя на нашем сервере!' + '\n'
-    descr += 'Если тебя интересует подготовка к ЕГЭ, то вот самые интересные каналы:' + '\n'
-    descr += f'{channel_inf_tasks} — если возникают трудности при решении каких-то задач, то '
-    descr += 'присылай свои задачи и мы поможем или же помоги другим ;)' + '\n'
-    descr += f'{channel_inf_courses} - очень крутые и полезные курсы от ВСЕОТЦА '
-    descr += 'помогут тебе увеличить свой балл на экзамене и обрести уверенность' + '\n'
-    descr += f'{channel_inf_links} - здесь все самые необходимые ссылки для подготовки к ЕГЭ по информатике'
+    title = 'ЕГЭ по информатике'
+    descr = 'Самые интересные и топовые каналы по этой теме:' + '\n\n'
+    descr += f'{channel_inf_tasks.mention} — если возникают трудности при решении каких-то задач, то '
+    descr += 'присылай свои задачи и мы поможем или же помоги другим ;)' + '\n\n'
+    descr += f'{channel_inf_courses.mention} - очень крутые и полезные курсы от ВСЕОТЦА '
+    descr += 'помогут тебе увеличить свой балл на экзамене и обрести уверенность' + '\n\n'
+    descr += f'{channel_inf_links.mention} - здесь все самые необходимые ссылки для подготовки к ЕГЭ по информатике'
     color = 0x103303
 
     embed = disnake.Embed(title=title, description=descr, color=color)
@@ -552,19 +560,20 @@ def embed_welcome_ege(bot, member: disnake.Member) -> disnake.Embed:
 
 
 def embed_welcome_it(bot, member: disnake.Member) -> disnake.Embed:
-    channel_it_tasks = find_channel_by_name(bot, 'инфа-задачи')
-    channel_it_courses = find_channel_by_name(bot, 'о-курсах-егэ')
-    channel_it_links = find_channel_by_name(bot, 'полезные-ссылки-егэ')
+    channel_it_tasks = find_channel_by_name(bot, 'общий')
+    channel_it_courses = find_channel_by_name(bot, 'о-курсах-it')
+    channel_it_links = find_channel_by_name(bot, 'полезные-ссылки-it')
 
-    descr = 'Если тебя интересует изучение программирования, то вот самые интересные каналы:' + '\n'
-    descr += f'{channel_it_tasks} — здесь можешь обсудить все интересующие тебя вопросы из мира IT' + '\n'
-    descr += f'{channel_it_courses} - очень крутые и полезные курсы от ВСЕОТЦА '
-    descr += 'их мало, но там так всё чётко разложено, будто ты всегда это знал, стоящая вещь!' + '\n'
-    descr += f'{channel_it_links} - множества полезнейших ресурсов для кодинга, разработки, '
+    title = 'Программирование | IT'
+    descr = 'Интересен мир IT? Ознакомься с этими каналами:' + '\n\n'
+    descr += f'{channel_it_tasks.mention} — здесь можешь обсудить все интересующие тебя вопросы из мира IT' + '\n\n'
+    descr += f'{channel_it_courses.mention} - очень крутые и полезные курсы от ВСЕОТЦА '
+    descr += 'их мало, но там так всё чётко разложено, будто ты всегда это знал, стоящая вещь!' + '\n\n'
+    descr += f'{channel_it_links.mention} - множества полезнейших ресурсов для кодинга, разработки, '
     descr += 'дизайна и анализа разного уровня сложности.'
     color = 0x330319
 
-    embed = disnake.Embed(description=descr, color=color)
+    embed = disnake.Embed(title=title, description=descr, color=color)
 
     return embed
 
