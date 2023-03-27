@@ -3,7 +3,7 @@ from config import settings
 from disnake.ext import commands
 import os, disnake
 import session, functions, users_stats, db_functions
-from functions import embed_reason
+from functions import embed_reason, embeds_welcome
 
 
 bot = commands.Bot(command_prefix=settings['prefix'], \
@@ -27,6 +27,7 @@ async def on_member_join(member: disnake.Member):
     print(f'{member} присоединился на сервер.')
 
     role = member.mutual_guilds[0].get_role(848161737655058463)
+    member.send(embeds=embeds_welcome)
     await member.add_roles(role)
     
 
