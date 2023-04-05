@@ -410,7 +410,7 @@ def trainer_15_text() -> tuple[str, str, int]:
     description_msg += '• Видео-разборы заданий;\n\n'
     description_msg += '• Ответы на все возникающие вопросы;\n\n'
     description_msg += 'Всего лишь за 350р. ты получишь всё это!\n'
-    description_msg += 'Для приобретения курса перейди по ссылке -> https://stepik.org/a/131347'
+    description_msg += 'Для приобретения курса перейди по ссылке -> https://stepik.org/149687'
     color_msg = 0x5ACFF5
 
     return (title_msg, description_msg, color_msg)
