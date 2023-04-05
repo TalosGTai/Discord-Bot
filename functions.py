@@ -410,7 +410,7 @@ def trainer_15_text() -> tuple[str, str, int]:
     description_msg += '• Видео-разборы заданий;\n\n'
     description_msg += '• Ответы на все возникающие вопросы;\n\n'
     description_msg += 'Всего лишь за 350р. ты получишь всё это!\n'
-    description_msg += 'Для приобретения курса перейди по ссылке -> https://stepik.org/a/131347'
+    description_msg += 'Для приобретения курса перейди по ссылке -> https://stepik.org/149687'
     color_msg = 0x5ACFF5
 
     return (title_msg, description_msg, color_msg)
@@ -578,11 +578,27 @@ def embed_welcome_it(bot, member: disnake.Member) -> disnake.Embed:
     return embed
 
 
-
 def embed_by_phrase(phrase: str) -> disnake.Embed:
     embed = disnake.Embed(description=phrase)
 
     return embed
+
+
+def write_to_file(file_name: str, msg: str):
+    file_strings = get_strings_from_file(file_name, msg)
+    file_strings += [msg]
+    f = open(f'logs/{file_name}.txt')
+    f.readlines(file_strings)
+    f.close()
+
+
+def get_strings_from_file(file_name: str) -> list[str]:
+    f = open(f'logs/{file_name}.txt')
+    file_strings = f.readlines()
+    file_strings[-1] += '\n'
+    f.close()
+
+    return file_strings
 
 
 def find_channel_by_name(bot, source_channel: str):
