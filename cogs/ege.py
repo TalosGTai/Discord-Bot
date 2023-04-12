@@ -61,7 +61,7 @@ class Ege(commands.Cog):
         
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
                 inter.author.display_name == 'GTai':
-            lst_tasks = [2, 8, 15]
+            lst_tasks = [2, 8, 15, 24]
             types_complexity = ['Лёгкая', 'Средняя', 'Сложная']
             complexity = complexity[0].upper() + complexity.lower()[1::]
 
@@ -70,6 +70,9 @@ class Ege(commands.Cog):
                 embed = embed_task_msg(number_task, row)
 
                 await inter.send(embeds=embed, view=RowButtons(row['answer']))
+
+                if 'txt' in row.keys():
+                    await inter.send(file=row['txt'])
             else:
                 msg = f'Выбери номер из {lst_tasks} и сложность из {types_complexity}'
                 await inter.send(msg)

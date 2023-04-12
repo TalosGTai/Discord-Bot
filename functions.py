@@ -423,11 +423,11 @@ def embed_task_msg(number_task: int, row: dict) -> list:
     color= 0x53377A
     embeds = []
 
-    if 'files' in row.keys():
-        for i in range(len(row['files'])):
+    if 'img' in row.keys():
+        for i in range(len(row['img'])):
             description += row['condition'][i]
             embed_i = disnake.Embed(color=color, description=description)
-            embed_i.set_image(file=row['files'][i])
+            embed_i.set_image(file=row['img'][i])
             embeds.append(embed_i)
             description = ''
     else:
