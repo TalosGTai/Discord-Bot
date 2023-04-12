@@ -302,7 +302,7 @@ def check_txt_condition(row: dict) -> bool:
 
 def get_txt_from_task(number_task: int, row_task: dict) -> dict:
     id_task = row_task['id_task']
-    path = f'S:/Programming/DB/ege_{number_task}/{number_task}.{id_task}.txt'
+    path = f'S:/Programming/DB/ege_{number_task}/{id_task}.txt'
     file = disnake.File(fp=path)
     row_task['txt'] = file
     return row_task
