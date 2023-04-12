@@ -291,12 +291,24 @@ def get_dict_from_task(result: list) -> dict:
 
 
 def check_pic_condition(row: dict) -> bool:
-    if row['condition'].count('pic') > 0:
-        return True
+    if 'pic' in row['condition']: return True
     return False
 
 
-def get_pic_condition(row_task: dict) -> dict:
+def check_txt_condition(row: dict) -> bool:
+    if '.txt' in row['condition']: return True
+    return False
+
+
+def get_txt_from_task(number_task: int, row_task: dict) -> dict:
+    id_task = row_task['id_task']
+    path = f'S:/Programming/DB/ege_{number_task}/{number_task}.{id_task}.txt'
+    file = disnake.File(fp=path)
+    row_task['txt'] = file
+    return row_task
+
+
+def get_pic_from_task(number_task: int, row_task: dict) -> dict:
     files = []
     rows = row_task['condition'].split('\n')
     id_task = row_task['id_task']
@@ -306,7 +318,7 @@ def get_pic_condition(row_task: dict) -> dict:
 
     for row in rows:
         if 'pic' in row:
-            path = f'S:/Programming/DB/ege_2/{id_task}.{count_rows}.png'
+            path = f'S:/Programming/DB/ege_{number_task}/{id_task}.{count_rows}.png'
             file = disnake.File(fp=path)
             files.append(file)
             count_rows += 1
@@ -316,7 +328,7 @@ def get_pic_condition(row_task: dict) -> dict:
             condition += row + '\n'
 
     row_task['condition'] = condition_lst
-    row_task['files'] = files
+    row_task['img'] = files
     return row_task
 
 
@@ -333,7 +345,9 @@ def get_task(number_task: int, complexity: str) -> dict:
     row = get_dict_from_task(result[id_random_task - 1])
 
     if check_pic_condition(row):
-        row = get_pic_condition(row)
+        row = get_pic_from_task(number_task, row)
+    if check_txt_condition(row):
+        row = get_txt_from_task(number_task, row)
 
     db.close_connect()
 
