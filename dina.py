@@ -1,9 +1,9 @@
 from asyncio import events, TimeoutError
 from config import settings
 from disnake.ext import commands
-import os, disnake
-import session, functions, users_stats, db_functions
-from functions import embed_reason, embeds_welcome, write_to_file
+import os, disnake, session, users_stats
+from db.db_functions import create_user
+from functions.main_func import embeds_welcome, delete_reverse_slash, find_user
 
 
 bot = commands.Bot(command_prefix=settings['prefix'], \
@@ -34,18 +34,7 @@ async def on_member_join(member: disnake.Member):
 @bot.event
 async def on_member_remove(member: disnake.Member):
     print(f'{member} покинул сервер.')
-
-    try:
-        await member.send(embed=embed_reason(member.name))
-        print(f'отправила сообщение {member.name}')
-    except disnake.errors.Forbidden:
-        print(f'не могу отправить сообщение {member.name}')
-    try:
-        msg = await bot.wait_for('message', timeout=600)
-        write_to_file('reasons_to_leave', msg)
-    except TimeoutError:
-        return await member.send('время вышло')
-
+    
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -61,8 +50,8 @@ async def on_command_error(ctx, error):
 @bot.event
 async def on_message(message):
     author = message.author.name
-    author = functions.delete_reverse_slash(author)
-    new_user = functions.find_user(author, session.all_users)
+    author = delete_reverse_slash(author)
+    new_user = find_user(author, session.all_users)
     
     if new_user:
         new_user.count_messages += 1
@@ -70,7 +59,7 @@ async def on_message(message):
         # create new author with start stats
         new_user = users_stats.User(message.author.name)
         session.all_users.append(new_user)
-        db_functions.create_user(new_user)
+        create_user(new_user)
 
     # так как on_message перекрывает все команды
     await bot.process_commands(message)

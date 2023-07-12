@@ -15,7 +15,7 @@ class Dina(commands.Cog):
         '''Отправить сообщение в чат
         
         Шаблон: command channel msg
-        Пример: .send_msg "егэ-чат" "Привет, красавчик ^_^"
+        Пример: .send_msg "егэ-чат" "Привет, ведьмак ^_^"
         '''
 
         for guild in self.bot.guilds:

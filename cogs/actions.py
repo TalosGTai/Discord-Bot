@@ -1,6 +1,6 @@
+from ..functions.main_func import find_user
 from disnake.ext import commands
 import disnake, session
-from functions import find_user
 
 
 class Actions(commands.Cog):

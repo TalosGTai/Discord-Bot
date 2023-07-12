@@ -1,6 +1,6 @@
 from discord.ext import tasks
 from disnake.ext import commands
-import session, os, functions, disnake
+import session, os, functions, disnake, db_functions
 import datetime as DT
 from git.repo import Repo
 
@@ -29,7 +29,7 @@ class Server(commands.Cog):
     async def save(self):
         '''Сохранение всей статистики'''
 
-        session.save_db(session.all_users)
+        db_functions.update_algo(session.all_users)
         minutes = functions.time_format(str(DT.datetime.now().minute))
         hours = functions.time_format(str(DT.datetime.now().hour))
         msg = f'{hours}:{minutes}: Все данные сохранены.'
@@ -45,7 +45,7 @@ class Server(commands.Cog):
         for user in session.all_users:
             user.update_rate()
 
-        session.save_db(session.all_users)
+        db_functions.update_algo(session.all_users)
         minutes = functions.time_format(str(DT.datetime.now().minute))
         hours = functions.time_format(str(DT.datetime.now().hour))
         msg = 'Обновлены все рейтинги.' + '\n'

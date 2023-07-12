@@ -1,21 +1,9 @@
 from disnake.ext import commands
 import disnake
-from functions import ege_24_text_1
-from functions import ege_24_text_2
-from functions import ege_25_text_1
-from functions import ege_25_text_2
-from functions import ege_26_text_1
-from functions import ege_26_text_2
-from functions import ege_27_text_1
-from functions import ege_27_text_2
-from functions import krugosvetka_pro_text_1
-from functions import krugosvetka_pro_text_2
-from functions import c_university_text_1
-from functions import c_university_text_2
-from functions import trainer_2_text
-from functions import trainer_7_text
-from functions import trainer_8_text
-from functions import trainer_15_text
+from ..functions.main_func import ege_24_text_1, ege_24_text_2, ege_25_text_1, \
+ege_25_text_2, ege_26_text_1, ege_26_text_2, ege_27_text_1, ege_27_text_2, \
+krugosvetka_pro_text_1, krugosvetka_pro_text_2, c_university_text_1, \
+c_university_text_2, trainer_2_text, trainer_7_text, trainer_8_text, trainer_15_text
 
 
 class Courses(commands.Cog):

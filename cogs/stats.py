@@ -1,5 +1,6 @@
-import session, functions
+import session
 from disnake.ext import commands
+from ..functions.main_func import find_user
 
 class Stats(commands.Cog):
     '''Изменение/просмотр статистики участников'''
@@ -22,7 +23,7 @@ class Stats(commands.Cog):
         Отнятие у GTai 100 монет
         '''
         author = ctx.message.author.name
-        user = functions.find_user(hero, session.all_users)
+        user = find_user(hero, session.all_users)
         
         if author == user.name and author != 'GTai':
             await ctx.send(f'В свой карман класть нельзя! Не шали ;_)')
@@ -53,7 +54,7 @@ class Stats(commands.Cog):
         Отнятие у GTai 10 рейтинга
         '''
         author = ctx.message.author.name
-        user = functions.find_user(hero, session.all_users)
+        user = find_user(hero, session.all_users)
 
         if author == user.name and author != 'GTai':
             await ctx.send(f'Себе нельзя изменять! Не шали ;_)')
@@ -80,7 +81,7 @@ class Stats(commands.Cog):
         Увеличение характеристики на 1
         '''
         author = ctx.message.author.name
-        user = functions.find_user(hero, session.all_users)
+        user = find_user(hero, session.all_users)
         user.count_req_help += count
         msg = f'{author} изменил количество запросов помощи у {user.name} на {count}'
 
@@ -100,7 +101,7 @@ class Stats(commands.Cog):
         Установил значение равным 5
         '''
         author = ctx.message.author.name
-        user = functions.find_user(hero, session.all_users)
+        user = find_user(hero, session.all_users)
         user.count_req_help = int(count)
         msg = f'{author} установил значение количество запросов помощи у {user.name} равным {count}'
 
@@ -120,7 +121,7 @@ class Stats(commands.Cog):
         Увеличение характеристики на 1
         '''
         author = ctx.message.author.name
-        user = functions.find_user(hero, session.all_users)
+        user = find_user(hero, session.all_users)
         user.count_done_help += int(count)
         msg = f'{author} изменил количество помощи у {user.name} на {count}'
 
@@ -140,7 +141,7 @@ class Stats(commands.Cog):
         Установил значение равным 5
         '''
         author = ctx.message.author.name
-        user = functions.find_user(hero, session.all_users)
+        user = find_user(hero, session.all_users)
         user.count_done_help = int(count)
         msg = f'{author} установил значение количество помощи у {user.name} равным {count}'
 
@@ -160,7 +161,7 @@ class Stats(commands.Cog):
         Увеличение характеристики на 1
         '''
         author = ctx.message.author.name
-        user = functions.find_user(hero, session.all_users)
+        user = find_user(hero, session.all_users)
         user.count_projects += 1
         msg = f'{author} увеличил количество проектов у {user.name} на 1'
 
@@ -179,7 +180,7 @@ class Stats(commands.Cog):
         Пример: .set_user_date GTai 2021-04-04
         '''
         author = ctx.message.author.name
-        user = functions.find_user(hero, session.all_users)
+        user = find_user(hero, session.all_users)
         user.live_server = date
         msg = f'{author} изменил стартовую дату для {user.name}'
 
@@ -195,7 +196,7 @@ class Stats(commands.Cog):
         
         Пример: .get_info GTai
         '''
-        user = functions.find_user(hero, session.all_users)
+        user = find_user(hero, session.all_users)
 
         await ctx.send(f'{user.user_info()}')
         await ctx.message.delete()
@@ -283,7 +284,7 @@ class Stats(commands.Cog):
         Шаблон: .duel_info name
         Пример: .duel_info GTai
         '''
-        user = functions.find_user(hero, session.all_users)
+        user = find_user(hero, session.all_users)
         all_games = int(user.duel_all_games)
         win_games = int(user.duel_win_games)
         wr = int((win_games/all_games) * 100)

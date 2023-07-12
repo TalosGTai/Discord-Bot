@@ -1,69 +1,6 @@
-from random import randint
 import datetime as DT
-from db_functions import get_question_from_db
+from ..db.db_functions import get_question_from_db
 import disnake
-
-
-def duel_algo(user1, user2) -> dict:
-    all_rate = user1.rate + user2.rate
-    winrate_user_1 = int(user1.rate / all_rate * 100)
-
-    # чтобы не было дуэлей 100-0
-    if winrate_user_1 == 0:
-        winrate_user_1 = 1
-    elif winrate_user_1 == 100:
-        winrate_user_1 = 99
-
-    winrate_rnd: int = randint(1, 99)
-    res = dict()
-
-    if winrate_rnd <= winrate_user_1:
-        res['winner'] = user1
-        res['wr_w'] = winrate_user_1
-        res['loser'] = user2
-        res['wr_l'] = 100 - winrate_user_1
-    else:
-        res['winner'] = user2
-        res['wr_w'] = 100 - winrate_user_1
-        res['loser'] = user1
-        res['wr_l'] = winrate_user_1
-
-    return res
-
-
-# Формула расчёт денег на победу
-def calculate_money_win(winrate_user_1: int, winrate_user_2: int, money_1: float, money_2: float) -> float:
-    money_win = min(winrate_user_1, winrate_user_2) * min(money_1 / 100, money_2 / 100)
-
-    if winrate_user_1 < winrate_user_2:
-        money_win *= 1.1
-
-    return to_two_digits(money_win)
-
-
-# +1 win and +1 game
-def update_duel_stat(stat, game: bool) -> str:
-    all_games = int(stat[0]) + 1
-
-    if game:
-        win_games = int(stat[1]) + 1
-    else:
-        win_games = int(stat[1])
-
-    res = str(all_games) + '-' + str(win_games)
-
-    return res
-
-
-# check < 0 and to view: xxx.xx
-def update_money(user_money: float, money_win: float) -> float:
-    # проверка на отрицательное количество монет
-    if user_money - money_win < 0:
-        money_win = user_money
-
-    money_win = to_two_digits(money_win)
-
-    return money_win
 
 
 # convert number to two digits
@@ -125,8 +62,7 @@ def time_format(time: str) -> str:
 def delete_reverse_slash(s: str) -> str:
     if s.find('\\') == -1:
         return s
-    else:
-        return s[:s.find('\\'):] + s[s.find('\\') + 1::]
+    return s[:s.find('\\'):] + s[s.find('\\') + 1::]
 
 
 def ege_24_text_1() -> tuple[str, str, int]:
@@ -520,7 +456,11 @@ def embed_wrong_channel(channel, type: str) -> disnake.Embed:
         case 'ege':
             description = f'Задачи от меня ты можешь получить на канале {channel.mention}' + '\n'
             description += 'просто напиши там эту же комманду ;)'
-    
+        case 'duel':
+            description = f'Сразиться в дуэли ты можешь на канале {channel.mention}'
+        case 'lucky_number':
+            description = f'Сыграть в эту игру ты можешь на канале {channel.mention}'
+
     color = 0x5c2e01
     embed = disnake.Embed(description=description, color=color)
 

@@ -1,5 +1,5 @@
 from connect_db import mydb
-import session, random
+import random
 import disnake
 
 def select_user(db, name: str):

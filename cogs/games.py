@@ -1,6 +1,7 @@
 import session
-from functions import find_user, load_phrases, duel_algo
-from functions import calculate_money_win, embed_by_phrase
+from ..functions.main_func import find_user, load_phrases, embed_by_phrase, \
+find_channel_by_name, embed_wrong_channel
+from ..functions.duel_func import duel_algo, calculate_money_win
 from disnake.ext import commands
 import disnake
 
@@ -17,61 +18,70 @@ class Games(commands.Cog):
         противник: str):
         '''Вызов на дуэль другого игрока'''
 
-        hero = противник
-        author = inter.author.name
-        user1 = find_user(author, session.all_users)
-        user1.count_messages -= 1
-        user2 = find_user(hero, session.all_users)
-        
-        if user2 == False:
-            msg = load_phrases('none')
-            embed = embed_by_phrase(phrase)
-            await inter.send(embed=embed)
-        else:
-            if user1.money == 0:
-                phrase = load_phrases('money-self')
-                embed = embed_by_phrase(phrase)
-                await inter.send(embed=embed)
-            elif user2.money == 0:
-                msg = load_phrases('money-enemy')
+        channels = ['игровой', 'чатимся']
+
+        if str(inter.guild.get_channel(inter.channel.id)) in channels or \
+                inter.author.display_name == 'GTai':
+            hero = противник
+            author = inter.author.name
+            user1 = find_user(author, session.all_users)
+            user1.count_messages -= 1
+            user2 = find_user(hero, session.all_users)
+            
+            if user2 == False:
+                msg = load_phrases('none')
                 embed = embed_by_phrase(phrase)
                 await inter.send(embed=embed)
             else:
-                # Проверка дуэли с ботом или самим собой
-                if user2.name == 'Dina':
-                    msg = load_phrases('bot')
+                if user1.money == 0:
+                    phrase = load_phrases('money-self')
                     embed = embed_by_phrase(phrase)
                     await inter.send(embed=embed)
-                elif user1.name == user2.name:
-                    msg = load_phrases('self')
+                elif user2.money == 0:
+                    msg = load_phrases('money-enemy')
                     embed = embed_by_phrase(phrase)
                     await inter.send(embed=embed)
                 else:
-                    res = duel_algo(user1, user2)
-                    user_win = res['winner']
-                    user_lose = res['loser']
-                    wr1 = res['wr_w']
-                    wr2 = res['wr_l']
+                    # Проверка дуэли с ботом или самим собой
+                    if user2.name == 'Dina':
+                        msg = load_phrases('bot')
+                        embed = embed_by_phrase(phrase)
+                        await inter.send(embed=embed)
+                    elif user1.name == user2.name:
+                        msg = load_phrases('self')
+                        embed = embed_by_phrase(phrase)
+                        await inter.send(embed=embed)
+                    else:
+                        res = duel_algo(user1, user2)
+                        user_win = res['winner']
+                        user_lose = res['loser']
+                        wr1 = res['wr_w']
+                        wr2 = res['wr_l']
 
-                    user_win.duel_all_games += 1
-                    user_win.duel_win_games += 1
-                    user_lose.duel_all_games += 1
-                    user_lose.duel_win_games -= 1
-                    
-                    money_win = calculate_money_win(
-                        wr1, wr2, user_win.money, user_lose.money)
-                    
-                    user_win.money += money_win
-                    user_lose.money -= money_win
+                        user_win.duel_all_games += 1
+                        user_win.duel_win_games += 1
+                        user_lose.duel_all_games += 1
+                        user_lose.duel_win_games -= 1
+                        
+                        money_win = calculate_money_win(
+                            wr1, wr2, user_win.money, user_lose.money)
+                        
+                        user_win.money += money_win
+                        user_lose.money -= money_win
 
-                    # embed
-                    msg = 'Дуэль между {} {}% и {} {}%\n'.format(
-                        user_win.name, wr1, user_lose.name, wr2)
-                    msg += '{} одержал победу в дуэли над {}\n'.format(
-                        user_win.name, user_lose.name)
-                    msg += 'И выиграл {} монет'.format(money_win)
-                    
-                    await inter.send(msg)
+                        # embed
+                        msg = 'Дуэль между {} {}% и {} {}%\n'.format(
+                            user_win.name, wr1, user_lose.name, wr2)
+                        msg += '{} одержал победу в дуэли над {}\n'.format(
+                            user_win.name, user_lose.name)
+                        msg += 'И выиграл {} монет'.format(money_win)
+                        
+                        await inter.send(msg)
+        else:
+            channel = find_channel_by_name(self.bot, 'игровой')
+            embed = embed_wrong_channel(channel.mention, 'duel')
+
+            await inter.send(embed=embed)
 
 
     # @commands.slash_command(name='угадай_число')
@@ -86,8 +96,16 @@ class Games(commands.Cog):
 
         P.S. в строке должно находится только число (без посторонних символов)
         '''
-        pass
+        channels = ['игровой', 'чатимся']
 
+        if str(inter.guild.get_channel(inter.channel.id)) in channels or \
+                inter.author.display_name == 'GTai':
+            pass
+        else:
+            channel = find_channel_by_name(self.bot, 'игровой')
+            embed = embed_wrong_channel(channel.mention, 'lucky_number')
+
+            await inter.send(embed=embed)
 
     # @commands.slash_command(name='ограбить')
     async def crime(self, inter: disnake.ApplicationCommandInteraction,

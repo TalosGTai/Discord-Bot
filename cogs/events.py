@@ -1,5 +1,5 @@
 from disnake.ext import commands
-import functions
+from ..functions.main_func import date_to_days
 import disnake
 
 
@@ -16,7 +16,7 @@ class Events(commands.Cog):
 
         ny = '2023-12-31'
 
-        days_ny = functions.date_to_days(ny)
+        days_ny = date_to_days(ny)
 
         new_line = '\n'
         msg = f'{days_ny} дней до Нового Года!'
@@ -30,7 +30,7 @@ class Events(commands.Cog):
 
         ny = '2023-10-31'
 
-        days_ny = functions.date_to_days(ny)
+        days_ny = date_to_days(ny)
 
         new_line = '\n'
         msg = f'{days_ny} дней до Хэллоуина!'

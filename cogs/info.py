@@ -1,6 +1,7 @@
-import session, functions
+import session
 from disnake.ext import commands
 import disnake
+from ..functions.main_func import find_user, to_two_digits, get_days, date_to_days
 
 
 class Info(commands.Cog):
@@ -15,7 +16,7 @@ class Info(commands.Cog):
         '''Рейтинг'''
         author = inter.author
 
-        user = functions.find_user(author.name, session.all_users)
+        user = find_user(author.name, session.all_users)
         user.count_messages -= 1
 
         await inter.send(f'Рейтинг {user.name} = {user.rate}')
@@ -26,9 +27,9 @@ class Info(commands.Cog):
         '''Количество монет'''
         author = author = inter.author
 
-        user = functions.find_user(author.name, session.all_users)
+        user = find_user(author.name, session.all_users)
         user.count_messages -= 1
-        user.money = functions.to_two_digits(user.money)
+        user.money = to_two_digits(user.money)
         
         await inter.send(f'У {user.name} {user.money} монет')
 
@@ -38,11 +39,11 @@ class Info(commands.Cog):
         '''Количество дней на сервере'''
         author = inter.author
 
-        user = functions.find_user(author.name, session.all_users)
+        user = find_user(author.name, session.all_users)
         user.count_messages -= 1
-        day = functions.date_to_days(user.live_server)
+        day = date_to_days(user.live_server)
 
-        await inter.send(f'{author} с нами {day} {functions.get_days(day)}')
+        await inter.send(f'{author} с нами {day} {get_days(day)}')
 
 
     @commands.slash_command(name='инфо')
@@ -50,7 +51,7 @@ class Info(commands.Cog):
         '''Вся информация о себе'''
         author = inter.author
 
-        user = functions.find_user(author.name, session.all_users)
+        user = find_user(author.name, session.all_users)
         user.count_messages -= 1
 
         await inter.send(f'{user.user_info()}')

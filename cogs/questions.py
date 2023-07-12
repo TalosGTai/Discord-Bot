@@ -1,6 +1,6 @@
 from disnake.ext import commands
 import disnake
-from functions import embed_question, find_channel_by_name, embed_wrong_channel
+from ..functions.main_func import embed_question, find_channel_by_name, embed_wrong_channel
 
 
 class Questions(commands.Cog):

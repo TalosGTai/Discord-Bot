@@ -1,9 +1,9 @@
 import disnake
 from disnake.ext import commands
 from disnake.enums import ButtonStyle
-from db_functions import get_task
-from functions import date_to_days, get_days, embed_task_msg, embed_days_to_ege
-from functions import find_channel_by_name, embed_wrong_channel
+from ..db.db_functions import get_task
+from ..functions.main_func import date_to_days, get_days, embed_task_msg, embed_days_to_ege
+from ..functions.main_func import find_channel_by_name, embed_wrong_channel
 from row_buttons import RowButtons
 
 
@@ -18,12 +18,12 @@ class Ege(commands.Cog):
     async def ege_days(self, inter: disnake.ApplicationCommandInteraction):
         '''Дней до начала ЕГЭ'''
 
-        inf = '2023-06-19'
-        math = '2023-06-01'
-        rus = '2023-05-29'
-        physics = '2023-06-05'
-        social = '2023-06-05'
-        history = '2023-06-29'
+        inf = '2024-06-19'
+        math = '2024-06-01'
+        rus = '2024-05-29'
+        physics = '2024-06-05'
+        social = '2024-06-05'
+        history = '2024-06-29'
 
 
         days_inf = date_to_days(inf)
