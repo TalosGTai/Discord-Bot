@@ -109,7 +109,7 @@ class Server(commands.Cog):
 
     @tasks.loop(hours=12)
     async def git_update_auto(self):
-        path = f'Discord/dina.py'
+        path = f'dina.py'
         repo = Repo(path, search_parent_directories=True)
 
         if repo.remote('origin').exists():
@@ -123,7 +123,7 @@ class Server(commands.Cog):
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def git_update(self, inter: disnake.ApplicationCommandInteraction):
-        path = f'Discord/dina.py'
+        path = f'dina.py'
         repo = Repo(path, search_parent_directories=True)
         
         if repo.remote('origin').exists():
