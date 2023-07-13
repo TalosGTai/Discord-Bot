@@ -1,4 +1,4 @@
-from connect_db import mydb
+from Discord.db.connect_db import mydb
 import random
 import disnake
 

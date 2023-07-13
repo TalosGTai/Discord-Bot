@@ -1,6 +1,6 @@
-import session
+import Discord.session as session
 from disnake.ext import commands
-from ..functions.main_func import find_user
+from Discord.functions.main_func import find_user
 
 class Stats(commands.Cog):
     '''Изменение/просмотр статистики участников'''

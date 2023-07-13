@@ -1,10 +1,10 @@
 import disnake
 from disnake.ext import commands
 from disnake.enums import ButtonStyle
-from ..db.db_functions import get_task
-from ..functions.main_func import date_to_days, get_days, embed_task_msg, embed_days_to_ege
-from ..functions.main_func import find_channel_by_name, embed_wrong_channel
-from row_buttons import RowButtons
+from Discord.db.db_functions import get_task
+from Discord.functions.main_func import date_to_days, get_days, embed_task_msg, \
+embed_days_to_ege, find_channel_by_name, embed_wrong_channel
+from Discord.row_buttons import RowButtons
 
 
 class Ege(commands.Cog):

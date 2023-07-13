@@ -1,7 +1,7 @@
-import session
-from ..functions.main_func import find_user, load_phrases, embed_by_phrase, \
+import Discord.session as session
+from Discord.functions.main_func import find_user, load_phrases, embed_by_phrase, \
 find_channel_by_name, embed_wrong_channel
-from ..functions.duel_func import duel_algo, calculate_money_win
+from Discord.functions.duel_func import duel_algo, calculate_money_win
 from disnake.ext import commands
 import disnake
 

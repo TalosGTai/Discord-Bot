@@ -3,6 +3,9 @@ users_stats.txt
 connect_db
 users_stats.py
 session.py
+functions/__pycache__
+cogs/__pycache__
+db/__pycache__
 __pycache__/
 __pycache__/config.cpython-38.pyc
 __pycache__/config.cpython-310.pyc

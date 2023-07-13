@@ -1,6 +1,7 @@
-from ..functions.main_func import find_user
+from Discord.functions.main_func import find_user
 from disnake.ext import commands
-import disnake, session
+import disnake
+import Discord.session as session
 
 
 class Actions(commands.Cog):

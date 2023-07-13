@@ -1,5 +1,5 @@
 import datetime as DT
-from ..db.db_functions import get_question_from_db
+from Discord.db.db_functions import get_question_from_db
 import disnake
 
 

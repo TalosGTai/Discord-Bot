@@ -1,5 +1,5 @@
 from random import randint
-from main_func import to_two_digits
+from Discord.functions.main_func import to_two_digits
 
 def duel_algo(user1, user2) -> dict:
     all_rate = user1.rate + user2.rate

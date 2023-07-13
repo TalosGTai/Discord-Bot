@@ -1,7 +1,7 @@
-import session
+import Discord.session as session
 from disnake.ext import commands
 import disnake
-from ..functions.main_func import find_user, to_two_digits, get_days, date_to_days
+from Discord.functions.main_func import find_user, to_two_digits, get_days, date_to_days
 
 
 class Info(commands.Cog):

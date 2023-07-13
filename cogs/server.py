@@ -1,8 +1,11 @@
 from discord.ext import tasks
 from disnake.ext import commands
-import session, os, functions, disnake, db_functions
+import os, disnake
 import datetime as DT
+import Discord.session as session
 from git.repo import Repo
+from Discord.db.db_functions import update_algo
+from Discord.functions.main_func import time_format
 
 
 class Server(commands.Cog):
@@ -29,9 +32,9 @@ class Server(commands.Cog):
     async def save(self):
         '''Сохранение всей статистики'''
 
-        db_functions.update_algo(session.all_users)
-        minutes = functions.time_format(str(DT.datetime.now().minute))
-        hours = functions.time_format(str(DT.datetime.now().hour))
+        update_algo(session.all_users)
+        minutes = time_format(str(DT.datetime.now().minute))
+        hours = time_format(str(DT.datetime.now().hour))
         msg = f'{hours}:{minutes}: Все данные сохранены.'
         
         print(msg)
@@ -45,9 +48,9 @@ class Server(commands.Cog):
         for user in session.all_users:
             user.update_rate()
 
-        db_functions.update_algo(session.all_users)
-        minutes = functions.time_format(str(DT.datetime.now().minute))
-        hours = functions.time_format(str(DT.datetime.now().hour))
+        update_algo(session.all_users)
+        minutes = time_format(str(DT.datetime.now().minute))
+        hours = time_format(str(DT.datetime.now().hour))
         msg = 'Обновлены все рейтинги.' + '\n'
         msg += f'{hours}:{minutes}: Все данные сохранены.'
 
@@ -106,7 +109,7 @@ class Server(commands.Cog):
 
     @tasks.loop(hours=12)
     async def git_update_auto(self):
-        path = 'dina.py'
+        path = f'Discord/dina.py'
         repo = Repo(path, search_parent_directories=True)
 
         if repo.remote('origin').exists():
@@ -120,7 +123,7 @@ class Server(commands.Cog):
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def git_update(self, inter: disnake.ApplicationCommandInteraction):
-        path = 'dina.py'
+        path = f'Discord/dina.py'
         repo = Repo(path, search_parent_directories=True)
         
         if repo.remote('origin').exists():
