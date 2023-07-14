@@ -3,7 +3,7 @@ from Discord.functions.main_func import find_user, load_phrases, embed_by_phrase
 find_channel_by_name, embed_wrong_channel
 from Discord.functions.duel_func import duel_algo, calculate_money_win
 from disnake.ext import commands
-import disnake, re
+import disnake
 from random import randint
 
 
@@ -22,7 +22,7 @@ class Games(commands.Cog):
         channels = ['игровой', 'чатимся']
 
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
-                inter.author.display_name == 'GTai':
+                inter.author.display_name == 'gtai':
             hero = противник
             author = inter.author.name
             user1 = find_user(author, session.all_users)
@@ -44,7 +44,7 @@ class Games(commands.Cog):
                     await inter.send(embed=embed)
                 else:
                     # Проверка дуэли с ботом или самим собой
-                    if user2.name == 'Dina':
+                    if user2.name == 'dina':
                         msg = load_phrases('bot')
                         embed = embed_by_phrase(phrase)
                         await inter.send(embed=embed)
@@ -85,7 +85,7 @@ class Games(commands.Cog):
             await inter.send(embed=embed)
 
 
-    # @commands.slash_command(name='угадай_число')
+    @commands.slash_command(name='угадай_число')
     async def lucky_number(self, inter: disnake.ApplicationCommandInteraction):
         '''Угадай число'''
         
@@ -100,43 +100,181 @@ class Games(commands.Cog):
         channels = ['игровой', 'чатимся']
 
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
-                inter.author.display_name == 'GTai':
+                inter.author.display_name == 'gtai':
             user = find_user(inter.author.name, session.all_users)
-            game = user.get_lucky_current_game()
+            game = user.lucky_current_game
+            money_win = 60
+            msg_win = 'Поздравляю тебя user! Ты угадал число number! \n'
+            msg_win += f'Твой выигрыш составил {money_win}.'
+            msg_more = 'Я загадала число больше твоего'
+            msg_less = 'Я загадала число меньше твоего'
 
             # проверка на начало игры
-            if game[0] == -1:
-                game[0] = randint(1, 100)
-                msg = 'Напиши число от 1 до 100 (включительно) и угадай моё число!' + '\n'
-                msg += 'На ответ даётся 30 секунд.'
+            if game == -1:
+                game = randint(1, 100)
+                msg = 'Напиши число от 1 до 100 (включительно) и угадай моё число!\n'
+                msg += 'На ответ даётся 10 секунд.\n'
+                msg += 'Твоя 1ая попытка, удачи!'
                 await inter.send(msg)
-            
-            def check(m):
-                return m.user == inter.user
-            
-            try:
-                answer = await self.bot.wait_for("message", check=check, timeout=30)
-                answer = answer.content
-            except TimeoutError:
-                return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
-            
-            if re.match(r'[1-100]', answer):
-                if game[0] == int(answer):
-                    msg = 'Поздравляю!'
+                
+                def check(m):
+                    print(game)
+                    return m.author == inter.author
+                
+                try:
+                    answer = await self.bot.wait_for("message", check=check, timeout=10)
+                    answer = answer.content
+                except TimeoutError:
+                    return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
+                
+                if str(answer).isdigit():
+                    # первый ход
+                    if game == int(answer):
+                        msg = msg_win.replace('user', str(
+                            inter.author.name)).replace('number', str(game))
+                        user.set_lucky_start_game()
+                        return await inter.send(msg)
+                    elif game > int(answer):
+                        msg = msg_more
+                    else:
+                        msg = msg_less
+                    
+                    msg += '\n' + 'Твоя 2ая попытка'
                     await inter.send(msg)
-                elif game[0] > int(answer):
-                    msg = '>'
-                    await inter.send(msg)
+
+                    # 2ой ход
+                    try:
+                        answer = await self.bot.wait_for("message", check=check, timeout=10)
+                        answer = answer.content
+                    except TimeoutError:
+                        return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
+                    
+                    if str(answer).isdigit():
+                        if game == int(answer):
+                            msg = msg_win.replace('user', str(inter.author.name)).replace(
+                                'number', str(game))
+                            user.set_lucky_start_game()
+                            return await inter.send(msg)
+                        elif game > int(answer):
+                            msg = msg_more
+                        else:
+                            msg = msg_less
+
+                        msg += '\n' + 'Твоя 3яя попытка'
+                        await inter.send(msg)
+
+                        # 3ий ход
+                        try:
+                            answer = await self.bot.wait_for("message", check=check, timeout=10)
+                            answer = answer.content
+                        except TimeoutError:
+                            return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
+
+                        if str(answer).isdigit():
+                            if game == int(answer):
+                                msg = msg_win.replace('user', str(inter.author.name)).replace(
+                                    'number', str(game))
+                                user.set_lucky_start_game()
+                                return await inter.send(msg)
+                            elif game > int(answer):
+                                msg = msg_more
+                            else:
+                                msg = msg_less
+
+                            msg += '\n' + 'Твоя 4ая попытка'
+                            await inter.send(msg)
+
+                            # 4ый ход
+                            try:
+                                answer = await self.bot.wait_for("message", check=check, timeout=10)
+                                answer = answer.content
+                            except TimeoutError:
+                                return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
+
+                            if str(answer).isdigit():
+                                if game == int(answer):
+                                    msg = msg_win.replace('user', str(inter.author.name)).replace(
+                                        'number', str(game))
+                                    user.set_lucky_start_game()
+                                    return await inter.send(msg)
+                                elif game > int(answer):
+                                    msg = msg_more
+                                else:
+                                    msg = msg_less
+
+                                msg += '\n' + 'Твоя 5ая попытка. Ты сможешь!'
+                                await inter.send(msg)
+
+                                # 5ый ход
+                                try:
+                                    answer = await self.bot.wait_for("message", check=check, timeout=10)
+                                    answer = answer.content
+                                except TimeoutError:
+                                    return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
+
+                                if str(answer).isdigit():
+                                    if game == int(answer):
+                                        msg = msg_win.replace('user', str(
+                                            inter.author.name)).replace('number', str(game))
+                                        user.set_lucky_start_game()
+                                        return await inter.send(msg)
+                                    elif game > int(answer):
+                                        msg = msg_more
+                                    else:
+                                        msg = msg_less
+                                    
+                                    msg += '\n' + 'Твоя последняя попытка. Пробуди свою силу!'
+                                    await inter.send(msg)
+
+                                    # 6ой ход
+                                    try:
+                                        answer = await self.bot.wait_for("message", check=check, timeout=10)
+                                        answer = answer.content
+                                    except TimeoutError:
+                                        return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
+
+                                    if str(answer).isdigit():
+                                        if game == int(answer):
+                                            msg = msg_win.replace('user', str(
+                                                inter.author.name)).replace('number', str(game))
+                                        elif game > int(answer):
+                                            msg = msg_more
+                                        else:
+                                            msg = msg_less
+                                        user.set_lucky_start_game()
+                                        return await inter.send(msg)
+                                    else:
+                                        msg = 'Нужно указать число от 1 до 100 (включительно).\n'
+                                        msg += 'Начни игру заново.'
+                                        user.set_lucky_start_game()
+                                        return await inter.send(msg)
+                                else:
+                                    msg = 'Нужно указать число от 1 до 100 (включительно).\n'
+                                    msg += 'Начни игру заново.'
+                                    user.set_lucky_start_game()
+                                    return await inter.send(msg)
+                            else:
+                                msg = 'Нужно указать число от 1 до 100 (включительно).\n'
+                                msg += 'Начни игру заново.'
+                                user.set_lucky_start_game()
+                                return await inter.send(msg)
+                        else:
+                            msg = 'Нужно указать число от 1 до 100 (включительно).\n'
+                            msg += 'Начни игру заново.'
+                            user.set_lucky_start_game()
+                            return await inter.send(msg)
+                    else:
+                        msg = 'Нужно указать число от 1 до 100 (включительно).\n'
+                        msg += 'Начни игру заново.'
+                        user.set_lucky_start_game()
+                        return await inter.send(msg)
                 else:
-                    msg = '<'
-                    await inter.send(msg)
+                    msg = 'Нужно указать число от 1 до 100 (включительно).\n'
+                    msg += 'Начни игру заново.'
+                    user.set_lucky_start_game()
+                    return await inter.send(msg)
             else:
-                msg = 'Нужно указать число от 1 до 100 (включительно).\n'
-                msg += 'Начни игру заново.'
-                user.set_lucky_start_game()
-                return await inter.send(msg)
-
-
+                pass
         else:
             channel = find_channel_by_name(self.bot, 'игровой')
             embed = embed_wrong_channel(channel.mention, 'lucky_number')

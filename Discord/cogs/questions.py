@@ -16,7 +16,7 @@ class Questions(commands.Cog):
         '''Вопросы от ведьмачки'''
 
         if str(inter.guild.get_channel(inter.channel.id)) == 'вопросы-от-ведьмачки' or \
-                inter.author.display_name == 'GTai':
+                inter.author.name == 'gtai':
             description, color = embed_question()
             question = description
             embed = disnake.Embed(description=description, color=color)
@@ -32,7 +32,8 @@ class Questions(commands.Cog):
         else:
             channel = find_channel_by_name(self.bot, 'вопросы-от-ведьмачки')
             embed = embed_wrong_channel(channel, 'question')
-            await inter.send(msg)
+            await inter.send(embed=embed)
+            await inter.send(inter.author.name)
 
 
     @commands.slash_command(name='задай_вопрос')
