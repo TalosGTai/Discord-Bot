@@ -3,7 +3,8 @@ from Discord.functions.main_func import find_user, load_phrases, embed_by_phrase
 find_channel_by_name, embed_wrong_channel
 from Discord.functions.duel_func import duel_algo, calculate_money_win
 from disnake.ext import commands
-import disnake
+import disnake, re
+from random import randint
 
 
 class Games(commands.Cog):
@@ -100,12 +101,48 @@ class Games(commands.Cog):
 
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
                 inter.author.display_name == 'GTai':
-            pass
+            user = find_user(inter.author.name, session.all_users)
+            game = user.get_lucky_current_game()
+
+            # проверка на начало игры
+            if game[0] == -1:
+                game[0] = randint(1, 100)
+                msg = 'Напиши число от 1 до 100 (включительно) и угадай моё число!' + '\n'
+                msg += 'На ответ даётся 30 секунд.'
+                await inter.send(msg)
+            
+            def check(m):
+                return m.user == inter.user
+            
+            try:
+                answer = await self.bot.wait_for("message", check=check, timeout=30)
+                answer = answer.content
+            except TimeoutError:
+                return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
+            
+            if re.match(r'[1-100]', answer):
+                if game[0] == int(answer):
+                    msg = 'Поздравляю!'
+                    await inter.send(msg)
+                elif game[0] > int(answer):
+                    msg = '>'
+                    await inter.send(msg)
+                else:
+                    msg = '<'
+                    await inter.send(msg)
+            else:
+                msg = 'Нужно указать число от 1 до 100 (включительно).\n'
+                msg += 'Начни игру заново.'
+                user.set_lucky_start_game()
+                return await inter.send(msg)
+
+
         else:
             channel = find_channel_by_name(self.bot, 'игровой')
             embed = embed_wrong_channel(channel.mention, 'lucky_number')
 
             await inter.send(embed=embed)
+
 
     # @commands.slash_command(name='ограбить')
     async def crime(self, inter: disnake.ApplicationCommandInteraction,
@@ -116,6 +153,11 @@ class Games(commands.Cog):
         но есть шанс быть пойманным. 
 
         Вероятность успеха зависит от твоих навыков '''
+        pass
+
+
+    async def calculate_expressions(self, inter: disnake.ApplicationCommandInteraction):
+        '''Вычислить выражения'''
         pass
 
 

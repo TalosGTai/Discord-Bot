@@ -1,6 +1,8 @@
 import datetime as DT
 from Discord.db.db_functions import get_question_from_db
 import disnake
+from users_stats import User
+from random import randint
 
 
 # convert number to two digits
@@ -549,7 +551,7 @@ def find_channel_by_name(bot, source_channel: str):
     return False
 
 
-def find_user(name: str, all_users):
+def find_user(name: str, all_users: list[User]) -> User|bool:
     for user in all_users:
         if user.name.lower() == name.lower():
             return user

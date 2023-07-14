@@ -41,7 +41,7 @@ def insert_users(db, values: list, new_id: int):
     sql = "INSERT INTO users \
     (name, money, idStat, date_registr) \
     VALUES (%s, %s, %s, %s)"
-    #val = (1, GTai, 12040, 1, 2021-10-10)
+    #val = (GTai, 12040, 1, 2021-10-10)
     val = (values[0], values[1], new_id, values[2])
     cursor.execute(sql, val)
 
