@@ -108,6 +108,7 @@ class Games(commands.Cog):
             msg_win += f'Твой выигрыш составил {money_win}.'
             msg_more = 'Я загадала число больше твоего'
             msg_less = 'Я загадала число меньше твоего'
+            msg_lose = 'К сожалению, ты проиграл. Загаданное число: number'
 
             # проверка на начало игры
             if game == -1:
@@ -133,6 +134,7 @@ class Games(commands.Cog):
                         msg = msg_win.replace('user', str(
                             inter.author.name)).replace('number', str(game))
                         user.set_lucky_start_game()
+                        user.money += 60
                         return await inter.send(msg)
                     elif game > int(answer):
                         msg = msg_more
@@ -153,6 +155,7 @@ class Games(commands.Cog):
                         if game == int(answer):
                             msg = msg_win.replace('user', str(inter.author.name)).replace(
                                 'number', str(game))
+                            user.money += 60
                             user.set_lucky_start_game()
                             return await inter.send(msg)
                         elif game > int(answer):
@@ -175,6 +178,7 @@ class Games(commands.Cog):
                                 msg = msg_win.replace('user', str(inter.author.name)).replace(
                                     'number', str(game))
                                 user.set_lucky_start_game()
+                                user.money += 60
                                 return await inter.send(msg)
                             elif game > int(answer):
                                 msg = msg_more
@@ -196,6 +200,7 @@ class Games(commands.Cog):
                                     msg = msg_win.replace('user', str(inter.author.name)).replace(
                                         'number', str(game))
                                     user.set_lucky_start_game()
+                                    user.money += 60
                                     return await inter.send(msg)
                                 elif game > int(answer):
                                     msg = msg_more
@@ -217,6 +222,7 @@ class Games(commands.Cog):
                                         msg = msg_win.replace('user', str(
                                             inter.author.name)).replace('number', str(game))
                                         user.set_lucky_start_game()
+                                        user.money += 60
                                         return await inter.send(msg)
                                     elif game > int(answer):
                                         msg = msg_more
@@ -237,10 +243,11 @@ class Games(commands.Cog):
                                         if game == int(answer):
                                             msg = msg_win.replace('user', str(
                                                 inter.author.name)).replace('number', str(game))
+                                            user.money += 60
                                         elif game > int(answer):
-                                            msg = msg_more
+                                            msg = msg_lose
                                         else:
-                                            msg = msg_less
+                                            msg = msg_lose
                                         user.set_lucky_start_game()
                                         return await inter.send(msg)
                                     else:
@@ -273,8 +280,6 @@ class Games(commands.Cog):
                     msg += 'Начни игру заново.'
                     user.set_lucky_start_game()
                     return await inter.send(msg)
-            else:
-                pass
         else:
             channel = find_channel_by_name(self.bot, 'игровой')
             embed = embed_wrong_channel(channel.mention, 'lucky_number')

@@ -20,7 +20,7 @@ def date_to_days(user_date: str) -> int:
 
 
 # окончания для даты (дня, дней)
-def get_days(day: int) -> dict:
+def get_days(day: int) -> dict[int, str]:
     days = {
         0: 'дней',
         1: 'день',
@@ -67,6 +67,52 @@ def delete_reverse_slash(s: str) -> str:
     return s[:s.find('\\'):] + s[s.find('\\') + 1::]
 
 
+def create_password(complexity: str, length: int) -> str:
+    alphabet = [chr(c) for c in range(ord('a'), ord('z') + 1)]
+    alphabet += [chr(c) for c in range(ord('A'), ord('Z') + 1)]
+    alphabet += [chr(c) for c in range(ord('0'), ord('9') + 1)]
+    special = ['`', '!', '@', ',', '.', '#', '$', '%', '^', '&', '*', '?', ':', '/', '\\', '_', '~']
+    password = ''
+    
+    match complexity:
+        case 'easy':
+            for i in range(length):
+                x = randint(0,  len(alphabet) - 1)
+                password += alphabet[x]
+        case 'medium':
+            alphabet += special
+            for i in range(length):
+                x = randint(0,  len(alphabet) - 1)
+                password += alphabet[x]
+        case 'hard':
+            alphabet += special
+            for i in range(length):
+                x = randint(0,  len(alphabet) - 1)
+                password += alphabet[x]
+
+    return password
+
+
+# словарь для понимания выбора сложности
+def get_complexity() -> dict[str, list[str]]:
+    complexity = {
+        'easy': ['лёгкая', 'легкая', 'easy', 'изи', 'лёгкий'], 
+        'medium': ['средняя', 'meduim', 'середина', 'норм', 'норма', 'средний'],
+        'hard': ['тяжёлая', 'тяжёлый', 'hard', 'хард', 'трудно', 'сильно',
+                'сложная', 'сложный', 'сложно']
+        }
+    return complexity
+
+
+# проверка значения на нахождения в словаре
+# возвращаем ключ от этого значения
+def get_key_by_value(value: str, categories_dict: dict[str, list[str]]) -> str | bool:
+    for key in categories_dict.keys():
+        if value in categories_dict[key]:
+            return key
+    return False
+
+
 def ege_24_text_1() -> tuple[str, str, int]:
     title_msg = 'Видео-курс 24 Задание ЕГЭ Информатика'
 
@@ -102,7 +148,7 @@ def ege_24_text_2(owner) -> str:
     return text
 
 
-def ege_25_text_1() -> dict[str, str, int]:
+def ege_25_text_1() -> tuple[str, str, int]:
     title_msg = 'Видео-курс 25 Задание ЕГЭ Информатика'
 
     description_msg = 'Всё самое необходимое для решения 25ого номера в ЕГЭ.\n\n'
