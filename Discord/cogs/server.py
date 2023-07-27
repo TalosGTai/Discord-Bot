@@ -61,14 +61,14 @@ class Server(commands.Cog):
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def load_all(self, ctx):
-        for filename in os.listdir('./cogs'):
+        for filename in os.listdir('./Discord/cogs'):
             if filename.endswith('.py'):
                 try:
-                    self.bot.load_extension(f'cogs.{filename[:-3]}')
+                    self.bot.load_extension(
+                        f'Discord.cogs.{filename[:-3]}')
                     print(f'Разрешение {filename[:-3]} успешно загружено.')
-                except Exception:
-                    print(f'Не удалось загрузить {filename[:-3]}.')
-                self.bot.load_extension(f'cogs.{filename[:-3]}')
+                except Exception as ex:
+                    print(f'Не удалось загрузить {filename[:-3]}.', ex)
         await ctx.message.delete()
 
 
@@ -76,10 +76,11 @@ class Server(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def load(self, ctx, extension):
         try:
-            self.bot.load_extension(f'cogs.{extension}')
+            self.bot.load_extension(
+                f'Discord.cogs.{extension}')
             print(f'Разрешение {extension} успешно загружено.')
-        except Exception:
-            print(f'Не удалось загрузить {extension}.')
+        except Exception as ex:
+            print(f'Не удалось загрузить {extension}.', ex)
             print(Exception)
         await ctx.message.delete()
 
@@ -88,11 +89,13 @@ class Server(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def reload(self, ctx, extension):
         try:
-            self.bot.unload_extension(f'cogs.{extension}')
-            self.bot.load_extension(f'cogs.{extension}')
+            self.bot.unload_extension(
+                f'Discord.cogs.{extension}')
+            self.bot.load_extension(
+                f'Discord.cogs.{extension}')
             print(f'Разрешение {extension} успешно перезагружено.')
-        except Exception:
-            print(f'Не удалось перезагрузить {extension}.')
+        except Exception as ex:
+            print(f'Не удалось перезагрузить {extension}.', ex)
         await ctx.message.delete()
 
 
@@ -100,10 +103,11 @@ class Server(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def unload(self, ctx, extension):
         try:
-            self.bot.unload_extension(f'cogs.{extension}')
+            self.bot.unload_extension(
+                f'Discord.cogs.{extension}')
             print(f'Разрешение {extension} успешно выгружено.')
-        except Exception:
-            print(f'Не удалось выгрузить {extension}.')
+        except Exception as ex:
+            print(f'Не удалось выгрузить {extension}.', ex)
         await ctx.message.delete()
 
 

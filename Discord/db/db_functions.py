@@ -2,15 +2,17 @@ from Discord.db.connect_db import mydb
 import random
 import disnake
 
-def select_user(db, name: str):
+
+def select_user(db, user_name: str) -> int:
     cursor = db.cursor()
 
-    sql = "SELECT idUser \
+    sql = f"SELECT idUser \
     FROM users \
-    WHERE name=\"" + name + "\""
+    WHERE name=\"{user_name}\""
 
     cursor.execute(sql)
     result = cursor.fetchone()
+    cursor.close()
 
     return result[0]
 
@@ -120,53 +122,26 @@ def update_duel(db, name: str, values: list):
     db.commit()
 
 
-def values_to_users(i: int, values: list) -> list:
-    t = []
-
+def values_to_users(i: int, values: list) -> list[str, int, str]:
     if i == -1:
-        t.append(values.name)
-        t.append(values.money)
-        t.append(values.live_server)
-    else:
-        t.append(values[i].name)
-        t.append(values[i].money)
-        t.append(values[i].live_server)
+        return [values.name, values.money, values.live_server]
+    return [values[i].name, values[i].money, values[i].live_server]
     
-    return t
 
-
-def values_to_stats(i: int, values: list) -> list:
-    t = []
-
+def values_to_stats(i: int, values: list) -> list[int, int, int, int, float, float]:
     if i == -1:
-        t.append(values.count_messages)
-        t.append(values.count_req_help)
-        t.append(values.count_done_help)
-        t.append(values.count_projects)
-        t.append(values.bonus_rate)
-        t.append(values.rate)
-    else:
-        t.append(values[i].count_messages)
-        t.append(values[i].count_req_help)
-        t.append(values[i].count_done_help)
-        t.append(values[i].count_projects)
-        t.append(values[i].bonus_rate)
-        t.append(values[i].rate)
-
-    return t
+        return [values.count_messages, values.count_req_help,
+                values.count_done_help, values.count_projects,
+                values.bonus_rate, values.rate]
+    return [values[i].count_messages, values[i].count_req_help,
+            values[i].count_done_help, values[i].count_projects,
+            values[i].bonus_rate, values[i].rate]
 
 
-def values_to_duel(i: int, values: list) -> list:
-    t = []
-
+def values_to_duel(i: int, values: list) -> list[int, int]:
     if i == -1:
-        t.append(values.duel_all_games)
-        t.append(values.duel_win_games)
-    else:
-        t.append(values[i].duel_all_games)
-        t.append(values[i].duel_win_games)
-
-    return t
+        return [values.duel_all_games, values.duel_win_games]
+    return [values[i].duel_all_games, values[i].duel_win_games]
 
 
 def divide_values(values: list, count: int) -> tuple:
@@ -210,7 +185,7 @@ def update_algo(values: list):
     db.close_connect()
 
 
-def create_user(user):
+def create_user(user) -> None:
     db = mydb()
     db.open_connect()
 
@@ -366,6 +341,25 @@ def get_question_from_db() -> str:
     db.close_connect()
 
     return result[0]
+
+
+def load_db(db) -> list:
+    cursor = db.cursor()
+
+    sql = "SELECT \
+        users.name, users.money, users.date_registr, stats.count_msg,\
+        stats.req_help, stats.done_help, stats.count_proj, \
+        stats.bonus_rate, stats.rate, duel.all_games, duel.win_games \
+        FROM users \
+        LEFT JOIN stats \
+        ON users.idStat = stats.idStat \
+        LEFT JOIN duel \
+        ON stats.idDuel = duel.idDuel"
+
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    cursor.close()
+    return [x for x in result]
 
 
 # index - stat_index

@@ -198,7 +198,7 @@ class Stats(commands.Cog):
         '''
         user = find_user(hero, session.all_users)
 
-        await ctx.send(f'{user.user_info()}')
+        await ctx.send(f'{user.user_info}')
         await ctx.message.delete()
 
 
@@ -289,7 +289,7 @@ class Stats(commands.Cog):
         win_games = int(user.duel_win_games)
         wr = int((win_games/all_games) * 100)
         msg = f'Статы {user.name} в игре Дуэль'
-        msg += f'\n{user.duel_stats()}, {wr}%'
+        msg += f'\n{user.duel_stats}, {wr}%'
         
         await ctx.send(msg)
         await ctx.message.delete()

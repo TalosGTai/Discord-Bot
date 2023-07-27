@@ -1,7 +1,6 @@
 import datetime as DT
 from Discord.db.db_functions import get_question_from_db
 import disnake
-#from Discord.users_stats import User
 from random import randint
 
 
@@ -54,8 +53,11 @@ def get_days(day: int) -> dict[int, str]:
         return days[day]
 
 
-# на вход подаётся число (х или хх) -> xx
 def time_format(time: str) -> str:
+    ''' На вход подаётся строка формата: х или хх.
+    Дописываем 0, если нужно.
+    '''
+    
     if len(time) == 1: return '0' + time
     return time
 
@@ -70,7 +72,7 @@ def delete_reverse_slash(s: str) -> str:
 def create_password(complexity: str, length: int) -> str:
     alphabet = [chr(c) for c in range(ord('a'), ord('z') + 1)]
     alphabet += [chr(c) for c in range(ord('A'), ord('Z') + 1)]
-    alphabet += [chr(c) for c in range(ord('0'), ord('9') + 1)]
+    digits = [chr(c) for c in range(ord('0'), ord('9') + 1)]
     special = ['`', '!', '@', ',', '.', '#', '$', '%', '^', '&', '*', '?', ':', '/', '\\', '_', '~']
     password = ''
     
@@ -80,15 +82,21 @@ def create_password(complexity: str, length: int) -> str:
                 x = randint(0,  len(alphabet) - 1)
                 password += alphabet[x]
         case 'medium':
-            alphabet += special
+            alphabet += digits
             for i in range(length):
                 x = randint(0,  len(alphabet) - 1)
                 password += alphabet[x]
         case 'hard':
-            alphabet += special
+            count_special = max(1, length // 3)
             for i in range(length):
-                x = randint(0,  len(alphabet) - 1)
-                password += alphabet[x]
+                choice_symb = randint(1, 2)
+                if choice_symb == 2 and count_special > 0:
+                    x = randint(0, len(special) - 1)
+                    password += special[x]
+                    count_special -= 1
+                else:
+                    x = randint(0,  len(alphabet) - 1)
+                    password += alphabet[x]
 
     return password
 
@@ -447,39 +455,24 @@ def embed_question() -> tuple[str, int]:
 
 
 def load_phrases(action: str) -> str:
+    path = 'Discord/phrases/games/'
     match (action):
         case 'bot':
-            f = open('../phrases/games/duel/fight_bot.txt')
+            f = open(f'{path}duel/fight_bot.txt', encoding='UTF-8')
         case 'self':
-            f = open('../phrases/games/duel/fight_self.txt')
+            f = open(f'{path}duel/fight_self.txt', encoding='UTF-8')
         case 'none':
-            f = open('../phrases/games/duel/fight_none.txt')
+            f = open(f'{path}duel/fight_none.txt', encoding='UTF-8')
         case 'money-self':
-            f = open('../phrases/games/duel/money_self.txt')
+            f = open(f'{path}duel/money_self.txt', encoding='UTF-8')
         case 'money-enemy':
-            f = open('../phrases/games/duel/money_enemy.txt')
-    
-    id_string: int = randint(0, count_strings_in_file(f) - 1)
-    phrase: str = get_string_by_id(f, id_string)
+            f = open(f'{path}duel/money_enemy.txt', encoding='UTF-8')
 
-    return phrase
+    strings_actions = f.readlines()
+    num_string = randint(0, len(strings_actions) - 1)
+    f.close()
 
-
-def count_strings_in_file(file) -> int:
-    count_strings: int = 0
-
-    for s in file:
-        count_strings += 1
-
-    return count_strings
-    
-
-def get_string_by_id(file, id_string: int) -> str:
-    cur_id: int = 0
-
-    for s in file:
-        if cur_id == id_string: return s
-        cur_id += 1
+    return strings_actions[num_string]
 
 
 def embed_reason(member:str) -> disnake.Embed:
@@ -572,7 +565,7 @@ def embed_by_phrase(phrase: str) -> disnake.Embed:
     return embed
 
 
-def write_to_file(file_name: str, msg: str):
+def write_to_file(file_name: str, msg: str) -> None:
     file_strings = get_strings_from_file(file_name, msg)
     file_strings += [msg]
     f = open(f'logs/{file_name}.txt')
