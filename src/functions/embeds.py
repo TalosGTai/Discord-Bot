@@ -1,4 +1,5 @@
 import disnake
+import discord
 from src.functions.discord import find_channel_by_name
 from src.data.data_base import DB
 
@@ -95,6 +96,32 @@ def embed_by_phrase(phrase: str) -> disnake.Embed:
     return embed
 
 
+def embed_stats_duel(user_name: str, value: dict[str, int]) -> disnake.Embed:
+    all_games, win_games = value['all_games'], value['win_games']
+    wr = value['wr']
+    
+    title = f'Статы {user_name} в игре Дуэль'
+    descr = f'Всего игр: {all_games}\n'
+    descr += f'Побед: {win_games}\n'
+    descr += f'Процент побед: {wr}'
+    color = 0x187CFC
+
+    embed = disnake.Embed(title=title, description=descr, color=color)
+
+    return embed
+
+
+def embed_user_info(user_name: str, value: dict[str, int]) -> disnake.Embed:
+    title = f''
+    descr = f''
+    
+    color = 0x187CFC
+
+    embed = disnake.Embed(title=title, description=descr, color=color)
+
+    return embed
+
+
 def embed_task_msg(number_task: int, row: dict) -> list:
     '''Создание embed для таска'''
 
@@ -144,3 +171,19 @@ def embed_question() -> tuple[str, int]:
     color = 0x003d03
 
     return (description, color)
+
+
+def embed_rules_lucky_game(timeout: int) -> disnake.Embed:
+    title = 'Игра Угадай число'
+    descr = 'Правила игры очень просты:\n'
+    descr += '    • загадано целое число от 1 до 100 (включительно)\n'
+    descr += '    • у тебя 6 попыток\n'
+    descr += f'   • на каждый ответ у тебя даётся {timeout} секунд\n'
+    descr += '    • при каждой попытке ты будешь знать больше/меньше'
+    descr += 'исходного числа ты находишься\n'
+    descr += 'В строке должно находится только число (без посторонних символов).'
+    color = 0x187CFC
+
+    embed = disnake.Embed(title=title, description=descr, color=color)
+
+    return embed
