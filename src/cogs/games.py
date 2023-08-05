@@ -1,6 +1,6 @@
 from src.functions.main_func import load_phrases
 from src.functions.embeds import embed_by_phrase, \
-    embed_wrong_channel
+    embed_wrong_channel, embed_rules_lucky_game
 from src.functions.discord import find_user, find_channel_by_name,\
     get_user_money, update_duel_stats, add_user_money
 from src.functions.duel_func import duel_algo, calculate_money_win
@@ -85,35 +85,27 @@ class Games(commands.Cog):
     @commands.slash_command(name='угадай_число')
     async def lucky_number(self, inter: disnake.ApplicationCommandInteraction):
         '''Угадай число'''
-        '''
-        Правила игры очень просты:
-            • загадано целое число от 1 до 100 (включительно)
-            • у тебя 6 попыток
-            • при каждой попытке ты будешь знать больше/меньше
-            исходного числа ты находишься
-
-        P.S. в строке должно находится только число (без посторонних символов)
-        '''
 
         channels = ['игровой', 'чатимся']
 
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
-                inter.author.display_name == 'gtai':
-            user = find_user(inter.author.name)
+                inter.author.name == 'gtai':
+
             game = -1
             money_win = 60
-            time_timeout = 15
+            time_timeout = 30
             msg_win = 'Поздравляю тебя user! Ты угадал число number! \n'
             msg_win += f'Твой выигрыш составил {money_win}.'
             msg_more = 'Я загадала число больше твоего.'
             msg_less = 'Я загадала число меньше твоего.'
             msg_lose = 'К сожалению, ты проиграл. Загаданное число: number.'
 
+            await inter.send(embed=embed_rules_lucky_game())
+
             # проверка на начало игры
             if game == -1:
                 game = randint(1, 100)
-                msg = 'Напиши число от 1 до 100 (включительно) и угадай моё число!\n'
-                msg += 'На ответ даётся 15 секунд.\n'
+                msg = f'На ответ даётся {time_timeout} секунд.\n'
                 msg += 'Твоя 1ая попытка, удачи!'
                 await inter.send(msg)
                 
@@ -121,7 +113,8 @@ class Games(commands.Cog):
                     return m.author == inter.author
                 
                 try:
-                    answer = await self.bot.wait_for("message", check=check, timeout=time_timeout)
+                    answer = await self.bot.wait_for("message", check=check,
+                                                      timeout=time_timeout)
                     answer = answer.content
                 except TimeoutError:
                     return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
@@ -131,8 +124,7 @@ class Games(commands.Cog):
                     if game == int(answer):
                         msg = msg_win.replace('user', str(
                             inter.author.name)).replace('number', str(game))
-                        user.set_lucky_start_game()
-                        user.money += 60
+                        add_user_money(inter.author.name, money_win)
                         return await inter.send(msg)
                     elif game > int(answer):
                         msg = msg_more
@@ -144,7 +136,8 @@ class Games(commands.Cog):
 
                     # 2ой ход
                     try:
-                        answer = await self.bot.wait_for("message", check=check, timeout=time_timeout)
+                        answer = await self.bot.wait_for("message",
+                                                          check=check, timeout=time_timeout)
                         answer = answer.content
                     except TimeoutError:
                         return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
@@ -153,8 +146,7 @@ class Games(commands.Cog):
                         if game == int(answer):
                             msg = msg_win.replace('user', str(inter.author.name)).replace(
                                 'number', str(game))
-                            user.money += 60
-                            user.set_lucky_start_game()
+                            add_user_money(inter.author.name, money_win)
                             return await inter.send(msg)
                         elif game > int(answer):
                             msg = msg_more
@@ -175,8 +167,7 @@ class Games(commands.Cog):
                             if game == int(answer):
                                 msg = msg_win.replace('user', str(inter.author.name)).replace(
                                     'number', str(game))
-                                user.set_lucky_start_game()
-                                user.money += 60
+                                add_user_money(inter.author.name, money_win)
                                 return await inter.send(msg)
                             elif game > int(answer):
                                 msg = msg_more
@@ -188,7 +179,8 @@ class Games(commands.Cog):
 
                             # 4ый ход
                             try:
-                                answer = await self.bot.wait_for("message", check=check, timeout=time_timeout)
+                                answer = await self.bot.wait_for("message",
+                                                                  check=check, timeout=time_timeout)
                                 answer = answer.content
                             except TimeoutError:
                                 return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
@@ -197,8 +189,8 @@ class Games(commands.Cog):
                                 if game == int(answer):
                                     msg = msg_win.replace('user', str(inter.author.name)).replace(
                                         'number', str(game))
-                                    user.set_lucky_start_game()
-                                    user.money += 60
+                                    add_user_money(
+                                        inter.author.name, money_win)
                                     return await inter.send(msg)
                                 elif game > int(answer):
                                     msg = msg_more
@@ -210,7 +202,8 @@ class Games(commands.Cog):
 
                                 # 5ый ход
                                 try:
-                                    answer = await self.bot.wait_for("message", check=check, timeout=time_timeout)
+                                    answer = await self.bot.wait_for("message",
+                                                                      check=check, timeout=time_timeout)
                                     answer = answer.content
                                 except TimeoutError:
                                     return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
@@ -219,8 +212,8 @@ class Games(commands.Cog):
                                     if game == int(answer):
                                         msg = msg_win.replace('user', str(
                                             inter.author.name)).replace('number', str(game))
-                                        user.set_lucky_start_game()
-                                        user.money += 60
+                                        add_user_money(
+                                            inter.author.name, money_win)
                                         return await inter.send(msg)
                                     elif game > int(answer):
                                         msg = msg_more
@@ -232,7 +225,8 @@ class Games(commands.Cog):
 
                                     # 6ой ход
                                     try:
-                                        answer = await self.bot.wait_for("message", check=check, timeout=time_timeout)
+                                        answer = await self.bot.wait_for("message",
+                                                                          check=check, timeout=time_timeout)
                                         answer = answer.content
                                     except TimeoutError:
                                         return await inter.send(f'{inter.author.name} время вышло. Игра окончена.')
@@ -241,41 +235,35 @@ class Games(commands.Cog):
                                         if game == int(answer):
                                             msg = msg_win.replace('user', str(
                                                 inter.author.name)).replace('number', str(game))
-                                            user.money += 60
+                                            add_user_money(
+                                                inter.author.name, money_win)
                                         else:
-                                            msg = msg_lose
-                                            msg.replace('number', str(game))
-                                        user.set_lucky_start_game()
+                                            msg = msg_lose.replace(
+                                                'number', str(game))
                                         return await inter.send(msg)
                                     else:
                                         msg = 'Нужно указать число от 1 до 100 (включительно).\n'
                                         msg += 'Начни игру заново.'
-                                        user.set_lucky_start_game()
                                         return await inter.send(msg)
                                 else:
                                     msg = 'Нужно указать число от 1 до 100 (включительно).\n'
                                     msg += 'Начни игру заново.'
-                                    user.set_lucky_start_game()
                                     return await inter.send(msg)
                             else:
                                 msg = 'Нужно указать число от 1 до 100 (включительно).\n'
                                 msg += 'Начни игру заново.'
-                                user.set_lucky_start_game()
                                 return await inter.send(msg)
                         else:
                             msg = 'Нужно указать число от 1 до 100 (включительно).\n'
                             msg += 'Начни игру заново.'
-                            user.set_lucky_start_game()
                             return await inter.send(msg)
                     else:
                         msg = 'Нужно указать число от 1 до 100 (включительно).\n'
                         msg += 'Начни игру заново.'
-                        user.set_lucky_start_game()
                         return await inter.send(msg)
                 else:
                     msg = 'Нужно указать число от 1 до 100 (включительно).\n'
                     msg += 'Начни игру заново.'
-                    user.set_lucky_start_game()
                     return await inter.send(msg)
         else:
             channel = find_channel_by_name(self.bot, 'игровой')

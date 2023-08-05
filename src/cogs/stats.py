@@ -5,6 +5,7 @@ from src.functions.discord import find_user, get_user_rate, \
     get_user_duel_win_games
 from src.functions.main_func import load_phrases, date_to_days, \
     get_days
+from src.functions.embeds import embed_stats_duel
 
 
 class Stats(commands.Cog):
@@ -87,12 +88,17 @@ class Stats(commands.Cog):
             all_games = get_user_duel_all_games(hero)
             win_games = get_user_duel_win_games(hero)
             wr = int((win_games/all_games) * 100)
-            msg = f'Статы {hero} в игре Дуэль'
-            msg += f'\n{user.duel_stats}, {wr}%'    
+            values = dict()
+            values['all_games'] = all_games 
+            values['win_games'] = win_games 
+            values['wr'] = wr
+            embed = embed_stats_duel(hero, values)
+            
+            await ctx.send(embed=embed)
         else:
             msg = load_phrases('social', 'not_exist')
-        
-        await ctx.send(msg)
+            await ctx.send(msg)
+
         await ctx.message.delete()
 
 
@@ -107,7 +113,7 @@ class Stats(commands.Cog):
     async def rate(self, inter: disnake.ApplicationCommandInteraction):
         '''Рейтинг'''
 
-        author = inter.author
+        author = inter.author.name
         user = find_user(author)
 
         if user:
@@ -122,11 +128,11 @@ class Stats(commands.Cog):
     async def money(self, inter: disnake.ApplicationCommandInteraction):
         '''Количество монет'''
 
-        author = inter.author
+        author = inter.author.name
         user = find_user(author)
 
         if user:
-            msg = f'У {author} {get_user_money(user)} монет'
+            msg = f'У {author} {get_user_money(author)} монет'
         else:
             msg = load_phrases('social', 'not_exist')
 

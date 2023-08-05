@@ -43,26 +43,9 @@ def calculate_money_win(winrate_user_1: int, winrate_user_2: int,
     return int(money_win)
 
 
-def update_duel_stat(stat, game: bool) -> str:
-    '''+1 win and +1 game'''
-
-    all_games = int(stat[0]) + 1
-
-    if game:
-        win_games = int(stat[1]) + 1
-    else:
-        win_games = int(stat[1])
-
-    return f'{all_games}-{win_games}'
-
-
-# check < 0 and to view: xxx.xx
 def update_money(user_money: int, money_win: int) -> float:
-    ''''''
-    # проверка на отрицательное количество монет
-    if user_money - money_win < 0:
-        money_win = user_money
+    '''Если у пользователя недостаточно денег,
+    то отдаёт всё своё'''
 
-    money_win = to_two_digits(money_win)
-
+    if user_money - money_win < 0: return user_money
     return money_win
