@@ -1,7 +1,9 @@
-from Discord.functions.main_func import find_user, get_complexity, create_password, get_key_by_value
+from src.functions.discord import find_user, \
+    get_user_money, add_user_money
+from src.functions.main_func import get_complexity, create_password,\
+    get_key_by_value, load_phrases
 from disnake.ext import commands
 import disnake
-import Discord.session as session
 
 
 class Actions(commands.Cog):
@@ -22,32 +24,41 @@ class Actions(commands.Cog):
         
         money = монет
         hero = inter.author.name
-        hero = find_user(hero, session.all_users)
-        player = find_user(игрок, session.all_users)
+        hero_money = get_user_money(hero)
+        player = find_user(игрок)
 
-        if player:
-            if inter.author.name != игрок and игрок != 'dina':
-                if money > 0:
-                    if hero.money >= money:
-                        hero.money -= money
-                        player.money += money
+        if hero_money is not None:
+            if player:
+                if inter.author.name != игрок:
+                    if игрок in ['dina', 'Dina']:
+                        if money > 0:
+                            if hero_money >= money:
+                                add_user_money(hero, -money)
+                                add_user_money(игрок, money)
 
-                        title = 'Передача монет'
-                        descr = f'Игрок {inter.author.name} отдал '
-                        descr += f'{money} монет игроку {игрок}'
-                        embed = disnake.Embed(title=title, description=descr)
-                        await inter.send(embed=embed)
+                                title = 'Передача монет'
+                                descr = f'Игрок {inter.author.name} отдал '
+                                descr += f'{money} монет игроку {игрок}.'
+                                
+                                embed = disnake.Embed(title=title, description=descr)
+                                await inter.send(embed=embed)
+                            else:
+                                msg = load_phrases('social', 'transfer_money')
+                                await inter.send(msg)
+                        else:
+                            msg = 'Количество монет должно быть положительным числом.'
+                            await inter.send(msg)
                     else:
-                        msg = 'У тебя нет столько монет :('
+                        msg = 'Спасибо, конечно, но мне монеты не нужны.'
                         await inter.send(msg)
                 else:
-                    msg = 'Количество монет должно быть положительным числом'
+                    msg = load_phrases('social', action='transfer_money_self')
                     await inter.send(msg)
             else:
-                msg = 'Забирать у себя и отдавать себе — бессмысленно.'
+                msg = 'Выбери существующего человека.'
                 await inter.send(msg)
         else:
-            msg = 'Выбери существующего человека.'
+            msg = load_phrases()
             await inter.send(msg)
 
 
@@ -60,6 +71,7 @@ class Actions(commands.Cog):
         сложность: лёгкая, средняя, сложная
         длина: [1, 16]
         '''
+        
         complexity_dict = get_complexity()
         complexity_pass = get_key_by_value(сложность, complexity_dict)
         if complexity_pass:

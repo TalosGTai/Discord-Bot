@@ -1,10 +1,12 @@
 import disnake
 from disnake.ext import commands
 from disnake.enums import ButtonStyle
-from Discord.db.db_functions import get_task
-from Discord.functions.main_func import date_to_days, get_days, embed_task_msg, \
-embed_days_to_ege, find_channel_by_name, embed_wrong_channel
-from Discord.row_buttons import RowButtons
+from src.data.db_help_functional import get_task
+from src.functions.main_func import date_to_days, get_days
+from src.functions.embeds import embed_task_msg, embed_days_to_ege,\
+    embed_wrong_channel
+from src.functions.discord import find_channel_by_name
+from src.modules.row_buttons import RowButtons
 
 
 class Ege(commands.Cog):
@@ -24,7 +26,6 @@ class Ege(commands.Cog):
         physics = '2024-06-05'
         social = '2024-06-05'
         history = '2024-06-29'
-
 
         days_inf = date_to_days(inf)
         days_math = date_to_days(math)
@@ -57,10 +58,11 @@ class Ege(commands.Cog):
         номер: int = 8, сложность: str = 'Средняя'):
         number_task, complexity = номер, сложность
         '''Реши задачу из любого номера ЕГЭ по Информатике'''
+        
         channels = ['инфа-задачи', 'группа-орлы', 'группа-убийцы', 'кругосветка-pro']
         
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
-                inter.author.display_name == 'GTai':
+                inter.author.name == 'GTai'.lower():
             lst_tasks = [2, 8, 15, 24]
             types_complexity = ['Лёгкая', 'Средняя', 'Сложная']
             complexity = complexity[0].upper() + complexity.lower()[1::]

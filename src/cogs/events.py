@@ -1,5 +1,5 @@
 from disnake.ext import commands
-from Discord.functions.main_func import date_to_days
+from src.functions.main_func import date_to_days
 import disnake
 
 

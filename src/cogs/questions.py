@@ -1,6 +1,7 @@
 from disnake.ext import commands
 import disnake
-from Discord.functions.main_func import embed_question, find_channel_by_name, embed_wrong_channel
+from src.functions.embeds import embed_question, embed_wrong_channel
+from src.functions.discord import find_channel_by_name
 
 
 class Questions(commands.Cog):
@@ -41,6 +42,10 @@ class Questions(commands.Cog):
     inter: disnake.ApplicationCommandInteraction, вопрос: str):
         '''Задай вопрос ведьмачке'''
         
+        print(f'author = {inter.author}')
+        print(f'author_name = {inter.author.name}')
+        print(f'author_nick = {inter.author.nick}')
+        print(f'author_display_name = {inter.author.display_name}')
         msg = 'В процессе разработки.\n Пиши ВСЕОТЦУ, если хочешь помочь ;)'
         await inter.send(msg)
 
