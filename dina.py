@@ -1,12 +1,12 @@
-from asyncio import events, TimeoutError
-from Discord.config import settings
+from src.config import settings
 from disnake.ext import commands
 import os
 import disnake
-import Discord.session as session
-import Discord.users_stats as users_stats
-from Discord.db.db_functions import create_user
-from Discord.functions.main_func import embeds_welcome, delete_reverse_slash, find_user
+from src.modules.users import User
+from src.data.db_help_functional import create_user
+from src.functions.embeds import embeds_welcome
+from src.functions.main_func import delete_reverse_slash
+from src.functions.discord import find_user, add_user_count_msg
 
 
 bot = commands.Bot(command_prefix=settings['prefix'],
@@ -18,16 +18,21 @@ bot = commands.Bot(command_prefix=settings['prefix'],
 async def on_ready():
     print('Приветствую, Господин.')
     print('Загрузка модулей.')
-    for filename in os.listdir('./Discord/cogs'):
+    for filename in os.listdir('./src/cogs'):
         if filename.endswith('.py'):
             print(filename[:-3])
-            bot.load_extension(f'Discord.cogs.{filename[:-3]}')
+            bot.load_extension(f'src.cogs.{filename[:-3]}')
     print('Все модули загружены.')
 
 
 @bot.event
 async def on_member_join(member: disnake.Member):
     print(f'{member} присоединился на сервер.')
+
+    member_name = delete_reverse_slash(member.name)
+    if find_user(member_name) is None:
+        new_user = User(member_name)
+        create_user(new_user)
 
     role = member.mutual_guilds[0].get_role(848161737655058463)
     await member.send(embeds=embeds_welcome(bot, member))
@@ -54,14 +59,13 @@ async def on_command_error(ctx, error):
 async def on_message(message):
     author = message.author.name
     author = delete_reverse_slash(author)
-    new_user = find_user(author, session.all_users)
+    new_user = find_user(author)
 
     if new_user:
-        new_user.count_messages += 1
+        add_user_count_msg(author, 1)
     else:
         # create new author with start stats
-        new_user = users_stats.User(message.author.name)
-        session.all_users.append(new_user)
+        new_user = User(message.author.name)
         create_user(new_user)
 
     # так как on_message перекрывает все команды

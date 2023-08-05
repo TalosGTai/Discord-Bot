@@ -1,3 +1,17 @@
+INSTALLATION
+----------------
+Please make sure the release file is unpacked under a Web-accessible directory. You shall see the following files and directories:
+
+cogs\
+phrases\
+dina.py
+
+run dina.py
+
+Contacts:
+Tg - Gtai_IT
+Discord - GTai#6400
+
 Administrators:
 /all_add_money (value)
 /all_set_money (value)

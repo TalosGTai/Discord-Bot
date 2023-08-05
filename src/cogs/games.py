@@ -1,7 +1,9 @@
-import Discord.session as session
-from Discord.functions.main_func import find_user, load_phrases, embed_by_phrase, \
-find_channel_by_name, embed_wrong_channel
-from Discord.functions.duel_func import duel_algo, calculate_money_win
+from src.functions.main_func import load_phrases
+from src.functions.embeds import embed_by_phrase, \
+    embed_wrong_channel
+from src.functions.discord import find_user, find_channel_by_name,\
+    get_user_money, update_duel_stats, add_user_money
+from src.functions.duel_func import duel_algo, calculate_money_win
 from disnake.ext import commands
 import disnake
 from random import randint
@@ -23,58 +25,53 @@ class Games(commands.Cog):
         channels = ['игровой', 'чатимся']
 
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
-                inter.author.display_name == 'gtai':
+                inter.author.name == 'gtai':
             hero = противник
             author = inter.author.name
-            user1 = find_user(author, session.all_users)
-            user2 = find_user(hero, session.all_users)
+            user2 = find_user(hero)
             
-            if not(user2):
-                phrase = load_phrases('none')
+            if not user2:
+                phrase = load_phrases('games', 'duel', 'none')
                 embed = embed_by_phrase(phrase)
                 await inter.send(embed=embed)
             else:
-                if user1.money == 0:
-                    phrase = load_phrases('money-self')
+                if get_user_money(author) == 0:
+                    phrase = load_phrases('games', 'duel', 'money_self')
                     embed = embed_by_phrase(phrase)
                     await inter.send(embed=embed)
-                elif user2.money == 0:
-                    phrase = load_phrases('money-enemy')
+                elif get_user_money(hero) == 0:
+                    phrase = load_phrases('games', 'duel', 'money_enemy')
                     embed = embed_by_phrase(phrase)
                     await inter.send(embed=embed)
                 else:
-                    # Проверка дуэли с ботом или самим собой
-                    if user2.name == 'dina':
-                        phrase = load_phrases('bot')
+                    if hero.lower() == 'dina':
+                        phrase = load_phrases('games', 'duel', 'bot')
                         embed = embed_by_phrase(phrase)
                         await inter.send(embed=embed)
-                    elif user1.name == user2.name:
-                        phrase = load_phrases('self')
+                    elif author == hero:
+                        phrase = load_phrases('games', 'duel', 'self')
                         embed = embed_by_phrase(phrase)
                         await inter.send(embed=embed)
                     else:
-                        res = duel_algo(user1, user2)
+                        res = duel_algo(author, hero)
                         user_win = res['winner']
                         user_lose = res['loser']
                         wr1 = res['wr_w']
                         wr2 = res['wr_l']
 
-                        user_win.duel_all_games += 1
-                        user_win.duel_win_games += 1
-                        user_lose.duel_all_games += 1
-                        user_lose.duel_win_games -= 1
+                        update_duel_stats(user_win, user_lose)
                         
                         money_win = calculate_money_win(
-                            wr1, wr2, user_win.money, user_lose.money)
+                            wr1, wr2, get_user_money(user_win), get_user_money(user_lose))
                         
-                        user_win.money += money_win
-                        user_lose.money -= money_win
+                        add_user_money(user_win, money_win)
+                        add_user_money(user_win, -money_win)
 
                         # embed
                         msg = 'Дуэль между {} {}% и {} {}%\n'.format(
-                            user_win.name, wr1, user_lose.name, wr2)
+                            user_win, wr1, user_lose, wr2)
                         msg += '{} одержал победу в дуэли над {}\n'.format(
-                            user_win.name, user_lose.name)
+                            user_win, user_lose)
                         msg += 'И выиграл {} монет'.format(money_win)
                         
                         await inter.send(msg)
@@ -88,8 +85,8 @@ class Games(commands.Cog):
     @commands.slash_command(name='угадай_число')
     async def lucky_number(self, inter: disnake.ApplicationCommandInteraction):
         '''Угадай число'''
-        
-        '''Правила игры очень просты:
+        '''
+        Правила игры очень просты:
             • загадано целое число от 1 до 100 (включительно)
             • у тебя 6 попыток
             • при каждой попытке ты будешь знать больше/меньше
@@ -97,19 +94,20 @@ class Games(commands.Cog):
 
         P.S. в строке должно находится только число (без посторонних символов)
         '''
+
         channels = ['игровой', 'чатимся']
 
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
                 inter.author.display_name == 'gtai':
-            user = find_user(inter.author.name, session.all_users)
-            game = user.lucky_current_game
+            user = find_user(inter.author.name)
+            game = -1
             money_win = 60
             time_timeout = 15
             msg_win = 'Поздравляю тебя user! Ты угадал число number! \n'
             msg_win += f'Твой выигрыш составил {money_win}.'
-            msg_more = 'Я загадала число больше твоего'
-            msg_less = 'Я загадала число меньше твоего'
-            msg_lose = 'К сожалению, ты проиграл. Загаданное число: number'
+            msg_more = 'Я загадала число больше твоего.'
+            msg_less = 'Я загадала число меньше твоего.'
+            msg_lose = 'К сожалению, ты проиграл. Загаданное число: number.'
 
             # проверка на начало игры
             if game == -1:

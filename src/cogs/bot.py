@@ -8,6 +8,7 @@ class Dina(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
+
     @commands.command(name='send_msg', aliases=['send', 'смс'])
     @commands.has_permissions(administrator=True)
     async def send_msg(self, inter: disnake.ApplicationCommandInteraction,
@@ -33,6 +34,7 @@ class Dina(commands.Cog):
         Шаблон: command channel msg
         Пример: .send_embed "егэ-чат" "Заголовок" "текст" "0x0004eb"
         '''
+        
         color = int(color, 16)
         embed = disnake.Embed(title=title,
                               description=description, color=color)
