@@ -314,6 +314,44 @@ def promotion_ege_text(bot, owner) -> tuple[str, dict[str, str], int]:
     field_msg_3 += f'За более подробной информацией ты можешь обратиться ко мне ({owner.mention}).\n'
     field_msg_3 += 'Данная акция работает работает бесконечное количество раз ;)'
     fields['field_3'] = field_msg_3
+
+    fields['title_4'] = '4. Скидка до 30% на приобретение сразу несколько курсов'
+    field_msg_4 = 'Взять сразу несколько курсов будет намного выгоднее, чем по отдельности их брать. '
+    field_msg_4 += 'Чтобы узнать какие именно скидки будут и при каких курсах, то '
+    field_msg_4 += f'пиши мне ({owner.mention}) за индивидуальным предложением.'
+    fields['field_4'] = field_msg_4
     color_msg = 0x5ACFF5
 
     return (title_msg, fields, color_msg)
+
+
+def monolith_text_1() -> tuple[str, str, int]:
+    title_msg = 'Курс-тренажёр по 15ому заданию ЕГЭ Информатика'
+
+    description_msg = 'Отличная возможность по подготовке и тренировке 15ого задания из ЕГЭ.\n\n'
+    description_msg += '• Научу с 0 делать этот номер;\n'
+    description_msg += '• 50+ заданий для практики;\n'
+    description_msg += '• Задания из реальных ЕГЭ прошлых лет;\n'
+    description_msg += '• Видео-разборы заданий;\n\n'
+    description_msg += '• Ответы на все возникающие вопросы;\n\n'
+    description_msg += 'Всего лишь за 350р. ты получишь всё это!\n'
+    description_msg += 'Для приобретения курса перейди по ссылке -> https://stepik.org/149687'
+    color_msg = 0x5ACFF5
+
+    return (title_msg, description_msg, color_msg)
+
+
+def monolith_text_2() -> tuple[str, str, int]:
+    title_msg = 'Курс-тренажёр по 15ому заданию ЕГЭ Информатика'
+
+    description_msg = 'Отличная возможность по подготовке и тренировке 15ого задания из ЕГЭ.\n\n'
+    description_msg += '• Научу с 0 делать этот номер;\n'
+    description_msg += '• 50+ заданий для практики;\n'
+    description_msg += '• Задания из реальных ЕГЭ прошлых лет;\n'
+    description_msg += '• Видео-разборы заданий;\n\n'
+    description_msg += '• Ответы на все возникающие вопросы;\n\n'
+    description_msg += 'Всего лишь за 350р. ты получишь всё это!\n'
+    description_msg += 'Для приобретения курса перейди по ссылке -> https://stepik.org/149687'
+    color_msg = 0x5ACFF5
+
+    return (title_msg, description_msg, color_msg)

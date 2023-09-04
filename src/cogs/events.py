@@ -37,6 +37,20 @@ class Events(commands.Cog):
 
         await inter.send(msg)
 
+    
+    @commands.slash_command(name='ближайшие_события')
+    async def upcoming_events(self, inter: disnake.ApplicationCommandInteraction):
+        '''Список событий в ближайшее время'''
+
+        ny = '2023-10-31'
+
+        days_ny = date_to_days(ny)
+
+        new_line = '\n'
+        msg = f'Находится в разработке. Появится в ближайшее время!'
+
+        await inter.send(msg)
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(Events(bot))
