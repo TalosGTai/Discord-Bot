@@ -20,7 +20,8 @@ def embed_reason(member: str) -> disnake.Embed:
 
 
 def embed_wrong_channel(channel, type: str) -> disnake.Embed:
-    '''Создание embed для вбыора неверного канала'''
+    '''Создание embed для выбора подходящего канала.
+    Когда пользователь выбрал не тот канал.'''
 
     match (type):
         case 'question':
@@ -126,8 +127,9 @@ def embed_task_msg(number_task: int, row: dict) -> list:
     '''Создание embed для таска'''
 
     title = f'Задача из {number_task}ого номера ЕГЭ по Информатике'
-    description = f"Тип задания: {row['type']}\n"
+    description = f"Тип задания: {row['theme']}\n"
     description += f"Сложность задания: {row['complexity']}\n"
+    description += f"Автор задания: {row['author']}\n"
     color = 0x53377A
     embeds = []
 

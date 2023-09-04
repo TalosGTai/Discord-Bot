@@ -37,7 +37,7 @@ class User:
         self.rate = self.count_messages * 0.01 + self.count_req_help * \
             0.15 + self.count_done_help * 0.8 + self.count_projects * 3.0 + \
             self.duel_all_games * 0.01 + self.duel_win_games * 0.03 + \
-            self.days_on_server * 0.01 + self.bonus_rate
+            self.days_on_server() * 0.01 + self.bonus_rate
         self.rate = to_two_digits(self.rate)
 
         return self.rate

@@ -12,7 +12,7 @@ class DB:
         self.open_connect_courses()
         self.open_connect_discord()
         self.__cursor_discord = self.__db_discord.cursor()
-        self.__cursor_course = self.__db_discord.cursor()
+        self.__cursor_course = self.__db_course.cursor()
 
 
     def open_connect_discord(self):
@@ -72,7 +72,7 @@ class DB:
         except mysql.connector.Error as error:
             print(f'Some error in functions [select_user], error: {error}')
         except Exception as ex:
-            print(f'Something gone wrong, ex: {ex}')
+            print(f'Something gone wrong in functions [select_user], ex: {ex}, txt: {user_name}')
 
         return None
     
@@ -530,7 +530,7 @@ class DB:
             "WHERE complexity = " + "\"" + complexity + "\""
 
         try:
-            self.__cursor_course = self.__db_discord.cursor()
+            self.__cursor_course = self.__db_course.cursor()
             self.__cursor_course.execute(query)
             result = self.__cursor_course.fetchone()
 
@@ -557,13 +557,13 @@ class DB:
             return self.__cursor_course.fetchall()
         except mysql.connector.InternalError as internal_error:
             print(
-                f'Error with cursor in functions [get_count_task_complexity], error: {internal_error}')
+                f'Error with cursor in functions [get_task_from_db], error: {internal_error}')
         except mysql.connector.ProgrammingError as programming_error:
             print(
-                f'Error with code, probably with syntax in functions [get_count_task_complexity], error: {programming_error}')
+                f'Error with code, probably with syntax in functions [get_task_from_db], error: {programming_error}')
         except mysql.connector.Error as error:
             print(
-                f'Some error in functions [get_count_task_complexity], error: {error}')
+                f'Some error in functions [get_task_from_db], error: {error}')
 
         return None
 
@@ -585,16 +585,14 @@ class DB:
                 return result[0]
             except mysql.connector.InternalError as internal_error:
                 print(
-                    f'Error with cursor in functions [get_count_task_complexity], error: {internal_error}')
+                    f'Error with cursor in functions [get_question_from_db], error: {internal_error}')
             except mysql.connector.ProgrammingError as programming_error:
                 print(
-                    f'Error with code, probably with syntax in functions [get_count_task_complexity], error: {programming_error}')
+                    f'Error with code, probably with syntax in functions [get_question_from_db], error: {programming_error}')
             except mysql.connector.Error as error:
                 print(
-                    f'Some error in functions [get_count_task_complexity], error: {error}')
+                    f'Some error in functions [get_question_from_db], error: {error}')
         return None
-
-
 
 
     def set_user_money(self, user_id: int, money: int):

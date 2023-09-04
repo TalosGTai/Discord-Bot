@@ -4,7 +4,7 @@ from src.functions.courses import ege_24_text_1, ege_24_text_2, ege_25_text_1, \
     ege_25_text_2, ege_26_text_1, ege_26_text_2, ege_27_text_1, ege_27_text_2, \
     krugosvetka_pro_text_1, krugosvetka_pro_text_2, c_university_text_1, \
     c_university_text_2, trainer_2_text, trainer_7_text, trainer_8_text, \
-    trainer_15_text
+    trainer_15_text, promotion_ege_text
 
 
 class Courses(commands.Cog):
@@ -192,7 +192,7 @@ class Courses(commands.Cog):
         await user.send(embed=embed_1)
         await inter.send(response)
 
-
+    @commands.slash_command(name='егэ_15')
     async def trainer_15(self, inter: disnake.ApplicationCommandInteraction):
         '''Курс-тренажёр по 15ому заданию ЕГЭ Информатика'''
 
@@ -206,6 +206,29 @@ class Courses(commands.Cog):
         response = 'Полная информация была отправлена тебе в личные сообщения :)'
 
         await user.send(embed=embed_1)
+        await inter.send(response)
+
+
+    @commands.slash_command(name='акции_егэ')
+    async def promotion_ege(self, inter: disnake.ApplicationCommandInteraction):
+        '''Акции и плюшки при прохождении курсов ЕГЭ'''
+
+        user = inter.author
+        author = 'GTai — Всеотец'
+
+        title, fields, color = promotion_ege_text(self.bot, user)
+        embed = disnake.Embed(
+            title=title, color=color)
+        embed.add_field(name=fields['title_1'],
+                        value=fields['field_1'], inline=False)
+        embed.add_field(name=fields['title_2'],
+                        value=fields['field_2'], inline=False)
+        embed.add_field(name=fields['title_3'],
+                        value=fields['field_3'], inline=False)
+        embed.set_author(name=author)
+        response = 'Полная информация была отправлена тебе в личные сообщения :)'
+
+        await user.send(embed=embed)
         await inter.send(response)
 
 

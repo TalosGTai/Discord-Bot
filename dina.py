@@ -30,7 +30,7 @@ async def on_member_join(member: disnake.Member):
     print(f'{member} присоединился на сервер.')
 
     member_name = delete_reverse_slash(member.name)
-    if find_user(member_name) is None:
+    if not(find_user(member_name)):
         new_user = User(member_name)
         create_user(new_user)
 
@@ -59,13 +59,13 @@ async def on_command_error(ctx, error):
 async def on_message(message):
     author = message.author.name
     author = delete_reverse_slash(author)
-    new_user = find_user(author)
+    user = find_user(author)
 
-    if new_user:
+    if user:
         add_user_count_msg(author, 1)
     else:
         # create new author with start stats
-        new_user = User(message.author.name)
+        new_user = User(author)
         create_user(new_user)
 
     # так как on_message перекрывает все команды

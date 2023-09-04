@@ -9,7 +9,7 @@ class Server(commands.Cog):
 
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
-        self.git_update_auto.start()
+        #self.git_update_auto.start()
 
 
     @commands.command()
@@ -20,7 +20,7 @@ class Server(commands.Cog):
                 try:
                     self.bot.load_extension(
                         f'Discord.src.cogs.{filename[:-3]}')
-                    print(f'Разрешение {filename[:-3]} успешно загружено.')
+                    print(f'Расширение {filename[:-3]} успешно загружено.')
                 except Exception as ex:
                     print(f'Не удалось загрузить {filename[:-3]}.', ex)
         await ctx.message.delete()

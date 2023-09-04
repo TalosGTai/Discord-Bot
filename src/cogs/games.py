@@ -95,12 +95,12 @@ class Games(commands.Cog):
             money_win = 60
             time_timeout = 30
             msg_win = 'Поздравляю тебя user! Ты угадал число number! \n'
-            msg_win += f'Твой выигрыш составил {money_win}.'
+            msg_win += f'Твой выигрыш составил {money_win} монет.'
             msg_more = 'Я загадала число больше твоего.'
             msg_less = 'Я загадала число меньше твоего.'
             msg_lose = 'К сожалению, ты проиграл. Загаданное число: number.'
 
-            await inter.send(embed=embed_rules_lucky_game())
+            await inter.send(embed=embed_rules_lucky_game(time_timeout))
 
             # проверка на начало игры
             if game == -1:

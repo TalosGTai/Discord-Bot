@@ -7,14 +7,15 @@ from src.config import paths
 def create_user(user):
     '''Создание пользователя в БД'''
     
+    data_base = db.DB()
     users, stats, duel = divide_values(user)
-    new_id = db.DB.get_last_user_id() + 1
+    new_id = data_base.get_last_user_id() + 1
 
     print(users, new_id)
 
-    db.DB.insert_stats(stats, new_id)
-    db.DB.insert_users(users, new_id)
-    db.DB.insert_duel(duel, new_id)
+    data_base.insert_stats(stats, new_id)
+    data_base.insert_users(users, new_id)
+    data_base.insert_duel(duel, new_id)
 
 
 def divide_values(values: list) -> tuple:
@@ -32,7 +33,8 @@ def divide_values(values: list) -> tuple:
 def get_number_random_question(table: str) -> int | None:
     '''Получаем номер(id) рандомного вопроса для bot question'''
 
-    count_questions = db.DB.get_count_records_in_table(table)
+    data_base = db.DB()
+    count_questions = data_base.get_count_records_in_table(table)
 
     if count_questions is not None:
         rnd = random.Random()
@@ -52,7 +54,8 @@ def get_sql_query_question(id_question: int, table: str) -> str:
 def get_id_random_task_complexity(number_task: int, complexity: str) -> int | None:
     '''Получаем номер рандомного таска определённой сложности'''
 
-    count_task = db.DB.get_count_task_complexity(number_task, complexity)
+    data_base = db.DB()
+    count_task = data_base.get_count_task_complexity(number_task, complexity)
 
     if count_task is not None:
         rnd = random.Random()
@@ -63,9 +66,10 @@ def get_id_random_task_complexity(number_task: int, complexity: str) -> int | No
 def get_sql_query_rnd_task_complexity(number_task: int, complexity: str) -> str:
     '''Запрос на нахождение таска определённой сложности'''
 
-    sql = f"SELECT id_ege_{number_task}, ege_{number_task}.type," + \
-        f"ege_{number_task}.complexity, " + \
-        f"ege_{number_task}.condition, " + f"ege_{number_task}.answer " + \
+    sql = f"SELECT id_ege_{number_task}, ege_{number_task}.theme, " + \
+        f"ege_{number_task}.complexity, " + f'ege_{number_task}.type, ' + \
+        f"ege_{number_task}.condition, " + f"ege_{number_task}.answer, " + \
+        f'ege_{number_task}.author ' + \
         f"FROM courses.ege_{number_task} " + \
         f"WHERE complexity = \"{complexity}\""
 
@@ -75,11 +79,12 @@ def get_sql_query_rnd_task_complexity(number_task: int, complexity: str) -> str:
 def get_dict_from_task(result: list) -> dict:
     '''Создаём словарь из списка значений таска
     
-    keys: id_task, type, complexity, codition, answer
+    keys: id_task, theme, complexity, type, codition, answer, author
     '''
 
-    row = {'id_task': result[0], 'type': result[1], 'complexity': result[2],
-           'condition': result[3], 'answer': result[4]}
+    row = {'id_task': result[0], 'theme': result[1], 'complexity': result[2],
+           'type': result[3], 'condition': result[4], 'answer': result[5],
+           'author': result[6]}
 
     return row
 
@@ -151,7 +156,8 @@ def get_task(number_task: int, complexity: str) -> dict | str:
         number_task, complexity)
     
     if id_random_task is not None:
-        result = db.DB.get_task_from_db(query)
+        data_base = db.DB()
+        result = data_base.get_task_from_db(query)
         
         if result is not None:
             row = get_dict_from_task(result[id_random_task - 1])
