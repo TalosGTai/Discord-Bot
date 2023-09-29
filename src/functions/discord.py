@@ -14,7 +14,12 @@ def find_channel_by_name(bot, source_channel: str):
 
 def find_user_by_name_discord(bot, user_name: str):
     '''Поиск пользователя по имени в дискорд-сервере'''
-    pass
+    
+    for guild in bot.guilds:
+        for member in guild.members:
+            if member.name == user_name:
+                return member
+    return False
 
 
 def find_user(user_name: str) -> bool:

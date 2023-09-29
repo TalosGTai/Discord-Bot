@@ -1,5 +1,5 @@
 from src.functions.discord import find_user, \
-    get_user_money, add_user_money
+    get_user_money, add_user_money, find_user_by_name_discord
 from src.functions.main_func import get_complexity, create_password,\
     get_key_by_value, load_phrases
 from disnake.ext import commands
@@ -16,32 +16,36 @@ class Actions(commands.Cog):
     @commands.slash_command(name='дать_монет')
     async def transfer_money(self,
         inter: disnake.ApplicationCommandInteraction,
-        игрок: str, монет: int):
+        игрок: str = 'GTai', монет: int = 100, сообщение: str = ''):
         '''Дать монет другому игроку
         
         Щедрое это дело. 
         '''
         
+        
         money = монет
         hero = inter.author.name
         hero_money = get_user_money(hero)
-        player = find_user(игрок)
 
         if hero_money is not None:
-            if player:
+            if find_user(игрок) or (игрок[0] == '@' and find_user(игрок[1::])):
                 if inter.author.name != игрок:
-                    if игрок in ['dina', 'Dina']:
+                    if игрок not in ['dina', 'Dina']:
                         if money > 0:
                             if hero_money >= money:
                                 add_user_money(hero, -money)
                                 add_user_money(игрок, money)
-
-                                title = 'Передача монет'
-                                descr = f'Игрок {inter.author.name} отдал '
-                                descr += f'{money} монет игроку {игрок}.'
+                                user = find_user_by_name_discord(self.bot, игрок)
                                 
-                                embed = disnake.Embed(title=title, description=descr)
-                                await inter.send(embed=embed)
+                                title = 'Передача монет\n'
+                                descr = f'Игрок {inter.author.name} отдал '
+                                descr += f'{money} монет игроку {user.mention}.\n'
+                                if len(сообщение) > 0:
+                                    descr += f'Сообщение: {сообщение}'
+                                msg = title + descr
+                                #embed = disnake.Embed(title=title, description=descr)
+                                #await inter.send(embed=embed)
+                                await inter.send(msg)
                             else:
                                 msg = load_phrases('social', 'transfer_money')
                                 await inter.send(msg)

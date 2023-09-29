@@ -2,6 +2,7 @@ import random
 import disnake
 import src.data.data_base as db
 from src.config import paths
+import datetime as DT
 
 
 def create_user(user):
@@ -57,7 +58,7 @@ def get_id_random_task_complexity(number_task: int, complexity: str) -> int | No
     data_base = db.DB()
     count_task = data_base.get_count_task_complexity(number_task, complexity)
 
-    if count_task is not None:
+    if count_task is not None and count_task != 0:
         rnd = random.Random()
         return rnd.randint(1, count_task)
     return None
@@ -137,6 +138,9 @@ def get_pic_from_task(number_task: int, row_task: dict) -> dict:
         else:
             condition += row + '\n'
 
+    if len(condition) > 0:
+        condition_lst.append(condition)
+        
     row_task['condition'] = condition_lst
     row_task['img'] = files
     
@@ -169,5 +173,24 @@ def get_task(number_task: int, complexity: str) -> dict | str:
 
             return row
         else:
-            return f'Не удалось найти задачу по заданным параметрам: task = {id_random_task}'
-    return f'Не удалось найти номер задачи заданной сложности: task = {id_random_task}, complexity = {complexity}'
+            return f'Не удалось найти задачу по заданным параметрам: task = {number_task}'
+    return f'Не удалось найти номер задачи заданной сложности: task = {number_task}, complexity = {complexity}'
+
+
+def add_warn_to_user(user_name: str, type: str, description: str = '', time: int = 0) -> None:
+    '''Добавить новое нарушение.
+    Параметры БД: 
+    • user_name: str;
+    • type: str;
+    • description: str;
+    • date_start: date;
+    • date_end: date;
+    '''
+    date_start = DT.date.today()
+    date_end = date_start + DT.timedelta(minutes=time)
+
+    data_base = db.DB()
+    id_user = data_base.select_user(user_name)
+    values = [id_user, type, description, date_start, date_end]
+
+    data_base.insert_table_warns(values)

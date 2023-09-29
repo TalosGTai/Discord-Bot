@@ -34,9 +34,9 @@ async def on_member_join(member: disnake.Member):
         new_user = User(member_name)
         create_user(new_user)
 
-    role = member.mutual_guilds[0].get_role(848161737655058463)
+    #role = member.mutual_guilds[0].get_role(848161737655058463)
     await member.send(embeds=embeds_welcome(bot, member))
-    await member.add_roles(role)
+    #await member.add_roles(role)
 
 
 @bot.event

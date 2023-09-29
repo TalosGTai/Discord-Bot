@@ -99,7 +99,7 @@ class Courses(commands.Cog):
         await inter.send(response)
 
 
-    @commands.slash_command(name='кругосветка')
+    #@commands.slash_command(name='кругосветка')
     async def krugosvetka_pro(self, inter: disnake.ApplicationCommandInteraction):
         '''Мастер-группа Кругосветка PRO ЕГЭ по Информатике'''
 
@@ -137,10 +137,9 @@ class Courses(commands.Cog):
         description = monolith_text_2(owner)
         embed_2 = disnake.Embed(description=description, color=color)
         response = 'Полная информация была отправлена тебе в личные сообщения :)'
-        response = 'Курс находится в разработке. Информация появится в ближайшее время!'
 
-        #await user.send(embed=embed_1)
-        #await user.send(embed=embed_2)
+        await user.send(embed=embed_1)
+        await user.send(embed=embed_2)
         await inter.send(response)
 
 

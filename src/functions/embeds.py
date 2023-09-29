@@ -127,19 +127,27 @@ def embed_task_msg(number_task: int, row: dict) -> list:
     '''Создание embed для таска'''
 
     title = f'Задача из {number_task}ого номера ЕГЭ по Информатике'
-    description = f"Тип задания: {row['theme']}\n"
-    description += f"Сложность задания: {row['complexity']}\n"
-    description += f"Автор задания: {row['author']}\n"
+    description = f"Тип: {row['theme']}\n"
+    description += f"Сложность: {row['complexity']}\n"
+    description += f"Автор: {row['author']}\n"
     color = 0x53377A
     embeds = []
 
     if 'img' in row.keys():
-        for i in range(len(row['img'])):
-            description += row['condition'][i]
-            embed_i = disnake.Embed(color=color, description=description)
-            embed_i.set_image(file=row['img'][i])
-            embeds.append(embed_i)
-            description = ''
+        if len(row['img']) > 1:
+            for i in range(len(row['img'])):
+                description += row['condition'][i]
+                embed_i = disnake.Embed(color=color, description=description)
+                embed_i.set_image(file=row['img'][i])
+                embeds.append(embed_i)
+                description = ''
+        else:
+            description += 'Условие:\n'
+            description += f"{row['condition'][1]}"
+            embed = disnake.Embed(
+                title=title, description=description, color=color)
+            embed.set_image(file=row['img'][0])
+            embeds.append(embed)
     else:
         description += 'Условие:\n'
         description += f"{row['condition']}"

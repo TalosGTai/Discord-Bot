@@ -62,7 +62,9 @@ class DB:
             self.__cursor_discord.execute(query)
             result = self.__cursor_discord.fetchone()
             self.__cursor_discord.close()
-
+            
+            if result is None:
+                return result
             return result[0]
         except mysql.connector.InternalError as internal_error:
             print(f'Error with cursor in functions [select_user], error: {internal_error}')
@@ -72,7 +74,7 @@ class DB:
         except mysql.connector.Error as error:
             print(f'Some error in functions [select_user], error: {error}')
         except Exception as ex:
-            print(f'Something gone wrong in functions [select_user], ex: {ex}, txt: {user_name}')
+            print(f'Something gone wrong in functions [select_user], ex: {ex}')
 
         return None
     
@@ -875,13 +877,13 @@ class DB:
                 f'Some error in functions [get_count_records_in_table], error: {error}')
 
 
-    def update_table_stats(self, name: str, values: list):
+    def update_table_stats(self, user_name: str, values: list):
         '''Обновление таблицы [stats] пользователя'''
 
-        idStat = self.select_user(name)
+        id_user = self.select_user(user_name)
 
-        if idStat is not None:
-            values.append(idStat)
+        if id_user is not None:
+            values.append(id_user)
 
             query = "UPDATE stats \
             SET count_msg = %s, req_help = %s, done_help = %s, count_proj = %s, \
@@ -903,12 +905,13 @@ class DB:
                     f'Some error in functions [update_table_stats], error: {error}')
 
 
-    def update_table_users(self, name: str, values: list):
+    def update_table_users(self, user_name: str, values: list):
         '''Обновление таблицы [users] пользователя'''
-        idStat = self.select_user(name)
+        
+        id_user = self.select_user(user_name)
 
-        if idStat is not None:
-            val = [values[1], idStat]
+        if id_user is not None:
+            val = [values[1], id_user]
 
             query = "UPDATE users \
             SET money = %s \
@@ -928,3 +931,27 @@ class DB:
                 print(
                     f'Some error in functions [update_table_users], error: {error}')
     
+
+    def insert_table_warns(self, values: list):
+        '''Задание новых значений/столбцов для таблицы users'''
+
+        query = "INSERT INTO warns \
+        (id_user, type, description, date_start, date_end) \
+        VALUES ( %s, %s, %s, %s, %s)"
+
+        try:
+            self.__cursor_discord = self.__db_discord.cursor()
+            self.__cursor_discord.execute(query, values)
+            self.__db_discord.commit()
+            self.__cursor_discord.close()
+
+            print('Success insert warn.')
+        except mysql.connector.InternalError as internal_error:
+            print(
+                f'Error with cursor in functions [insert_table_warns], error: {internal_error}')
+        except mysql.connector.ProgrammingError as programming_error:
+            print(
+                f'Error with code, probably with syntax in functions [insert_table_warns], error: {programming_error}')
+        except mysql.connector.Error as error:
+            print(
+                f'Some error in functions [insert_table_warns], error: {error}')
