@@ -1,7 +1,7 @@
 import disnake
-import discord
 from src.functions.discord import find_channel_by_name
 from src.data.data_base import DB
+from src.functions.panels import moderator_functions
 
 
 def embed_reason(member: str) -> disnake.Embed:
@@ -195,5 +195,14 @@ def embed_rules_lucky_game(timeout: int) -> disnake.Embed:
     color = 0x187CFC
 
     embed = disnake.Embed(title=title, description=descr, color=color)
+
+    return embed
+
+
+def embed_rules_moderator_panel() -> disnake.Embed:
+    dict_embed = moderator_functions()
+    embed = disnake.Embed(
+        title=dict_embed['title'], description=dict_embed['description'],
+        color=dict_embed['color'])
 
     return embed

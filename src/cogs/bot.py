@@ -1,5 +1,10 @@
 from disnake.ext import commands
+from disnake import Embed
 import disnake
+from src.functions.roles import get_all_roles, roles_main,\
+    roles_games, roles_it, get_all_msg_roles
+from src.functions.discord import find_channel_by_name,\
+    find_role_by_name, find_user_by_id
 
 
 class Dina(commands.Cog):
@@ -56,6 +61,68 @@ class Dina(commands.Cog):
 
         await ctx.channel.purge(limit=int(count))
         await ctx.message.delete()
+        
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        '''События при добавлении роли'''
+
+        msg_id = int(payload.message_id)
+        if msg_id in get_all_msg_roles():
+            emoji = str(payload.emoji)
+            member = payload.member
+            roles = get_all_roles(self.bot)
+            role = find_role_by_name(self.bot, roles[emoji])
+            await member.add_roles(role)
+
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self, payload):
+        '''События при удалении роли'''
+
+        msg_id = int(payload.message_id)
+        if msg_id in get_all_msg_roles():
+            emoji = str(payload.emoji)
+            member = find_user_by_id(self.bot, payload.user_id)
+            roles = get_all_roles(self.bot)
+            role = find_role_by_name(self.bot, roles[emoji])
+            await member.remove_roles(role)
+
+
+    @commands.command(name='create_msg_role_main')
+    @commands.has_permissions(administrator=True)
+    async def create_msg_role_main(self, ctx):
+        msg = roles_main()
+        embed = Embed(description=msg['description'], color=msg['color'])
+        channel = find_channel_by_name(self.bot, 'роли')
+        await channel.send(embed=embed)
+
+
+    @commands.command(name='create_msg_role_code')
+    @commands.has_permissions(administrator=True)
+    async def create_msg_role_it(self, ctx):
+        msg = roles_it(self.bot)
+        embed = Embed(title=msg['title'], description=msg['description'],
+                       color=msg['color'])
+        channel = find_channel_by_name(self.bot, 'роли')
+        await channel.send(embed=embed)
+
+
+    @commands.command(name='create_msg_role_games')
+    @commands.has_permissions(administrator=True)
+    async def create_msg_role_games(self, ctx):
+        msg = roles_games()
+        embed = Embed(description=msg['description'], color=msg['color'])
+        channel = find_channel_by_name(self.bot, 'роли')
+        await channel.send(embed=embed)
+    
+
+    @commands.command(name='add_role_to_msg')
+    @commands.has_permissions(administrator=True)
+    async def add_role_to_msg(self, ctx):
+        channel = find_channel_by_name(self.bot, 'роли')
+        msg = await channel.fetch_message(1158408970160050287)
+        await msg.add_reaction('<:js:848668818385010708>')
         
 
 def setup(bot: commands.Bot):

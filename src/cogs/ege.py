@@ -5,7 +5,7 @@ from src.data.db_help_functional import get_task
 from src.functions.main_func import date_to_days, get_days
 from src.functions.embeds import embed_task_msg, embed_days_to_ege,\
     embed_wrong_channel
-from src.functions.discord import find_channel_by_name
+from src.functions.discord import find_channel_by_name, find_user_by_name_discord
 from src.modules.row_buttons import RowButtons
 
 
@@ -93,15 +93,8 @@ class Ege(commands.Cog):
     @commands.has_permissions(administrator=True)
     @commands.slash_command(name='тест')
     async def test(self, inter: disnake.GuildCommandInteraction):
-        #file = disnake.File(fp='S:/Programming/DB/ege_2/1.1.png')
-        #embed = disnake.Embed(title='Test img',
-        #    description='some text here')
-        #embed.set_image(file=file)
-        for guild in self.bot.guilds:
-            for channel in guild.channels:
-                if channel.name == 'вопросы-от-ведьмачки':
-                    await inter.send(channel.mention)
-        await inter.send(inter.author.display_name)
+        await inter.send('<:GTai:1158357831058206801>')
+        #await inter.send()
 
 
 def setup(bot: commands.Bot):

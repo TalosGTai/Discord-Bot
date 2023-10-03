@@ -65,8 +65,7 @@ class Server(commands.Cog):
         await ctx.message.delete()
 
 
-    @tasks.loop(hours=12)
-    async def git_update_auto(self):
+    '''async def git_update_auto(self):
         path = f'dina.py'
         repo = Repo(path, search_parent_directories=True)
 
@@ -76,7 +75,7 @@ class Server(commands.Cog):
             print('Загружена последняя версия.')
         else:
             print('Репозитория не существует.')
-
+    '''
 
     @commands.command()
     @commands.has_permissions(administrator=True)

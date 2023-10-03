@@ -1,8 +1,10 @@
 from disnake.ext import commands
+import disnake
 from src.functions.discord import find_user, set_user_date_registr, \
     add_user_bonus_rate, add_user_count_proj, add_user_done_help, \
     add_user_money, add_user_req_help, set_user_done_help, \
     find_user_by_name_discord
+from src.functions.embeds import embed_rules_moderator_panel
 from src.data.db_help_functional import add_warn_to_user
 from asyncio import sleep
 
@@ -439,6 +441,15 @@ class Admins(commands.Cog):
         print(msg)
         await ctx.send(msg)
         await ctx.message.delete()
+
+
+    @commands.slash_command(name='панель_модератора')
+    @commands.has_permissions(kick_members=True)
+    async def moder_panel(self, inter: disnake.GuildCommandInteraction):
+        '''Описание всех возможностей модератора'''
+        embed = embed_rules_moderator_panel()
+
+        await inter.send(embed=embed)
 
 
 def setup(bot: commands.Bot):

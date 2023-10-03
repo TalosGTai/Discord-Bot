@@ -22,6 +22,26 @@ def find_user_by_name_discord(bot, user_name: str):
     return False
 
 
+def find_role_by_name(bot, role_name: str):
+    '''Поиск роли по названию в дискорд-сервере'''
+
+    for guild in bot.guilds:
+        for role in guild.roles:
+            if role.name == role_name:
+                return role
+    return False
+
+
+def find_user_by_id(bot, user_id: int):
+    '''Поиск пользователя по ID в дискорд-сервере'''
+
+    for guild in bot.guilds:
+        for member in guild.members:
+            if member.id == user_id:
+                return member
+    return False
+
+
 def find_user(user_name: str) -> bool:
     '''Поиск пользователя по имени в БД'''
 
