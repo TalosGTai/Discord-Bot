@@ -1,7 +1,7 @@
 import disnake
 from src.functions.discord import find_channel_by_name
 from src.data.data_base import DB
-from src.functions.panels import moderator_functions
+from src.functions.describe import lucky_number_describe
 
 
 def embed_reason(member: str) -> disnake.Embed:
@@ -184,25 +184,37 @@ def embed_question() -> tuple[str, int]:
 
 
 def embed_rules_lucky_game(timeout: int) -> disnake.Embed:
-    title = 'Игра Угадай число'
-    descr = 'Правила игры очень просты:\n'
-    descr += '    • загадано целое число от 1 до 100 (включительно)\n'
-    descr += '    • у тебя 6 попыток\n'
-    descr += f'   • на каждый ответ у тебя даётся {timeout} секунд\n'
-    descr += '    • при каждой попытке ты будешь знать больше/меньше'
-    descr += 'исходного числа ты находишься\n'
-    descr += 'В строке должно находится только число (без посторонних символов).'
+    d_rules = lucky_number_describe(timeout)
     color = 0x187CFC
 
-    embed = disnake.Embed(title=title, description=descr, color=color)
+    embed = disnake.Embed(title=d_rules['title'],
+                          description=d_rules['description'], color=color)
 
     return embed
 
 
-def embed_rules_moderator_panel() -> disnake.Embed:
-    dict_embed = moderator_functions()
+def embed_moderator_panel(d_embed: dict[str, str]) -> disnake.Embed:
+    color = 0x38016b
     embed = disnake.Embed(
-        title=dict_embed['title'], description=dict_embed['description'],
-        color=dict_embed['color'])
+        title=d_embed['title'], description=d_embed['description'],
+        color=color)
+
+    return embed
+
+
+def embed_games_panel(d_embed: dict[str, str]) -> disnake.Embed:
+    color = 0x0073ff
+    embed = disnake.Embed(
+        title=d_embed['title'], description=d_embed['description'],
+        color=color)
+
+    return embed
+
+
+def embed_user_panel(d_embed: dict[str, str]) -> disnake.Embed:
+    color = 0x0e5c00
+    embed = disnake.Embed(
+        title=d_embed['title'], description=d_embed['description'],
+        color=color)
 
     return embed

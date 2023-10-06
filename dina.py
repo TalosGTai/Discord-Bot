@@ -1,12 +1,12 @@
 from src.config import settings
 from disnake.ext import commands
-import os
 import disnake
+import os
 from src.modules.users import User
 from src.data.db_help_functional import create_user
 from src.functions.embeds import embeds_welcome
 from src.functions.main_func import delete_reverse_slash
-from src.functions.discord import find_user, add_user_count_msg
+from src.functions.discord import find_user
 
 
 bot = commands.Bot(command_prefix=settings['prefix'],
@@ -34,42 +34,6 @@ async def on_member_join(member: disnake.Member):
         new_user = User(member_name)
         create_user(new_user)
 
-    #role = member.mutual_guilds[0].get_role(848161737655058463)
-    await member.send(embeds=embeds_welcome(bot, member))
-    #await member.add_roles(role)
-
-
-@bot.event
-async def on_member_remove(member: disnake.Member):
-    print(f'{member} покинул сервер.')
-
-
-@bot.event
-async def on_command_error(ctx, error):
-    print(error)
-
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author}, у тебя недостаточно прав для выполнения данной команды!')
-    elif isinstance(error, commands.UserInputError):
-        await ctx.send(f'Правильное использование команды:\n \'{ctx.prefix}{ctx.command.name}\'' +
-                       f' ({ctx.command.brief})')
-
-
-@bot.event
-async def on_message(message):
-    author = message.author.name
-    author = delete_reverse_slash(author)
-    user = find_user(author)
-
-    if user:
-        add_user_count_msg(author, 1)
-    else:
-        # create new author with start stats
-        new_user = User(author)
-        create_user(new_user)
-
-    # так как on_message перекрывает все команды
-    await bot.process_commands(message)
-
+    #await member.send(embeds=embeds_welcome(bot, member))
 
 bot.run(settings['token'])

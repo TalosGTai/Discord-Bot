@@ -5,8 +5,10 @@ from src.data.db_help_functional import get_task
 from src.functions.main_func import date_to_days, get_days
 from src.functions.embeds import embed_task_msg, embed_days_to_ege,\
     embed_wrong_channel
-from src.functions.discord import find_channel_by_name, find_user_by_name_discord
-from src.modules.row_buttons import RowButtons
+from src.functions.discord import find_channel_by_name
+from disnake import Embed
+from src.modules.ege_buttons import EgeButtons
+from src.modules.modal_moderator import ModeratorModal
 
 
 class Ege(commands.Cog):
@@ -14,7 +16,6 @@ class Ege(commands.Cog):
 
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
-
 
     @commands.slash_command(name='дней_до_егэ')
     async def ege_days(self, inter: disnake.ApplicationCommandInteraction):
@@ -51,16 +52,16 @@ class Ege(commands.Cog):
         
         await inter.send(embed=embed)
     
-
     @commands.slash_command(name='задачи_егэ_инф')
     async def tasks(self, 
      inter: disnake.ApplicationCommandInteraction,
         номер: int = 8, сложность: str = 'Средняя'):
-        number_task, complexity = номер, сложность
         '''Реши задачу из любого номера ЕГЭ по Информатике'''
         
-        channels = ['инфа-задачи', 'группа-орлы', 'группа-убийцы', 'кругосветка-pro']
-        
+        channels = ['помощь-с-егэ', 'группа-орлы', 'группа-убийцы',
+                    'помощь-с-кодом']
+        number_task, complexity = номер, сложность
+
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
                 inter.author.name == 'GTai'.lower():
             lst_tasks = [1, 2, 8, 13, 15, 23, 24]
@@ -73,7 +74,8 @@ class Ege(commands.Cog):
                 if type(row) != str:
                     embed = embed_task_msg(number_task, row)
 
-                    await inter.send(embeds=embed, view=RowButtons(row['answer']))
+                    await inter.send(embeds=embed,
+                                     view=EgeButtons(row['answer']))
 
                     if 'txt' in row.keys():
                         await inter.send(file=row['txt'])
@@ -89,13 +91,10 @@ class Ege(commands.Cog):
             
             await inter.send(embed=embed)
 
-
     @commands.has_permissions(administrator=True)
     @commands.slash_command(name='тест')
-    async def test(self, inter: disnake.GuildCommandInteraction):
-        await inter.send('<:GTai:1158357831058206801>')
-        #await inter.send()
-
+    async def test(self, inter: disnake.ApplicationCommandInteraction):
+        pass        
 
 def setup(bot: commands.Bot):
     bot.add_cog(Ege(bot))

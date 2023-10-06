@@ -9,7 +9,6 @@ class Events(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
-
     @commands.slash_command(name='дней_до_нг')
     async def days_ny(self, inter: disnake.ApplicationCommandInteraction):
         '''Дней до Нового Года'''
@@ -23,9 +22,9 @@ class Events(commands.Cog):
 
         await inter.send(msg)
     
-    
     @commands.slash_command(name='дней_до_хэллоуина')
-    async def days_helloween(self, inter: disnake.ApplicationCommandInteraction):
+    async def days_helloween(self, 
+                             inter: disnake.ApplicationCommandInteraction):
         '''Дней до Хэллоуина'''
 
         ny = '2023-10-31'
@@ -37,20 +36,14 @@ class Events(commands.Cog):
 
         await inter.send(msg)
 
-    
     @commands.slash_command(name='ближайшие_события')
-    async def upcoming_events(self, inter: disnake.ApplicationCommandInteraction):
+    async def upcoming_events(self, 
+                              inter: disnake.ApplicationCommandInteraction):
         '''Список событий в ближайшее время'''
 
-        ny = '2023-10-31'
-
-        days_ny = date_to_days(ny)
-
-        new_line = '\n'
         msg = f'Находится в разработке. Появится в ближайшее время!'
 
         await inter.send(msg)
-
 
 def setup(bot: commands.Bot):
     bot.add_cog(Events(bot))

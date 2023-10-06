@@ -9,8 +9,6 @@ class Server(commands.Cog):
 
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
-        #self.git_update_auto.start()
-
 
     @commands.command()
     @commands.has_permissions(administrator=True)
@@ -25,7 +23,6 @@ class Server(commands.Cog):
                     print(f'Не удалось загрузить {filename[:-3]}.', ex)
         await ctx.message.delete()
 
-
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def load(self, ctx, extension):
@@ -37,7 +34,6 @@ class Server(commands.Cog):
             print(f'Не удалось загрузить {extension}.', ex)
             print(Exception)
         await ctx.message.delete()
-
 
     @commands.command()
     @commands.has_permissions(administrator=True)
@@ -52,7 +48,6 @@ class Server(commands.Cog):
             print(f'Не удалось перезагрузить {extension}.', ex)
         await ctx.message.delete()
 
-
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def unload(self, ctx, extension):
@@ -63,7 +58,6 @@ class Server(commands.Cog):
         except Exception as ex:
             print(f'Не удалось выгрузить {extension}.', ex)
         await ctx.message.delete()
-
 
     '''async def git_update_auto(self):
         path = f'dina.py'
@@ -76,7 +70,6 @@ class Server(commands.Cog):
         else:
             print('Репозитория не существует.')
     '''
-
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def git_update(self, inter: disnake.ApplicationCommandInteraction):
@@ -89,7 +82,6 @@ class Server(commands.Cog):
             print('Загружена последняя версия.')
         else:
             print('Репозитория не существует.')
-
 
 def setup(bot: commands.Bot):
     bot.add_cog(Server(bot))

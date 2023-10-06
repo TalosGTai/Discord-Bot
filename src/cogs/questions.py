@@ -10,8 +10,7 @@ class Questions(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
-
-    @commands.slash_command(name='вопрос_от_ведьмачки')
+    #@commands.slash_command(name='вопрос_от_ведьмачки')
     async def question_philosophy(self, 
     inter: disnake.ApplicationCommandInteraction):
         '''Вопросы от ведьмачки'''
@@ -36,19 +35,13 @@ class Questions(commands.Cog):
             await inter.send(embed=embed)
             await inter.send(inter.author.name)
 
-
-    @commands.slash_command(name='задай_вопрос')
+    #@commands.slash_command(name='задай_вопрос')
     async def question_to_dina(self, 
     inter: disnake.ApplicationCommandInteraction, вопрос: str):
         '''Задай вопрос ведьмачке'''
         
-        print(f'author = {inter.author}')
-        print(f'author_name = {inter.author.name}')
-        print(f'author_nick = {inter.author.nick}')
-        print(f'author_display_name = {inter.author.display_name}')
         msg = 'В процессе разработки.\n Пиши ВСЕОТЦУ, если хочешь помочь ;)'
         await inter.send(msg)
-
 
 def setup(bot: commands.Bot):
     bot.add_cog(Questions(bot))

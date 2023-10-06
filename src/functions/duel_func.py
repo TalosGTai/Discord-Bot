@@ -29,7 +29,6 @@ def duel_algo(user_1: str, user_2: str) -> dict:
 
     return res
 
-
 def calculate_money_win(winrate_user_1: int, winrate_user_2: int,
                         money_1: int, money_2: int) -> int:
     '''Формула расчёта денег за победу'''
@@ -41,7 +40,6 @@ def calculate_money_win(winrate_user_1: int, winrate_user_2: int,
         money_win *= 1.15
 
     return int(money_win)
-
 
 def update_money(user_money: int, money_win: int) -> float:
     '''Если у пользователя недостаточно денег,

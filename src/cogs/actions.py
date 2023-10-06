@@ -1,9 +1,14 @@
 from src.functions.discord import find_user, \
-    get_user_money, add_user_money, find_user_by_name_discord
+    get_user_money, add_user_money, find_user_by_name_discord, \
+    check_permissions
 from src.functions.main_func import get_complexity, create_password,\
     get_key_by_value, load_phrases
 from disnake.ext import commands
 import disnake
+from src.modules.panel_main_buttons import MainPanelButtons
+from src.modules.panel_mainplus_buttons import MainPlusPanelButtons
+from src.functions.embeds import embed_user_panel
+from src.functions.describe import user_panel
 
 
 class Actions(commands.Cog):
@@ -12,18 +17,16 @@ class Actions(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
-
     @commands.slash_command(name='дать_монет')
     async def transfer_money(self,
         inter: disnake.ApplicationCommandInteraction,
-        игрок: str = 'GTai', монет: int = 100, сообщение: str = ''):
+        игрок: str = 'GTai', монеты: int = 100, сообщение: str = ''):
         '''Дать монет другому игроку
         
         Щедрое это дело. 
         '''
         
-        
-        money = монет
+        money = монеты
         hero = inter.author.name
         hero_money = get_user_money(hero)
 
@@ -43,8 +46,6 @@ class Actions(commands.Cog):
                                 if len(сообщение) > 0:
                                     descr += f'Сообщение: {сообщение}'
                                 msg = title + descr
-                                #embed = disnake.Embed(title=title, description=descr)
-                                #await inter.send(embed=embed)
                                 await inter.send(msg)
                             else:
                                 msg = load_phrases('social', 'transfer_money')
@@ -64,7 +65,6 @@ class Actions(commands.Cog):
         else:
             msg = load_phrases()
             await inter.send(msg)
-
 
     @commands.slash_command(name='сгенерировать_пароль')
     async def generate_password(self,
@@ -90,6 +90,20 @@ class Actions(commands.Cog):
             msg = 'Выбери одну из сложностей: лёгкая, средняя, сложная.'
             await inter.send(msg)
 
+    @commands.slash_command(name='панель_действий')
+    async def main_panel(self, inter: disnake.GuildCommandInteraction):
+        '''Описание всех твоих возможностей'''
+        
+        embed = embed_user_panel(user_panel())
+        perm = check_permissions(inter.author)
+        print(check_permissions(inter.author))
+        
+        if perm:
+            await inter.send(embed=embed, 
+                             view=MainPlusPanelButtons(perm))
+        else:
+            await inter.send(embed=embed,
+                             view=MainPanelButtons(perm))
 
 def setup(bot: commands.Bot):
     bot.add_cog(Actions(bot))

@@ -8,7 +8,7 @@ from disnake.ext import commands
 import disnake
 from random import randint
 from asyncio.exceptions import TimeoutError
-
+from src.modules.panel_games_buttons import GamesPanelButtons
 
 class Games(commands.Cog):
     '''Игры'''
@@ -22,7 +22,7 @@ class Games(commands.Cog):
         противник: str):
         '''Вызов на дуэль другого игрока'''
 
-        channels = ['игровой', 'чатимся']
+        channels = ['игры']
 
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
                 inter.author.name == 'gtai':
@@ -44,7 +44,7 @@ class Games(commands.Cog):
                     embed = embed_by_phrase(phrase)
                     await inter.send(embed=embed)
                 else:
-                    if hero.lower() == 'dina':
+                    if hero.lower() == 'кристи':
                         phrase = load_phrases('games', 'duel', 'bot')
                         embed = embed_by_phrase(phrase)
                         await inter.send(embed=embed)
@@ -62,12 +62,12 @@ class Games(commands.Cog):
                         update_duel_stats(user_win, user_lose)
                         
                         money_win = calculate_money_win(
-                            wr1, wr2, get_user_money(user_win), get_user_money(user_lose))
+                            wr1, wr2, get_user_money(user_win),
+                            get_user_money(user_lose))
                         
                         add_user_money(user_win, money_win)
                         add_user_money(user_win, -money_win)
 
-                        # embed
                         msg = 'Дуэль между {} {}% и {} {}%\n'.format(
                             user_win, wr1, user_lose, wr2)
                         msg += '{} одержал победу в дуэли над {}\n'.format(
@@ -76,7 +76,7 @@ class Games(commands.Cog):
                         
                         await inter.send(msg)
         else:
-            channel = find_channel_by_name(self.bot, 'игровой')
+            channel = find_channel_by_name(self.bot, 'игры')
             embed = embed_wrong_channel(channel.mention, 'duel')
 
             await inter.send(embed=embed)
@@ -86,7 +86,7 @@ class Games(commands.Cog):
     async def lucky_number(self, inter: disnake.ApplicationCommandInteraction):
         '''Угадай число'''
 
-        channels = ['игровой', 'чатимся']
+        channels = ['игры']
 
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
                 inter.author.name == 'gtai':
@@ -266,7 +266,7 @@ class Games(commands.Cog):
                     msg += 'Начни игру заново.'
                     return await inter.send(msg)
         else:
-            channel = find_channel_by_name(self.bot, 'игровой')
+            channel = find_channel_by_name(self.bot, 'игры')
             embed = embed_wrong_channel(channel.mention, 'lucky_number')
 
             await inter.send(embed=embed)
@@ -275,18 +275,18 @@ class Games(commands.Cog):
     # @commands.slash_command(name='ограбить')
     async def crime(self, inter: disnake.ApplicationCommandInteraction,
         hero: str):
-        '''Ограбить игрока'''
+        '''Ограбить игрока. 
+        Ты можешь напасть попытаться ограбить игрока,
+        но есть шанс быть пойманным. Вероятность успеха зависит от твоих навыков '''
         
-        '''Ты можешь напасть попытаться ограбить игрока,
-        но есть шанс быть пойманным. 
-
-        Вероятность успеха зависит от твоих навыков '''
         pass
 
+    
+    @commands.slash_command(name='панель_игр')
+    async def games_panel(self, inter: disnake.ApplicationCommandInteraction):
+        '''Описание всех игр пользователя'''
 
-    async def calculate_expressions(self, inter: disnake.ApplicationCommandInteraction):
-        '''Вычислить выражения'''
-        pass
+        await inter.send(view=GamesPanelButtons())
 
 
 def setup(bot: commands.Bot):

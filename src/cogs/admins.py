@@ -4,9 +4,9 @@ from src.functions.discord import find_user, set_user_date_registr, \
     add_user_bonus_rate, add_user_count_proj, add_user_done_help, \
     add_user_money, add_user_req_help, set_user_done_help, \
     find_user_by_name_discord
-from src.functions.embeds import embed_rules_moderator_panel
 from src.data.db_help_functional import add_warn_to_user
 from asyncio import sleep
+from src.modules.panel_main_buttons import MainPanelButtons
 
 
 class Admins(commands.Cog):
@@ -267,17 +267,26 @@ class Admins(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def kick_user(self, ctx, hero: str, reason: str):
-        '''Кик пользователя
-
-        Это очень ответственное дело, поэтому, никогда с этим не спеши.
-        Сделай несколько предупреждений, взвесь всё и только после этого
-        кикай человека.
+    async def get_info(self, ctx, hero):
+        '''Посмотреть информацию об участнике
         
-        Шаблон: .kick_user hero reason
-        Пример: .kick_user Test "Не реагировал на предупреждения и вёл себя неуважительно."
-
+        Пример: .get_info GTai
         '''
+        user = find_user(hero)
+
+        if user:
+            msg = 'None msg in info'
+        else:
+            msg = 'Выбери существующего человека.'
+
+        await ctx.send(msg)
+        await ctx.message.delete()
+
+
+    @commands.command()
+    @commands.has_permissions(kick_members=True)
+    async def kick_user(self, ctx, hero: str, reason: str):
+        '''Кик пользователя'''
 
         author = ctx.message.author.name
 
@@ -297,15 +306,7 @@ class Admins(commands.Cog):
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def mute_user(self, ctx, hero: str, time: str, reason: str):
-        '''Мут пользователя
-
-        Не раздавай муты направо и налево, сначала сделай предупреждение.
-        Время мута всегда в минутах.
-        
-        Шаблон: .mute_user hero time reason
-        Пример: .mute_user Test 30 "После предупреждений продолжил использовать нецензурную лексику."
-
-        '''
+        '''Мут пользователя'''
 
         author = ctx.message.author.name
         condition_time = time.isdigit()
@@ -337,14 +338,7 @@ class Admins(commands.Cog):
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def unmute_user(self, ctx, hero: str):
-        '''АнМут пользователя
-
-        Если человек исправился или мут был дан по ошибке.
-        
-        Шаблон: .unmute_user hero
-        Пример: .unmute_user Test
-
-        '''
+        '''Размут пользователя'''
 
         author = ctx.message.author.name
 
@@ -364,15 +358,7 @@ class Admins(commands.Cog):
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def warn_user(self, ctx, hero: str, reason: str):
-        '''Предупреждение пользователю
-
-        Предупреждения стоит выдавать после словесного 1ого предупреждения 
-        или после грубого/жёсткого нарушения правил.
-        
-        Шаблон: .warn_user hero reason
-        Пример: .warn_user Test "Много мата."
-
-        '''
+        '''Предупреждение пользователю'''
 
         author = ctx.message.author.name
 
@@ -388,16 +374,9 @@ class Admins(commands.Cog):
 
 
     @commands.command()
-    @commands.has_permissions(kick_members=True)
+    @commands.has_permissions(ban_members=True)
     async def ban_user(self, ctx, hero: str, reason: str):
-        '''Бан пользователя
-
-        Это последняя фаза. Если предупреждения и кики не работают, то только тогда бань пользователя.
-        
-        Шаблон: .ban_user hero reason
-        Пример: .ban_user Test "Неадекватное многократное поведение."
-
-        '''
+        '''Бан пользователя'''
 
         author = ctx.message.author.name
         user = find_user(hero)
@@ -416,17 +395,9 @@ class Admins(commands.Cog):
 
 
     @commands.command()
-    @commands.has_permissions(kick_members=True)
+    @commands.has_permissions(ban_members=True)
     async def unban_user(self, ctx, hero: str, reason: str):
-        '''Разбан пользователя
-
-        Только в случае решения всех конфликтов и искренного понимания
-        от участника.
-        
-        Шаблон: .unban_user hero reason
-        Пример: .unban_user Test "Исправился."
-
-        '''
+        '''Разбан пользователя'''
 
         author = ctx.message.author.name
         user = find_user(hero)
@@ -447,10 +418,9 @@ class Admins(commands.Cog):
     @commands.has_permissions(kick_members=True)
     async def moder_panel(self, inter: disnake.GuildCommandInteraction):
         '''Описание всех возможностей модератора'''
-        embed = embed_rules_moderator_panel()
 
-        await inter.send(embed=embed)
-
+        await inter.send(view=MainPanelButtons())
+  
 
 def setup(bot: commands.Bot):
     bot.add_cog(Admins(bot))
