@@ -5,7 +5,7 @@ from src.functions.describe import lucky_number_describe,\
     duel_describe, user_panel
 from src.functions.embeds import embed_games_panel, \
     embed_user_panel
-from data.actions_config import lucky_number
+from src.modules.config import lucky_number
 import src.modules.panel_main_buttons as mp
 import src.modules.panel_mainplus_buttons as mpp
 

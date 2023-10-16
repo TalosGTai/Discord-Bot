@@ -412,14 +412,6 @@ class Admins(commands.Cog):
         print(msg)
         await ctx.send(msg)
         await ctx.message.delete()
-
-
-    @commands.slash_command(name='панель_модератора')
-    @commands.has_permissions(kick_members=True)
-    async def moder_panel(self, inter: disnake.GuildCommandInteraction):
-        '''Описание всех возможностей модератора'''
-
-        await inter.send(view=MainPanelButtons())
   
 
 def setup(bot: commands.Bot):

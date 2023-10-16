@@ -12,12 +12,11 @@ from src.data.db_help_functional import create_user
 from src.modules.users import User
 
 
-class Dina(commands.Cog):
+class Cristi(commands.Cog):
     '''Управление Диной'''
 
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
-
 
     @commands.command(name='send_msg', aliases=['send', 'смс'])
     @commands.has_permissions(administrator=True)
@@ -33,7 +32,6 @@ class Dina(commands.Cog):
             for channel in guild.channels:
                 if channel.name == msg_channel:
                     await channel.send(msg)
-
 
     @commands.command(name='send_embed', aliases=['embed'])
     @commands.has_permissions(administrator=True)
@@ -54,7 +52,6 @@ class Dina(commands.Cog):
                 if channel.name == msg_channel:
                     await channel.send(embed=embed)
 
-
     @commands.command(name='clear', aliases=['очистить', 'удалить'])
     @commands.has_permissions(administrator=True)
     async def clear(self, ctx, count: int):
@@ -67,7 +64,6 @@ class Dina(commands.Cog):
         await ctx.channel.purge(limit=int(count))
         await ctx.message.delete()
         
-
     @commands.command(name='create_msg_role_main')
     @commands.has_permissions(administrator=True)
     async def create_msg_role_main(self, ctx):
@@ -75,7 +71,6 @@ class Dina(commands.Cog):
         embed = Embed(description=msg['description'], color=msg['color'])
         channel = find_channel_by_name(self.bot, 'роли')
         await channel.send(embed=embed)
-
 
     @commands.command(name='create_msg_role_code')
     @commands.has_permissions(administrator=True)
@@ -86,7 +81,6 @@ class Dina(commands.Cog):
         channel = find_channel_by_name(self.bot, 'роли')
         await channel.send(embed=embed)
 
-
     @commands.command(name='create_msg_role_games')
     @commands.has_permissions(administrator=True)
     async def create_msg_role_games(self, ctx):
@@ -95,14 +89,12 @@ class Dina(commands.Cog):
         channel = find_channel_by_name(self.bot, 'роли')
         await channel.send(embed=embed)
     
-
     @commands.command(name='add_role_to_msg')
     @commands.has_permissions(administrator=True)
     async def add_role_to_msg(self, ctx):
         channel = find_channel_by_name(self.bot, 'роли')
         msg = await channel.fetch_message(1158408970160050287)
         await msg.add_reaction('<:js:848668818385010708>')
-
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
@@ -116,7 +108,6 @@ class Dina(commands.Cog):
             role = find_role_by_name(self.bot, roles[emoji])
             await member.add_roles(role)
 
-   
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
         '''События при удалении роли'''
@@ -128,7 +119,6 @@ class Dina(commands.Cog):
             roles = get_all_roles(self.bot)
             role = find_role_by_name(self.bot, roles[emoji])
             await member.remove_roles(role)
-
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -146,11 +136,9 @@ class Dina(commands.Cog):
         # так как on_message перекрывает все команды
         await self.bot.process_commands(message)
 
-
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
         print(f'{member} покинул сервер.')
-
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -162,6 +150,5 @@ class Dina(commands.Cog):
             await ctx.send(f'Правильное использование команды:\n \'{ctx.prefix}{ctx.command.name}\'' +
                            f' ({ctx.command.brief})')
 
-
 def setup(bot: commands.Bot):
-    bot.add_cog(Dina(bot))
+    bot.add_cog(Cristi(bot))

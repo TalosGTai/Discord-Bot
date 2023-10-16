@@ -16,7 +16,6 @@ class Games(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
-
     @commands.slash_command(name='дуэль')
     async def duel(self, inter: disnake.ApplicationCommandInteraction,
         противник: str):
@@ -80,7 +79,6 @@ class Games(commands.Cog):
             embed = embed_wrong_channel(channel.mention, 'duel')
 
             await inter.send(embed=embed)
-
 
     @commands.slash_command(name='угадай_число')
     async def lucky_number(self, inter: disnake.ApplicationCommandInteraction):
@@ -271,7 +269,6 @@ class Games(commands.Cog):
 
             await inter.send(embed=embed)
 
-
     # @commands.slash_command(name='ограбить')
     async def crime(self, inter: disnake.ApplicationCommandInteraction,
         hero: str):
@@ -280,14 +277,6 @@ class Games(commands.Cog):
         но есть шанс быть пойманным. Вероятность успеха зависит от твоих навыков '''
         
         pass
-
-    
-    @commands.slash_command(name='панель_игр')
-    async def games_panel(self, inter: disnake.ApplicationCommandInteraction):
-        '''Описание всех игр пользователя'''
-
-        await inter.send(view=GamesPanelButtons())
-
 
 def setup(bot: commands.Bot):
     bot.add_cog(Games(bot))

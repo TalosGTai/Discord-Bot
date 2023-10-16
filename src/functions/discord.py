@@ -1,8 +1,9 @@
 from src.data.data_base import DB
 import datetime as DT
+from src.modules.config import top_permissions
 
 
-def find_channel_by_name(bot, source_channel: str):
+def find_channel_by_name(bot: object, source_channel: str):
     '''Поиск канала по названию канала'''
 
     for guild in bot.guilds:
@@ -11,7 +12,7 @@ def find_channel_by_name(bot, source_channel: str):
                 return channel
     return False
 
-def find_user_by_name_discord(bot, user_name: str):
+def find_user_by_name_discord(bot: object, user_name: str):
     '''Поиск пользователя по имени в дискорд-сервере'''
     
     for guild in bot.guilds:
@@ -20,7 +21,7 @@ def find_user_by_name_discord(bot, user_name: str):
                 return member
     return False
 
-def find_role_by_name(bot, role_name: str):
+def find_role_by_name(bot: object, role_name: str):
     '''Поиск роли по названию в дискорд-сервере'''
 
     for guild in bot.guilds:
@@ -29,7 +30,7 @@ def find_role_by_name(bot, role_name: str):
                 return role
     return False
 
-def find_user_by_id(bot, user_id: int):
+def find_user_by_id(bot: object, user_id: int):
     '''Поиск пользователя по ID в дискорд-сервере'''
 
     for guild in bot.guilds:
@@ -206,9 +207,20 @@ def update_duel_stats(user_win: str, user_lose: str):
     db.update_duel_stats(user_lose, -1)
 
 def check_permissions(author) -> bool:
-    roles = ['Всеотец', 'Модератор', 'Секрет']
-
     for role in author.roles:
-        if role.name in roles:
+        if role.name in top_permissions:
             return True
     return False
+
+def purchase_item(item: dict, user_name: str) -> bool:
+    try:
+        if item['price'] <= get_user_money(user_name):
+            # add item to user
+            return True
+        return False
+    except TypeError as type_error:
+        print(f'Error in functions purchase_item: {type_error}')
+        return False
+    except Exception as exception:
+        print(f'Error in functions purchase_item: {exception}')
+        return False

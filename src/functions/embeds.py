@@ -18,7 +18,6 @@ def embed_reason(member: str) -> disnake.Embed:
 
     return embed
 
-
 def embed_wrong_channel(channel, type: str) -> disnake.Embed:
     '''Создание embed для выбора подходящего канала.
     Когда пользователь выбрал не тот канал.'''
@@ -39,7 +38,6 @@ def embed_wrong_channel(channel, type: str) -> disnake.Embed:
 
     return embed
 
-
 def embeds_welcome(bot, member: disnake.Member) -> list[disnake.Embed]:
     title = 'Добро пожаловать на сервер'
     descr = f'{member.mention}, очень рада приветствовать тебя на нашем сервере!' + '\n'
@@ -51,7 +49,6 @@ def embeds_welcome(bot, member: disnake.Member) -> list[disnake.Embed]:
     embed = disnake.Embed(title=title, description=descr, color=color)
 
     return [embed, embed_welcome_ege(bot, member), embed_welcome_it(bot, member)]
-
 
 def embed_welcome_ege(bot, member: disnake.Member) -> disnake.Embed:
     channel_inf_tasks = find_channel_by_name(bot, 'инфа-задачи')
@@ -71,7 +68,6 @@ def embed_welcome_ege(bot, member: disnake.Member) -> disnake.Embed:
 
     return embed
 
-
 def embed_welcome_it(bot, member: disnake.Member) -> disnake.Embed:
     channel_it_tasks = find_channel_by_name(bot, 'общий')
     channel_it_courses = find_channel_by_name(bot, 'о-курсах-it')
@@ -90,12 +86,10 @@ def embed_welcome_it(bot, member: disnake.Member) -> disnake.Embed:
 
     return embed
 
-
 def embed_by_phrase(phrase: str) -> disnake.Embed:
     embed = disnake.Embed(description=phrase)
 
     return embed
-
 
 def embed_stats_duel(user_name: str, value: dict[str, int]) -> disnake.Embed:
     all_games, win_games = value['all_games'], value['win_games']
@@ -111,17 +105,14 @@ def embed_stats_duel(user_name: str, value: dict[str, int]) -> disnake.Embed:
 
     return embed
 
-
 def embed_user_info(user_name: str, value: dict[str, int]) -> disnake.Embed:
     title = f''
     descr = f''
-    
     color = 0x187CFC
 
     embed = disnake.Embed(title=title, description=descr, color=color)
 
     return embed
-
 
 def embed_task_msg(number_task: int, row: dict) -> list:
     '''Создание embed для таска'''
@@ -157,7 +148,6 @@ def embed_task_msg(number_task: int, row: dict) -> list:
 
     return embeds
 
-
 def embed_days_to_ege(t_ege: tuple[tuple[int, str], tuple[int, str],
                                    tuple[int, str]]) -> tuple[str, str, int]:
     '''Создание embed для отображения дней до ЕГЭ'''
@@ -174,14 +164,12 @@ def embed_days_to_ege(t_ege: tuple[tuple[int, str], tuple[int, str],
 
     return (title, description, color)
 
-
 def embed_question() -> tuple[str, int]:
     db = DB()
     description = db.get_question_from_db()
     color = 0x003d03
 
     return (description, color)
-
 
 def embed_rules_lucky_game(timeout: int) -> disnake.Embed:
     d_rules = lucky_number_describe(timeout)
@@ -192,7 +180,6 @@ def embed_rules_lucky_game(timeout: int) -> disnake.Embed:
 
     return embed
 
-
 def embed_moderator_panel(d_embed: dict[str, str]) -> disnake.Embed:
     color = 0x38016b
     embed = disnake.Embed(
@@ -200,7 +187,6 @@ def embed_moderator_panel(d_embed: dict[str, str]) -> disnake.Embed:
         color=color)
 
     return embed
-
 
 def embed_games_panel(d_embed: dict[str, str]) -> disnake.Embed:
     color = 0x0073ff
@@ -210,9 +196,16 @@ def embed_games_panel(d_embed: dict[str, str]) -> disnake.Embed:
 
     return embed
 
-
 def embed_user_panel(d_embed: dict[str, str]) -> disnake.Embed:
     color = 0x0e5c00
+    embed = disnake.Embed(
+        title=d_embed['title'], description=d_embed['description'],
+        color=color)
+
+    return embed
+
+def embed_shop_panel(d_embed: dict[str, str]) -> disnake.Embed:
+    color = 0x0ea180 
     embed = disnake.Embed(
         title=d_embed['title'], description=d_embed['description'],
         color=color)

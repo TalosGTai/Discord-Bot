@@ -1,5 +1,5 @@
 import mysql.connector
-from src.config import data_base
+from src.settings import data_base
 from src.data.db_help_functional import get_number_random_question, \
     get_sql_query_question
 import datetime as DT
@@ -13,7 +13,6 @@ class DB:
         self.open_connect_discord()
         self.__cursor_discord = self.__db_discord.cursor()
         self.__cursor_course = self.__db_course.cursor()
-
 
     def open_connect_discord(self):
         try:
@@ -29,7 +28,6 @@ class DB:
             print(f'Something gone wrong, error: {error}')
         except Exception as ex:
             print(f'Something gone wrong, ex: {ex}')
-
 
     def open_connect_courses(self):
         try:
@@ -47,7 +45,6 @@ class DB:
         except Exception as ex:
             print(f'Something gone wrong, ex: {ex}')
             
-
     def select_user(self, user_name: str) -> int | None:
         '''Ищем пользователя в БД по имени
         возвращаем id
@@ -78,7 +75,6 @@ class DB:
 
         return None
     
-
     def get_user_money(self, user_id: int) -> int | None:
         '''Ищем количество монет полоьзователя по id'''
 
@@ -103,7 +99,6 @@ class DB:
             print(f'Some error in functions [get_user_money], error: {error}')
 
         return None
-
 
     def get_user_bonus_rate(self, user_id: int) -> int | None:
         '''Ищем бонусный рейтинг пользователя в БД по id'''
@@ -131,7 +126,6 @@ class DB:
 
         return None
     
-
     def get_user_rate(self, user_id: int) -> int | None:
         '''Ищем рейтинг пользователя в БД по id'''
 
@@ -158,7 +152,6 @@ class DB:
 
         return None
     
-
     def get_user_count_msg(self, user_id: int) -> int | None:
         '''Ищем количество сообщений пользователя по id'''
 
@@ -184,7 +177,6 @@ class DB:
                 f'Some error in functions [get_user_count_msg], error: {error}')
 
         return None
-
 
     def get_user_req_help(self, user_id: int) -> int | None:
         '''Ищем количество запросов помощи пользователя по id'''
@@ -212,7 +204,6 @@ class DB:
 
         return None
 
-
     def get_user_done_help(self, user_id: int) -> int | None:
         '''Ищем количество запросов помощи пользователя по id'''
 
@@ -238,7 +229,6 @@ class DB:
                 f'Some error in functions [get_user_done_help], error: {error}')
 
         return None
-
 
     def get_user_date(self, user_id: int) -> DT.datetime | None:
         '''Ищем дату регистрации пользователя по id'''
@@ -266,7 +256,6 @@ class DB:
 
         return None
 
-
     def get_duel_all_games(self, user_id: int) -> int | None:
         '''Ищем количество всех дуэлей пользователя по id'''
 
@@ -292,7 +281,6 @@ class DB:
                 f'Some error in functions [get_user_done_help], error: {error}')
 
         return None
-
 
     def get_duel_win_games(self, user_id: int) -> int | None:
         '''Ищем количество всех дуэлей пользователя по id'''
@@ -320,7 +308,6 @@ class DB:
 
         return None
 
-
     def add_user_count_msg(self, user_id: int, count_msg: int):
         '''Увеличиваем количество сообщений для пользователя по id'''
 
@@ -341,7 +328,6 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [add_user_count_msg], error: {error}')
-
 
     def add_user_bonus_rate(self, user_id: int, rate: int):
         '''Увеличиваем бонусный рейтинг пользователя по id'''
@@ -364,7 +350,6 @@ class DB:
             print(
                 f'Some error in functions [add_user_bonus_rate], error: {error}')
 
-
     def add_user_rate(self, user_id: int, rate: int):
         '''Увеличиваем бонусный рейтинг пользователя по id'''
 
@@ -385,7 +370,6 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [add_user_rate], error: {error}')
-
 
     def add_user_money(self, user_id: int, money: int):
         '''Увеличиваем монеты пользователя по id'''
@@ -408,7 +392,6 @@ class DB:
             print(
                 f'Some error in functions [add_user_money], error: {error}')
 
-
     def add_user_req_help(self, user_id: int, count: int):
         '''Увеличиваем/уменьшаем количество запросов помощи пользователя по id'''
 
@@ -429,7 +412,6 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [add_user_req_help], error: {error}')
-
 
     def add_user_done_help(self, user_id: int, count: int):
         '''Увеличиваем/уменьшаем количество выполненной помощи пользователя по id'''
@@ -452,7 +434,6 @@ class DB:
             print(
                 f'Some error in functions [add_user_done_help], error: {error}')
 
-
     def add_user_count_proj(self, user_id: int, count: int):
         '''Увеличиваем/уменьшаем количество проектов пользователя по id'''
 
@@ -473,7 +454,6 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [add_user_count_proj], error: {error}')
-
 
     def get_last_insert_id(self) -> int | None:
         '''Получаем индекс последнего добавленного пользователя'''
@@ -499,7 +479,6 @@ class DB:
 
         return None
     
-
     def get_last_user_id(self) -> int | None:
         '''Получаем индекс последнего добавленного пользователя'''
         
@@ -523,7 +502,6 @@ class DB:
                 f'Some error in functions [get_last_insert_id], error: {error}')
 
         return None
-
 
     def get_count_task_complexity(self, number_task: int, complexity: str) -> int | None:
         '''Количество задач в номере определённой сложности'''
@@ -549,7 +527,6 @@ class DB:
 
         return None
 
-
     def get_task_from_db(self, query) -> list | None:
         '''По запросу возвращаем таск из таблицы [course]'''
 
@@ -568,7 +545,6 @@ class DB:
                 f'Some error in functions [get_task_from_db], error: {error}')
 
         return None
-
 
     def get_question_from_db(self) -> str:
         '''Запрос в БД на получение вопроса из таблицы [questions]'''
@@ -596,7 +572,6 @@ class DB:
                     f'Some error in functions [get_question_from_db], error: {error}')
         return None
 
-
     def set_user_money(self, user_id: int, money: int):
         '''Задаём монеты для пользователя по id'''
 
@@ -617,7 +592,6 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [set_user_money], error: {error}')
-
 
     def set_user_req_help(self, user_id: int, count: int):
         '''Задаём количество запросов помощи для пользователя по id'''
@@ -640,7 +614,6 @@ class DB:
             print(
                 f'Some error in functions [set_user_req_help], error: {error}')
 
-
     def set_user_done_help(self, user_id: int, count: int):
         '''Задаём количество выполненной помощи для пользователя по id'''
 
@@ -661,7 +634,6 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [set_user_done_help], error: {error}')
-
 
     def set_user_rate(self, user_id: int, rate: int):
         '''Задаём рейтинг пользователя по id'''
@@ -684,7 +656,6 @@ class DB:
             print(
                 f'Some error in functions [set_user_money], error: {error}')
 
-
     def set_user_bonus_rate(self, user_id: int, rate: int):
         '''Задаём бонусный рейтинг пользователя по id'''
 
@@ -705,7 +676,6 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [set_user_bonus_rate], error: {error}')
-
 
     def set_user_count_msg(self, user_id: int, count_msg: int):
         '''Задаём количество сообщений для пользователя по id'''
@@ -728,7 +698,6 @@ class DB:
             print(
                 f'Some error in functions [set_user_count_msg], error: {error}')
 
-
     def set_user_date(self, user_id: int, date: int):
         '''Задаём количество сообщений для пользователя по id'''
 
@@ -749,7 +718,6 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [set_user_date], error: {error}')
-
 
     def insert_users(self, values: list, new_id: int):
         '''Вставка нового пользователя в БД [users]'''
@@ -777,16 +745,19 @@ class DB:
             print(
                 f'Some error in functions [insert_users], error: {error}')
 
-
     def insert_stats(self, values: list, new_id: int):
         '''Добавление статистики пользователя в таблицу [stats] БД'''
 
         query = "INSERT INTO stats \
-        (count_msg, req_help, done_help, count_proj, bonus_rate, rate, idDuel) \
-        VALUES ( %s, %s, %s, %s, %s, %s, %s)"
+        (count_msg, req_help, done_help, count_proj, bonus_rate, rate, idDuel, "\
+        "id_lucky_number, id_hero) \
+        VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
         try:
             self.__cursor_discord = self.__db_discord.cursor()
+            # for every id
+            values.append(new_id)
+            values.append(new_id)
             values.append(new_id)
             self.__cursor_discord.execute(query, values)
             self.__db_discord.commit()
@@ -803,7 +774,6 @@ class DB:
             print(
                 f'Some error in functions [insert_stats], error: {error}')
             
-
     def insert_duel(self, values: list, new_id: int):
         '''Добавление статистики для дуэлей пользователя в таблицу [duels] БД'''
 
@@ -829,7 +799,6 @@ class DB:
             print(
                 f'Some error in functions [insert_duel], error: {error}')
 
-
     def update_duel_stats(self, user_name: str, result_duel: int):
         '''Обновление в таблице дуэль'''
 
@@ -853,7 +822,6 @@ class DB:
             print(
                 f'Some error in functions [update_duel_stats], error: {error}')
 
-
     def get_count_records_in_table(self, table: str) -> int | None:
         '''Количество записей в таблице'''
 
@@ -875,7 +843,6 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [get_count_records_in_table], error: {error}')
-
 
     def update_table_stats(self, user_name: str, values: list):
         '''Обновление таблицы [stats] пользователя'''
@@ -904,7 +871,6 @@ class DB:
                 print(
                     f'Some error in functions [update_table_stats], error: {error}')
 
-
     def update_table_users(self, user_name: str, values: list):
         '''Обновление таблицы [users] пользователя'''
         
@@ -931,7 +897,6 @@ class DB:
                 print(
                     f'Some error in functions [update_table_users], error: {error}')
     
-
     def insert_table_warns(self, values: list):
         '''Задание новых значений/столбцов для таблицы users'''
 
@@ -955,3 +920,27 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [insert_table_warns], error: {error}')
+
+    def insert_table_lucky_number(self, values: list):
+        '''Задание новых значений для таблицы lucky_number'''
+
+        query = "INSERT INTO lucky_number \
+        (win_games, all_games) \
+        VALUES ( %s, %s)"
+
+        try:
+            self.__cursor_discord = self.__db_discord.cursor()
+            self.__cursor_discord.execute(query, values)
+            self.__db_discord.commit()
+            self.__cursor_discord.close()
+
+            print('Success insert lucky_number.')
+        except mysql.connector.InternalError as internal_error:
+            print(
+                f'Error with cursor in functions [lucky_number], error: {internal_error}')
+        except mysql.connector.ProgrammingError as programming_error:
+            print(
+                f'Error with code, probably with syntax in functions [lucky_number], error: {programming_error}')
+        except mysql.connector.Error as error:
+            print(
+                f'Some error in functions [lucky_number], error: {error}')

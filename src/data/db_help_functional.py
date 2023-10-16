@@ -1,7 +1,7 @@
 import random
 import disnake
 import src.data.data_base as db
-from src.config import paths
+from src.settings import paths
 import datetime as DT
 
 
@@ -176,7 +176,6 @@ def get_task(number_task: int, complexity: str) -> dict | str:
             return f'Не удалось найти задачу по заданным параметрам: task = {number_task}'
     return f'Не удалось найти номер задачи заданной сложности: task = {number_task}, complexity = {complexity}'
 
-
 def add_warn_to_user(user_name: str, type: str, description: str = '', time: int = 0) -> None:
     '''Добавить новое нарушение.
     Параметры БД: 
@@ -186,6 +185,7 @@ def add_warn_to_user(user_name: str, type: str, description: str = '', time: int
     • date_start: date;
     • date_end: date;
     '''
+
     date_start = DT.date.today()
     date_end = date_start + DT.timedelta(minutes=time)
 

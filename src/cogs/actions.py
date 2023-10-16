@@ -46,25 +46,25 @@ class Actions(commands.Cog):
                                 if len(сообщение) > 0:
                                     descr += f'Сообщение: {сообщение}'
                                 msg = title + descr
-                                await inter.send(msg)
+                                await inter.send(msg, ephemeral=True)
                             else:
                                 msg = load_phrases('social', 'transfer_money')
-                                await inter.send(msg)
+                                await inter.send(msg, ephemeral=True)
                         else:
                             msg = 'Количество монет должно быть положительным числом.'
-                            await inter.send(msg)
+                            await inter.send(msg, ephemeral=True)
                     else:
                         msg = 'Спасибо, конечно, но мне монеты не нужны.'
-                        await inter.send(msg)
+                        await inter.send(msg, ephemeral=True)
                 else:
                     msg = load_phrases('social', action='transfer_money_self')
-                    await inter.send(msg)
+                    await inter.send(msg, ephemeral=True)
             else:
                 msg = 'Выбери существующего человека.'
-                await inter.send(msg)
+                await inter.send(msg, ephemeral=True)
         else:
             msg = load_phrases()
-            await inter.send(msg)
+            await inter.send(msg, ephemeral=True)
 
     @commands.slash_command(name='сгенерировать_пароль')
     async def generate_password(self,
@@ -82,7 +82,7 @@ class Actions(commands.Cog):
             if 0 < длина <= 16:
                 password = create_password(complexity_pass, длина)
                 msg = f'Твой сгенерированный пароль: {password}'
-                await inter.send(msg)
+                await inter.send(msg, ephemeral=True)
             else:
                 msg = 'Длина пароля должна быть от 1 до 16 символов (включительно).'
                 await inter.send(msg)
@@ -96,14 +96,13 @@ class Actions(commands.Cog):
         
         embed = embed_user_panel(user_panel())
         perm = check_permissions(inter.author)
-        print(check_permissions(inter.author))
         
         if perm:
             await inter.send(embed=embed, 
-                             view=MainPlusPanelButtons(perm))
+                             view=MainPlusPanelButtons(perm), ephemeral=True)
         else:
             await inter.send(embed=embed,
-                             view=MainPanelButtons(perm))
+                             view=MainPanelButtons(perm), ephemeral=True)
 
 def setup(bot: commands.Bot):
     bot.add_cog(Actions(bot))

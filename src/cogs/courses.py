@@ -13,7 +13,6 @@ class Courses(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
-
     @commands.slash_command(name='егэ_24')
     async def ege_24(self, inter: disnake.ApplicationCommandInteraction):
         '''Курс 24ого задания ЕГЭ по Информатике'''
@@ -31,8 +30,7 @@ class Courses(commands.Cog):
         
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
-        await inter.send(response)
-
+        await inter.send(response, ephemeral=True)
 
     @commands.slash_command(name='егэ_25')
     async def ege_25(self, inter: disnake.ApplicationCommandInteraction):
@@ -53,8 +51,7 @@ class Courses(commands.Cog):
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
-        await inter.send(response)
-
+        await inter.send(response, ephemeral=True)
 
     @commands.slash_command(name='егэ_26')
     async def ege_26(self, inter: disnake.ApplicationCommandInteraction):
@@ -75,9 +72,8 @@ class Courses(commands.Cog):
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
-        await inter.send(response)
+        await inter.send(response, ephemeral=True)
 
-    
     async def ege_27(self, inter: disnake.ApplicationCommandInteraction):
         '''Курс 27ого задания ЕГЭ по Информатике'''
 
@@ -96,9 +92,8 @@ class Courses(commands.Cog):
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
-        await inter.send(response)
+        await inter.send(response, ephemeral=True)
 
-    
     @commands.slash_command(name='монолит')
     async def monolith(self, inter: disnake.ApplicationCommandInteraction):
         '''Мастер-группа Монолит ЕГЭ по Информатике'''
@@ -118,8 +113,7 @@ class Courses(commands.Cog):
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
-        await inter.send(response)
-
+        await inter.send(response, ephemeral=True)
 
     @commands.slash_command(name='си_вуз')
     async def c_university(self, inter: disnake.ApplicationCommandInteraction):
@@ -140,8 +134,7 @@ class Courses(commands.Cog):
 
         await user.send(embed=embed_1)
         await user.send(embed=embed_2)
-        await inter.send(response)
-
+        await inter.send(response, ephemeral=True)
 
     @commands.slash_command(name='егэ_2')
     async def trainer_2(self, inter: disnake.ApplicationCommandInteraction):
@@ -157,8 +150,7 @@ class Courses(commands.Cog):
         response = 'Полная информация была отправлена тебе в личные сообщения :)'
 
         await user.send(embed=embed_1)
-        await inter.send(response)
-
+        await inter.send(response, ephemeral=True)
 
     @commands.slash_command(name='егэ_8')
     async def trainer_8(self, inter: disnake.ApplicationCommandInteraction):
@@ -174,8 +166,7 @@ class Courses(commands.Cog):
         response = 'Полная информация была отправлена тебе в личные сообщения :)'
         
         await user.send(embed=embed_1)
-        await inter.send(response)
-
+        await inter.send(response, ephemeral=True)
 
     async def trainer_7(self, inter: disnake.ApplicationCommandInteraction):
         '''Курс-тренажёр по 7ому заданию ЕГЭ Информатика'''
@@ -190,8 +181,7 @@ class Courses(commands.Cog):
         response = 'Полная информация была отправлена тебе в личные сообщения :)'
         
         await user.send(embed=embed_1)
-        await inter.send(response)
-
+        await inter.send(response, ephemeral=True)
 
     @commands.slash_command(name='егэ_15')
     async def trainer_15(self, inter: disnake.ApplicationCommandInteraction):
@@ -207,8 +197,7 @@ class Courses(commands.Cog):
         response = 'Полная информация была отправлена тебе в личные сообщения :)'
 
         await user.send(embed=embed_1)
-        await inter.send(response)
-
+        await inter.send(response, ephemeral=True)
 
     @commands.slash_command(name='акции_егэ')
     async def promotion_ege(self, inter: disnake.ApplicationCommandInteraction):
@@ -233,8 +222,7 @@ class Courses(commands.Cog):
         response = 'Полная информация была отправлена тебе в личные сообщения :)'
 
         await user.send(embed=embed)
-        await inter.send(response)
-
+        await inter.send(response, ephemeral=True)
 
 def setup(bot: commands.Bot):
     bot.add_cog(Courses(bot))

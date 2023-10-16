@@ -1,4 +1,5 @@
 from src.functions.discord import find_channel_by_name
+from src.modules.config import roles_cost, primary_items
 
 
 def ask_for_help() -> dict[str, str]:
@@ -240,3 +241,182 @@ def user_panel() -> dict[str, str]:
     descr = 'Тут будет информация о тебе'
     
     return {'title': title, 'description': descr}
+
+def shop_panel() -> dict[str, str]:
+    '''Описание действий в магазине'''
+
+    title = 'Магазин'
+    descr = 'Выбери категорию, которая тебя интересует.'
+    
+    return {'title': title, 'description': descr}
+
+def roles() -> dict[str, str]:
+    '''Покупка ролей в магазине'''
+
+    title = 'Роли'
+    descr = 'Ты можешь выбрать любое название, цвет и картинку!\n'
+    descr += 'Трать монеты с удовольствием ;)'
+
+    return {'title': title, 'description': descr}
+
+def role_color_with_icon() -> dict[str, str]:
+    '''Покупка цветной роли со значком в магазине'''
+
+    cost = roles_cost['role_color_with_icon']
+    title = 'Цветная роль с картинкой'
+    descr = 'Ты будешь выделяться среди всех, красивым цветом роли '
+    descr += 'которая будет отображаться у тебя в профиле и потрясающим значком.\n'
+    descr += 'Значок всегда будет отображаться в твоих сообщениях - это очень статусно.\n'
+    descr += 'Это не выделенная роль - означает, что она не будет отображаться '
+    descr += 'справа отдельно от всех. Но будет классно смотреться при просмотре '
+    descr += '+ будет возможность её тегнуть (обращаться через знак @).'
+    descr += '\n\n'
+    descr += f'Стоимость роли: {cost} монет.\n'
+    descr += f'Роль приобретается в виде подписки ежемесячной (цена за месяц).'
+
+    return {'title': title, 'description': descr}
+
+def role_color_with_icon_sep() -> dict[str, str]:
+    '''Покупка выделенной цветной роли со значком в магазине'''
+
+    cost = roles_cost['role_color_with_icon_sep']
+    title = 'Цветная роль с картинкой'
+    descr = 'Ты будешь выделяться среди всех, висеть будешь в топе ролей '
+    descr += 'с красивым цветом и зачётной картинкой. Каждый будет видеть '
+    descr += 'твою отличающуюся картинку и кайфовый по цвету ник - '
+    descr += 'это зачётное зрелище. \n'
+    descr += 'Данная роль является выделеной — отображается отдельно от всех (справа).'
+    descr += '\n\n'
+    descr += f'Стоимость выделенной роли: {cost} монет.\n'
+    descr += f'Роль приобретается в виде подписки ежемесячной (цена за месяц).'
+
+    return {'title': title, 'description': descr}
+
+def role_color_without_icon() -> dict[str, str]:
+    '''Покупка цветной роли без значка в магазине'''
+
+    cost = roles_cost['role_color_without_icon']
+    title = 'Цветная роль'
+    descr = 'Ты будешь выделяться среди всех, красивым цветом роли. '
+    descr += 'Приятный цвет никого не оставит равнодушным. \n'
+    descr += 'Это не выделенная роль - означает, что она не будет отображаться '
+    descr += 'справа отдельно от всех. Но будет классно смотреться при просмотре '
+    descr += '+ будет возможность её тегнуть (обращаться через знак @).'
+    descr += '\n\n'
+    descr += f'Стоимость роли: {cost} монет.\n'
+    descr += f'Роль приобретается в виде подписки ежемесячной (цена за месяц).'
+
+    return {'title': title, 'description': descr}
+
+def role_color_without_icon_sep() -> dict[str, str]:
+    '''Покупка выделенной цветной роли без значка в магазине'''
+
+    cost = roles_cost['role_color_without_icon_sep']
+    title = 'Цветная роль'
+    descr = 'Ты будешь выделяться среди всех, красивым цветом и '
+    descr += 'названием роли. Каждый будет видеть твой кайфовый ник с ролью.'
+    descr += 'Приятный цвет никого не оставит равнодушным. \n'
+    descr += 'Данная роль является выделеной — отображается отдельно от всех (справа).'
+    descr += '\n\n'
+    descr += f'Стоимость выделенной роли: {cost} монет.\n'
+    descr += f'Роль приобретается в виде подписки ежемесячной (цена за месяц).'
+
+    return {'title': title, 'description': descr}
+
+def role_color_without() -> dict[str, str]:
+    '''Покупка роли с цветом и картинкой в магазине'''
+
+    cost = roles_cost['role_without_color']
+    title = 'Кастомная роль'
+    descr = 'Ты всегда сможешь выделиться среди всех, висеть будешь в топе ролей. '
+    descr += 'Приятный цвет никого не оставит равнодушным.'
+    descr += '\n\n'
+    descr += f'Стоимость данной роли: {cost} монет.\n'
+    descr += f'Роль приобретается в виде подписки ежемесячной (цена за месяц).'
+
+    return {'title': title, 'description': descr}
+
+def events() -> dict[str, str]:
+    '''Покупка событий в магазине'''
+
+    title = 'События'
+    descr = 'Ты можешь выбрать любое заинтересовавшее тебя действие!\n'
+    descr += 'Трать монеты с удовольствием ;)'
+
+    return {'title': title, 'description': descr}
+
+def items() -> dict[str, str]:
+    '''Покупка предметов в магазине'''
+
+    title = 'Предметы'
+    descr = 'Подберём предмет тебе по вкусу!\n'
+    descr += 'Трать монеты с удовольствием ;)'
+
+    return {'title': title, 'description': descr}
+
+def all_goods() -> dict[str, str]:
+    '''Покупка всех товаров в магазине'''
+
+    title = 'Все товары'
+    descr = 'Выбирай из всех товаров!\n'
+    descr += 'Трать монеты с удовольствием ;)'
+    
+
+    return {'title': title, 'description': descr}
+
+def user_got_item(user: object, item_name: str) -> str | bool:
+    '''Сообщение для модераторов о том, что пользователь
+    приобрёл товар, если этот товар:
+    роль, событие или разное'''
+
+    # check for moderator's action
+    actions = ['role', 'event', 'other']
+    if any(action for action in actions if action in item):
+        msg = f'{user.mention} купил {item_name}.\n'
+        msg += 'Требуется действие.'
+        return msg
+    return False
+
+def user_congratulation(item_name: str) -> dict[str, str]:
+    '''Поздравительное сообщению пользователю о приобретении
+        товара.'''
+
+    if is_primary_item(item_name):
+        return msg_congratulation_primary(item_name)
+    return msg_congratulation_standart(item_name)
+
+def msg_congratulation_standart(item_name: str) -> dict[str, str]:
+    title = 'Поздравляю с приобретением предмета!'
+    descr = f'Поздравляю тебя с покупкой {item_name}!\n'
+    descr += f'Только у нас товары по самым выгодным ценам!'
+
+    return {'title': title, 'description': descr}
+
+def msg_congratulation_primary(item_name: str) -> dict[str, str]:
+    title = 'Поздравляю с приобретением товара!'
+    descr = f'Поздравляю тебя с покупкой {item_name}!\n'
+    descr += f'Спасибо тебе за поддержку меня, канала, моей деятельности и сервера!'
+
+    return {'title': title, 'description': descr}
+
+def is_primary_item(item_name: str) -> bool:
+    for item in primary_items:
+        if item in item_name:
+            return True
+    return False
+
+def convert_item_promt_to_msg(item_name: str) -> str:
+    '''Преобразование промт строки в название для 
+    пользователя'''
+
+    match(item_name):
+        case 'role_color_with_icon_sep':
+            return 'Выделенная цветная роль со значком'
+        case 'role_color_without_icon_sep':
+            return 'Выделенная цветная роль'
+        case 'role_color_with_icon':
+            return 'Цветная роль со значком'
+        case 'role_color_without_icon':
+            return 'Цветная роль'
+        case 'role_color_without':
+            return 'Роль'

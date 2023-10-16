@@ -1,4 +1,4 @@
-from src.config import settings
+from src.settings import settings
 from disnake.ext import commands
 import disnake
 import os

@@ -1,6 +1,6 @@
 import datetime as DT
 from random import randint
-from src.data.data_base import DB
+from src.functions.discord import get_user_money
 
 
 def to_two_digits(num: float) -> float:

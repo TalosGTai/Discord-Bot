@@ -8,7 +8,7 @@ from src.functions.embeds import embed_task_msg, embed_days_to_ege,\
 from src.functions.discord import find_channel_by_name
 from disnake import Embed
 from src.modules.ege_buttons import EgeButtons
-from src.modules.modal_moderator import ModeratorModal
+from src.data.data_base import DB
 
 
 class Ege(commands.Cog):
@@ -91,10 +91,15 @@ class Ege(commands.Cog):
             
             await inter.send(embed=embed)
 
+    test_choice = commands.option_enum({'test1': 'ok', 'test2': 'haha'})
+
     @commands.has_permissions(administrator=True)
     @commands.slash_command(name='тест')
-    async def test(self, inter: disnake.ApplicationCommandInteraction):
-        pass        
+    async def test(self, 
+                   inter: disnake.ApplicationCommandInteraction,
+                   t: test_choice):
+        await inter.send(t)
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(Ege(bot))
