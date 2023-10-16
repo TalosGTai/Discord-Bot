@@ -14,12 +14,12 @@ Also, this bot have MVC pattern structure in which you can figure out and unders
 
 
 ## How To Use It
-run dina.py
+run cristi.py
 
 
 ## Contacts 
 - Tg — GTai_IT
-- Discord — GTai
+- Discord — gtai
 
 
 ## Functional roles

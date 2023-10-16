@@ -14,25 +14,6 @@ class Stats(commands.Cog):
     def __init__(self,  bot: commands.Bot) -> None:
         self.bot = bot
 
-
-    @commands.command()
-    @commands.has_permissions(kick_members=True)
-    async def get_info(self, ctx, hero):
-        '''Посмотреть информацию об участнике
-        
-        Пример: .get_info GTai
-        '''
-        user = find_user(hero)
-
-        if user:
-            msg = 'None msg in info'
-        else:
-            msg = 'Выбери существующего человека.'
-
-        await ctx.send(msg)
-        await ctx.message.delete()
-
-
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def duel_top(self, ctx):
@@ -72,7 +53,6 @@ class Stats(commands.Cog):
         '''
         await ctx.message.delete()
 
-
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def duel_info(self, ctx, hero: str):
@@ -101,14 +81,6 @@ class Stats(commands.Cog):
 
         await ctx.message.delete()
 
-
-    @commands.command()
-    @commands.has_permissions(administrator=True)
-    async def top_rate(self, ctx):
-        '''Топ 10 пользователей по рейтингу'''
-        pass
-
-
     @commands.slash_command(name='рейтинг')
     async def rate(self, inter: disnake.ApplicationCommandInteraction):
         '''Рейтинг'''
@@ -122,7 +94,6 @@ class Stats(commands.Cog):
             msg = load_phrases('social', 'not_exist')
             
         await inter.send(msg)
-
 
     @commands.slash_command(name='монеты')
     async def money(self, inter: disnake.ApplicationCommandInteraction):
@@ -138,14 +109,12 @@ class Stats(commands.Cog):
 
         await inter.send(msg)
 
-
     @commands.slash_command(name='дней_на_сервере')
     async def days(self, inter: disnake.ApplicationCommandInteraction):
         '''Количество дней на сервере'''
 
         author = inter.author.name
         user = find_user(author)
-        msg = 'Something gone wronge. [days]'
 
         if user:
             user_date = date_to_days(get_user_date(author))
@@ -154,7 +123,6 @@ class Stats(commands.Cog):
             msg = load_phrases('social', 'not_exist')
 
         await inter.send(msg)
-
 
     @commands.slash_command(name='инфо')
     async def info(self, inter: disnake.ApplicationCommandInteraction):
@@ -169,7 +137,6 @@ class Stats(commands.Cog):
             msg = load_phrases('social', 'not_exist')
 
         await inter.send(msg)   
-
 
 def setup(bot: commands.Bot):
     bot.add_cog(Stats(bot))

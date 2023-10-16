@@ -1,13 +1,12 @@
 import datetime as DT
 from random import randint
-from src.data.data_base import DB
+from src.functions.discord import get_user_money
 
 
 def to_two_digits(num: float) -> float:
     '''Преобразовываем к 2ум знакам после запятой'''
 
     return int(num * 100) / 100
-
 
 def date_to_days(user_date: str) -> int:
     '''Количество дней от даты до текущего дня'''
@@ -18,7 +17,6 @@ def date_to_days(user_date: str) -> int:
     days = abs(int((date - DT.date.today()).days))
 
     return days
-
 
 def get_days(day: int) -> dict[int, str]:
     '''Окончания для даты (дня, дней)'''
@@ -55,7 +53,6 @@ def get_days(day: int) -> dict[int, str]:
         day = day % 10
         return days[day]
 
-
 def time_format(time: str) -> str:
     ''' На вход подаётся строка формата: х или хх.
     Дописываем 0, если нужно.
@@ -64,12 +61,10 @@ def time_format(time: str) -> str:
     if len(time) == 1: return '0' + time
     return time
 
-
 def delete_reverse_slash(s: str) -> str:
     if s.find('\\') == -1:
         return s
     return s[:s.find('\\'):] + s[s.find('\\') + 1::]
-
 
 def create_password(complexity: str, length: int) -> str:
     '''Генерация пароля по заданной сложности и длине'''
@@ -104,7 +99,6 @@ def create_password(complexity: str, length: int) -> str:
 
     return password
 
-
 def get_complexity() -> dict[str, list[str]]:
     '''Словарь для понимания выбора сложности'''
 
@@ -116,7 +110,6 @@ def get_complexity() -> dict[str, list[str]]:
         }
     return complexity
 
-
 def get_key_by_value(value: str, categories_dict: dict[str, list[str]]) -> str | bool:
     '''Проверка значения на нахождения в словаре
     возвращаем ключ от этого значения
@@ -126,7 +119,6 @@ def get_key_by_value(value: str, categories_dict: dict[str, list[str]]) -> str |
         if value in categories_dict[key]:
             return key
     return False
-
 
 def load_phrases(type='social', game='', action='not_exist') -> str:
     '''Подгрузка фраз для общения
@@ -172,14 +164,12 @@ def load_phrases(type='social', game='', action='not_exist') -> str:
 
     return strings_actions[num_string]
 
-
 def write_to_file(file_name: str, msg: str) -> None:
     file_strings = get_strings_from_file(file_name, msg)
     file_strings += [msg]
     f = open(f'logs/{file_name}.txt')
     f.readlines(file_strings)
     f.close()
-
 
 def get_strings_from_file(file_name: str) -> list[str]:
     f = open(f'logs/{file_name}.txt')

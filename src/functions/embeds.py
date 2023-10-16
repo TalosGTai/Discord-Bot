@@ -1,7 +1,7 @@
 import disnake
-import discord
 from src.functions.discord import find_channel_by_name
 from src.data.data_base import DB
+from src.functions.describe import lucky_number_describe
 
 
 def embed_reason(member: str) -> disnake.Embed:
@@ -18,9 +18,9 @@ def embed_reason(member: str) -> disnake.Embed:
 
     return embed
 
-
 def embed_wrong_channel(channel, type: str) -> disnake.Embed:
-    '''Создание embed для вбыора неверного канала'''
+    '''Создание embed для выбора подходящего канала.
+    Когда пользователь выбрал не тот канал.'''
 
     match (type):
         case 'question':
@@ -38,7 +38,6 @@ def embed_wrong_channel(channel, type: str) -> disnake.Embed:
 
     return embed
 
-
 def embeds_welcome(bot, member: disnake.Member) -> list[disnake.Embed]:
     title = 'Добро пожаловать на сервер'
     descr = f'{member.mention}, очень рада приветствовать тебя на нашем сервере!' + '\n'
@@ -50,7 +49,6 @@ def embeds_welcome(bot, member: disnake.Member) -> list[disnake.Embed]:
     embed = disnake.Embed(title=title, description=descr, color=color)
 
     return [embed, embed_welcome_ege(bot, member), embed_welcome_it(bot, member)]
-
 
 def embed_welcome_ege(bot, member: disnake.Member) -> disnake.Embed:
     channel_inf_tasks = find_channel_by_name(bot, 'инфа-задачи')
@@ -70,7 +68,6 @@ def embed_welcome_ege(bot, member: disnake.Member) -> disnake.Embed:
 
     return embed
 
-
 def embed_welcome_it(bot, member: disnake.Member) -> disnake.Embed:
     channel_it_tasks = find_channel_by_name(bot, 'общий')
     channel_it_courses = find_channel_by_name(bot, 'о-курсах-it')
@@ -89,12 +86,10 @@ def embed_welcome_it(bot, member: disnake.Member) -> disnake.Embed:
 
     return embed
 
-
 def embed_by_phrase(phrase: str) -> disnake.Embed:
     embed = disnake.Embed(description=phrase)
 
     return embed
-
 
 def embed_stats_duel(user_name: str, value: dict[str, int]) -> disnake.Embed:
     all_games, win_games = value['all_games'], value['win_games']
@@ -110,34 +105,40 @@ def embed_stats_duel(user_name: str, value: dict[str, int]) -> disnake.Embed:
 
     return embed
 
-
 def embed_user_info(user_name: str, value: dict[str, int]) -> disnake.Embed:
     title = f''
     descr = f''
-    
     color = 0x187CFC
 
     embed = disnake.Embed(title=title, description=descr, color=color)
 
     return embed
 
-
 def embed_task_msg(number_task: int, row: dict) -> list:
     '''Создание embed для таска'''
 
     title = f'Задача из {number_task}ого номера ЕГЭ по Информатике'
-    description = f"Тип задания: {row['type']}\n"
-    description += f"Сложность задания: {row['complexity']}\n"
+    description = f"Тип: {row['theme']}\n"
+    description += f"Сложность: {row['complexity']}\n"
+    description += f"Автор: {row['author']}\n"
     color = 0x53377A
     embeds = []
 
     if 'img' in row.keys():
-        for i in range(len(row['img'])):
-            description += row['condition'][i]
-            embed_i = disnake.Embed(color=color, description=description)
-            embed_i.set_image(file=row['img'][i])
-            embeds.append(embed_i)
-            description = ''
+        if len(row['img']) > 1:
+            for i in range(len(row['img'])):
+                description += row['condition'][i]
+                embed_i = disnake.Embed(color=color, description=description)
+                embed_i.set_image(file=row['img'][i])
+                embeds.append(embed_i)
+                description = ''
+        else:
+            description += 'Условие:\n'
+            description += f"{row['condition'][1]}"
+            embed = disnake.Embed(
+                title=title, description=description, color=color)
+            embed.set_image(file=row['img'][0])
+            embeds.append(embed)
     else:
         description += 'Условие:\n'
         description += f"{row['condition']}"
@@ -146,7 +147,6 @@ def embed_task_msg(number_task: int, row: dict) -> list:
         embeds.append(embed)
 
     return embeds
-
 
 def embed_days_to_ege(t_ege: tuple[tuple[int, str], tuple[int, str],
                                    tuple[int, str]]) -> tuple[str, str, int]:
@@ -164,7 +164,6 @@ def embed_days_to_ege(t_ege: tuple[tuple[int, str], tuple[int, str],
 
     return (title, description, color)
 
-
 def embed_question() -> tuple[str, int]:
     db = DB()
     description = db.get_question_from_db()
@@ -172,18 +171,43 @@ def embed_question() -> tuple[str, int]:
 
     return (description, color)
 
-
 def embed_rules_lucky_game(timeout: int) -> disnake.Embed:
-    title = 'Игра Угадай число'
-    descr = 'Правила игры очень просты:\n'
-    descr += '    • загадано целое число от 1 до 100 (включительно)\n'
-    descr += '    • у тебя 6 попыток\n'
-    descr += f'   • на каждый ответ у тебя даётся {timeout} секунд\n'
-    descr += '    • при каждой попытке ты будешь знать больше/меньше'
-    descr += 'исходного числа ты находишься\n'
-    descr += 'В строке должно находится только число (без посторонних символов).'
+    d_rules = lucky_number_describe(timeout)
     color = 0x187CFC
 
-    embed = disnake.Embed(title=title, description=descr, color=color)
+    embed = disnake.Embed(title=d_rules['title'],
+                          description=d_rules['description'], color=color)
+
+    return embed
+
+def embed_moderator_panel(d_embed: dict[str, str]) -> disnake.Embed:
+    color = 0x38016b
+    embed = disnake.Embed(
+        title=d_embed['title'], description=d_embed['description'],
+        color=color)
+
+    return embed
+
+def embed_games_panel(d_embed: dict[str, str]) -> disnake.Embed:
+    color = 0x0073ff
+    embed = disnake.Embed(
+        title=d_embed['title'], description=d_embed['description'],
+        color=color)
+
+    return embed
+
+def embed_user_panel(d_embed: dict[str, str]) -> disnake.Embed:
+    color = 0x0e5c00
+    embed = disnake.Embed(
+        title=d_embed['title'], description=d_embed['description'],
+        color=color)
+
+    return embed
+
+def embed_shop_panel(d_embed: dict[str, str]) -> disnake.Embed:
+    color = 0x0ea180 
+    embed = disnake.Embed(
+        title=d_embed['title'], description=d_embed['description'],
+        color=color)
 
     return embed

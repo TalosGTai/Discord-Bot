@@ -20,16 +20,13 @@ class User:
         self.lucky_current_game = -1
         self.rate = self.calc_rate()
 
-
     def set_lucky_start_game(self):
         ''' Значение по умолчанию для "угадай число" '''
 
         self.lucky_current_game = -1
 
-
     def days_on_server(self) -> int:
         return date_to_days(self.live_server)
-    
     
     def calc_rate(self) -> int:
         '''Формула рассчёта рейтинга пользователя'''
@@ -37,11 +34,10 @@ class User:
         self.rate = self.count_messages * 0.01 + self.count_req_help * \
             0.15 + self.count_done_help * 0.8 + self.count_projects * 3.0 + \
             self.duel_all_games * 0.01 + self.duel_win_games * 0.03 + \
-            self.days_on_server * 0.01 + self.bonus_rate
+            self.days_on_server() * 0.01 + self.bonus_rate
         self.rate = to_two_digits(self.rate)
 
         return self.rate
-
 
     def user_info(self) -> dict[str, int]:
         dict_user: dict = {}
@@ -55,13 +51,11 @@ class User:
 
         return dict_user
 
-
     def duel_stats(self) -> str:
         msg = f'Всего игр/побед: {self.duel_all_games}/{self.duel_win_games}'
 
         return msg
     
-
     def lucky_stats(self) -> str:
         msg = f'Всего игр/побед: {self.lucky_all_games}/{self.lucky_win_games}'
 

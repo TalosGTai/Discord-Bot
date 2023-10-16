@@ -9,8 +9,6 @@ class Server(commands.Cog):
 
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
-        self.git_update_auto.start()
-
 
     @commands.command()
     @commands.has_permissions(administrator=True)
@@ -20,11 +18,10 @@ class Server(commands.Cog):
                 try:
                     self.bot.load_extension(
                         f'Discord.src.cogs.{filename[:-3]}')
-                    print(f'Разрешение {filename[:-3]} успешно загружено.')
+                    print(f'Расширение {filename[:-3]} успешно загружено.')
                 except Exception as ex:
                     print(f'Не удалось загрузить {filename[:-3]}.', ex)
         await ctx.message.delete()
-
 
     @commands.command()
     @commands.has_permissions(administrator=True)
@@ -37,7 +34,6 @@ class Server(commands.Cog):
             print(f'Не удалось загрузить {extension}.', ex)
             print(Exception)
         await ctx.message.delete()
-
 
     @commands.command()
     @commands.has_permissions(administrator=True)
@@ -52,7 +48,6 @@ class Server(commands.Cog):
             print(f'Не удалось перезагрузить {extension}.', ex)
         await ctx.message.delete()
 
-
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def unload(self, ctx, extension):
@@ -64,9 +59,7 @@ class Server(commands.Cog):
             print(f'Не удалось выгрузить {extension}.', ex)
         await ctx.message.delete()
 
-
-    @tasks.loop(hours=12)
-    async def git_update_auto(self):
+    '''async def git_update_auto(self):
         path = f'dina.py'
         repo = Repo(path, search_parent_directories=True)
 
@@ -76,8 +69,7 @@ class Server(commands.Cog):
             print('Загружена последняя версия.')
         else:
             print('Репозитория не существует.')
-
-
+    '''
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def git_update(self, inter: disnake.ApplicationCommandInteraction):
@@ -90,7 +82,6 @@ class Server(commands.Cog):
             print('Загружена последняя версия.')
         else:
             print('Репозитория не существует.')
-
 
 def setup(bot: commands.Bot):
     bot.add_cog(Server(bot))

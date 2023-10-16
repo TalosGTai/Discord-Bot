@@ -6,7 +6,9 @@ from src.functions.main_func import date_to_days, get_days
 from src.functions.embeds import embed_task_msg, embed_days_to_ege,\
     embed_wrong_channel
 from src.functions.discord import find_channel_by_name
-from src.modules.row_buttons import RowButtons
+from disnake import Embed
+from src.modules.ege_buttons import EgeButtons
+from src.data.data_base import DB
 
 
 class Ege(commands.Cog):
@@ -14,7 +16,6 @@ class Ege(commands.Cog):
 
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
-
 
     @commands.slash_command(name='дней_до_егэ')
     async def ege_days(self, inter: disnake.ApplicationCommandInteraction):
@@ -51,30 +52,36 @@ class Ege(commands.Cog):
         
         await inter.send(embed=embed)
     
-
     @commands.slash_command(name='задачи_егэ_инф')
     async def tasks(self, 
      inter: disnake.ApplicationCommandInteraction,
         номер: int = 8, сложность: str = 'Средняя'):
-        number_task, complexity = номер, сложность
         '''Реши задачу из любого номера ЕГЭ по Информатике'''
         
-        channels = ['инфа-задачи', 'группа-орлы', 'группа-убийцы', 'кругосветка-pro']
-        
+        channels = ['помощь-с-егэ', 'группа-орлы', 'группа-убийцы',
+                    'помощь-с-кодом']
+        number_task, complexity = номер, сложность
+
         if str(inter.guild.get_channel(inter.channel.id)) in channels or \
                 inter.author.name == 'GTai'.lower():
-            lst_tasks = [2, 8, 15, 24]
+            lst_tasks = [1, 2, 8, 13, 15, 23, 24]
             types_complexity = ['Лёгкая', 'Средняя', 'Сложная']
             complexity = complexity[0].upper() + complexity.lower()[1::]
 
             if number_task in lst_tasks and complexity in types_complexity:
                 row = get_task(number_task, complexity)
-                embed = embed_task_msg(number_task, row)
+                
+                if type(row) != str:
+                    embed = embed_task_msg(number_task, row)
 
-                await inter.send(embeds=embed, view=RowButtons(row['answer']))
+                    await inter.send(embeds=embed,
+                                     view=EgeButtons(row['answer']))
 
-                if 'txt' in row.keys():
-                    await inter.send(file=row['txt'])
+                    if 'txt' in row.keys():
+                        await inter.send(file=row['txt'])
+                else:
+                    msg = row
+                    await inter.send(msg)
             else:
                 msg = f'Выбери номер из {lst_tasks} и сложность из {types_complexity}'
                 await inter.send(msg)
@@ -84,19 +91,14 @@ class Ege(commands.Cog):
             
             await inter.send(embed=embed)
 
+    test_choice = commands.option_enum({'test1': 'ok', 'test2': 'haha'})
 
     @commands.has_permissions(administrator=True)
     @commands.slash_command(name='тест')
-    async def test(self, inter: disnake.GuildCommandInteraction):
-        #file = disnake.File(fp='S:/Programming/DB/ege_2/1.1.png')
-        #embed = disnake.Embed(title='Test img',
-        #    description='some text here')
-        #embed.set_image(file=file)
-        for guild in self.bot.guilds:
-            for channel in guild.channels:
-                if channel.name == 'вопросы-от-ведьмачки':
-                    await inter.send(channel.mention)
-        await inter.send(inter.author.display_name)
+    async def test(self, 
+                   inter: disnake.ApplicationCommandInteraction,
+                   t: test_choice):
+        await inter.send(t)
 
 
 def setup(bot: commands.Bot):
