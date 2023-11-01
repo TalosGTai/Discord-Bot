@@ -10,8 +10,8 @@ from src.functions.discord import find_user
 
 
 bot = commands.Bot(command_prefix=settings['prefix'],
-                   intents=disnake.Intents().all(),
-                   test_guilds=[settings['server']])
+                   intents=disnake.Intents().all())
+                   # test_guilds=[settings['server']])
 
 
 @bot.event
@@ -22,6 +22,7 @@ async def on_ready():
         if filename.endswith('.py'):
             print(filename[:-3])
             bot.load_extension(f'src.cogs.{filename[:-3]}')
+    bot.load_extension('src.bot.cogs.{actions}')
     print('Все модули загружены.')
 
 
@@ -34,6 +35,6 @@ async def on_member_join(member: disnake.Member):
         new_user = User(member_name)
         create_user(new_user)
 
-    #await member.send(embeds=embeds_welcome(bot, member))
+    await member.send(embeds=embeds_welcome(bot, member))
 
 bot.run(settings['token'])

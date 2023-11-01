@@ -270,7 +270,8 @@ def form_lucky_stats_dict(user_name: str):
         'all_games': get_all_games_lucky(user_name),
         'win_games': get_win_games_lucky(user_name),
     }
-    info_dict['wr'] = "%.2f" % (info_dict['win_games'] / info_dict['all_games'] * 100)
+    if not info_dict['all_games']: info_dict['wr'] = 0
+    else: info_dict['wr'] = "%.2f" % (info_dict['win_games'] / info_dict['all_games'] * 100)
     return info_dict
 
 def form_duel_stats_dict(user_name: str):
@@ -278,5 +279,6 @@ def form_duel_stats_dict(user_name: str):
         'all_games': get_all_games_duel(user_name),
         'win_games': get_win_games_duel(user_name),
     }
-    info_dict['wr'] = "%.2f" % (info_dict['win_games'] / info_dict['all_games'] * 100)
+    if not info_dict['all_games']: info_dict['wr'] = 0
+    else: info_dict['wr'] = "%.2f" % (info_dict['win_games'] / info_dict['all_games'] * 100)
     return info_dict

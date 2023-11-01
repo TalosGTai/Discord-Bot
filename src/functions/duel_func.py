@@ -5,7 +5,7 @@ from src.functions.discord import get_user_rate
 
 def duel_algo(user_1: str, user_2: str) -> dict:
     all_rate = get_user_rate(user_1) + get_user_rate(user_2)
-    winrate_user_1 = int(get_user_rate(user_1) / all_rate * 100)
+    winrate_user_1 = 0 if not all_rate else int(get_user_rate(user_1) / all_rate * 100)
 
     # чтобы не было дуэлей 100-0
     if winrate_user_1 == 0:
