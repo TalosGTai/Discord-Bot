@@ -224,3 +224,61 @@ def purchase_item(item: dict, user_name: str) -> bool:
     except Exception as exception:
         print(f'Error in functions purchase_item: {exception}')
         return False
+
+def get_all_games_lucky(user_name: str):
+    db = DB()
+    user_id = db.select_user(user_name)
+
+    if user_id is not None:
+        return db.get_all_games_lucky(user_id)
+    return None
+
+def get_win_games_lucky(user_name: str):
+    db = DB()
+    user_id = db.select_user(user_name)
+
+    if user_id is not None:
+        return db.get_win_games_lucky(user_id)
+    return None
+
+def get_all_games_duel(user_name: str):
+    db = DB()
+    user_id = db.select_user(user_name)
+
+    if user_id is not None:
+        return db.get_duel_all_games(user_id)
+    return None
+
+def get_win_games_duel(user_name: str):
+    db = DB()
+    user_id = db.select_user(user_name)
+
+    if user_id is not None:
+        return db.get_duel_win_games(user_id)
+    return None
+
+def update_lucky_stats(user_name: str, result: int):
+    db = DB()
+    user_id = db.select_user(user_name)
+
+    if user_id is not None:
+        return db.update_table_lucky_number(user_name, result)
+    return None
+
+def form_lucky_stats_dict(user_name: str):
+    info_dict = {
+        'all_games': get_all_games_lucky(user_name),
+        'win_games': get_win_games_lucky(user_name),
+    }
+    if not info_dict['all_games']: info_dict['wr'] = 0
+    else: info_dict['wr'] = "%.2f" % (info_dict['win_games'] / info_dict['all_games'] * 100)
+    return info_dict
+
+def form_duel_stats_dict(user_name: str):
+    info_dict = {
+        'all_games': get_all_games_duel(user_name),
+        'win_games': get_win_games_duel(user_name),
+    }
+    if not info_dict['all_games']: info_dict['wr'] = 0
+    else: info_dict['wr'] = "%.2f" % (info_dict['win_games'] / info_dict['all_games'] * 100)
+    return info_dict

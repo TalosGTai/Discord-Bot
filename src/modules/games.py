@@ -1,35 +1,33 @@
 from src.functions.main_func import load_phrases
 from src.functions.embeds import embed_by_phrase, \
-    embed_wrong_channel, embed_rules_lucky_game, embed_stats_lucky, embed_stats_duel, embed_games_panel
+    embed_wrong_channel, embed_rules_lucky_game
 from src.functions.discord import find_user, find_channel_by_name,\
-    get_user_money, update_duel_stats, add_user_money, update_lucky_stats, \
-    form_lucky_stats_dict, form_duel_stats_dict
+    get_user_money, update_duel_stats, add_user_money, update_lucky_stats
 from src.functions.duel_func import duel_algo, calculate_money_win
 from disnake.ext import commands
 import disnake
 from random import randint
 from asyncio.exceptions import TimeoutError
-from src.functions.describe import duel_describe
+from src.modules.enemy_input_modal import EnemyModal
 
 
-class Games(commands.Cog):
+class Games:
     '''Игры'''
 
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
-    @commands.slash_command(name='дуэль')
-    async def duel(self, inter: disnake.ApplicationCommandInteraction,
-                   противник: str):
+    async def duel(self, inter: disnake.MessageInteraction):
         '''Вызов на дуэль другого игрока'''
         #
         # channels = ['игры']
         #
         # if str(inter.guild.get_channel(inter.channel.id)) in channels or \
         #         inter.author.name == 'gtai':
-        await inter.send(embeds=[embed_games_panel(duel_describe()), embed_stats_duel(inter.author.name,
-                                                         form_duel_stats_dict(inter.author.name))])
-        hero = противник
+        enemy_modal: EnemyModal = EnemyModal(inter, self.bot)
+        enemy: disnake.ModalInteraction = await enemy_modal.send_enemy_modal()
+        hero = enemy.text_values["enemy"]
+
         author = inter.author.name
         user2 = find_user(hero)
 
@@ -84,10 +82,8 @@ class Games(commands.Cog):
         #
         #     await inter.send(embed=embed)
 
-    @commands.slash_command(name='угадай_число')
-    async def lucky_number(self, inter: disnake.ApplicationCommandInteraction):
+    async def lucky_number(self, inter: disnake.MessageInteraction):
         '''Угадай число'''
-        #
         # channels = ['игры']
         #
         # if str(inter.guild.get_channel(inter.channel.id)) in channels or \
@@ -102,8 +98,6 @@ class Games(commands.Cog):
         msg_less = 'Я загадала число меньше твоего.'
         msg_lose = 'К сожалению, ты проиграл. Загаданное число: number.'
 
-        await inter.send(embeds=[embed_rules_lucky_game(time_timeout), embed_stats_lucky(inter.author.name,
-                                                         form_lucky_stats_dict(inter.author.name))])
         # проверка на начало игры
         if game == -1:
             game = randint(1, 100)
@@ -282,7 +276,8 @@ class Games(commands.Cog):
         #
         #     await inter.send(embed=embed)
 
-    # @commands.slash_command(name='ограбить')
+        # @commands.slash_command(name='ограбить')
+
     async def crime(self, inter: disnake.ApplicationCommandInteraction,
                     hero: str):
         '''Ограбить игрока.
@@ -290,7 +285,3 @@ class Games(commands.Cog):
         но есть шанс быть пойманным. Вероятность успеха зависит от твоих навыков '''
 
         pass
-
-
-def setup(bot: commands.Bot):
-    bot.add_cog(Games(bot))
