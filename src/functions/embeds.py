@@ -211,3 +211,17 @@ def embed_shop_panel(d_embed: dict[str, str]) -> disnake.Embed:
         color=color)
 
     return embed
+
+def embed_stats_lucky(user_name: str, value: dict[str, int]) -> disnake.Embed:
+    all_games, win_games = value['all_games'], value['win_games']
+    wr = value['wr']
+
+    title = f'Статы {user_name} в игре Угадай число'
+    descr = f'Всего игр: {all_games}\n'
+    descr += f'Побед: {win_games}\n'
+    descr += f'Процент побед: {wr}'
+    color = 0x187CFC
+
+    embed = disnake.Embed(title=title, description=descr, color=color)
+
+    return embed
