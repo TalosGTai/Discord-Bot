@@ -8,11 +8,15 @@ import datetime as DT
 class DB:
     def __init__(self) -> None:
         self.__db_discord: mysql.connector.connection = None
-        self.__db_course: mysql.connector.connection = None
-        self.open_connect_courses()
         self.open_connect_discord()
         self.__cursor_discord = self.__db_discord.cursor()
-        self.__cursor_course = self.__db_course.cursor()
+        #
+        # self.__db_discord: mysql.connector.connection = None
+        # self.__db_course: mysql.connector.connection = None
+        # self.open_connect_courses()
+        # self.open_connect_discord()
+        # self.__cursor_discord = self.__db_discord.cursor()
+        # self.__cursor_course = self.__db_course.cursor()
 
     def open_connect_discord(self):
         try:
@@ -49,7 +53,6 @@ class DB:
         '''Ищем пользователя в БД по имени
         возвращаем id
         '''
-        
         query = f"SELECT idUser \
         FROM users \
         WHERE name=\"{user_name}\""
@@ -59,7 +62,6 @@ class DB:
             self.__cursor_discord.execute(query)
             result = self.__cursor_discord.fetchone()
             self.__cursor_discord.close()
-            
             if result is None:
                 return result
             return result[0]
@@ -149,6 +151,58 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [get_user_rate], error: {error}')
+
+        return None
+
+    def get_all_games_lucky(self, user_id: int) -> int | None:
+        '''Ищем количество всех дуэлей пользователя по id'''
+
+        query = f"SELECT all_games \
+            FROM lucky_number \
+            WHERE idLucky=\"{user_id}\""
+
+        try:
+            self.__cursor_discord = self.__db_discord.cursor()
+            self.__cursor_discord.execute(query)
+            result = self.__cursor_discord.fetchone()
+            self.__cursor_discord.close()
+
+            return result[0]
+        except mysql.connector.InternalError as internal_error:
+            print(
+                f'Error with cursor in functions [get_user_done_help], error: {internal_error}')
+        except mysql.connector.ProgrammingError as programming_error:
+            print(
+                f'Error with code, probably with syntax in functions [get_user_done_help], error: {programming_error}')
+        except mysql.connector.Error as error:
+            print(
+                f'Some error in functions [get_user_done_help], error: {error}')
+
+        return None
+
+    def get_win_games_lucky(self, user_id: int) -> int | None:
+        '''Ищем количество всех дуэлей пользователя по id'''
+
+        query = f"SELECT win_games \
+            FROM lucky_number \
+            WHERE idLucky=\"{user_id}\""
+
+        try:
+            self.__cursor_discord = self.__db_discord.cursor()
+            self.__cursor_discord.execute(query)
+            result = self.__cursor_discord.fetchone()
+            self.__cursor_discord.close()
+
+            return result[0]
+        except mysql.connector.InternalError as internal_error:
+            print(
+                f'Error with cursor in functions [get_user_done_help], error: {internal_error}')
+        except mysql.connector.ProgrammingError as programming_error:
+            print(
+                f'Error with code, probably with syntax in functions [get_user_done_help], error: {programming_error}')
+        except mysql.connector.Error as error:
+            print(
+                f'Some error in functions [get_user_done_help], error: {error}')
 
         return None
     
@@ -719,6 +773,28 @@ class DB:
             print(
                 f'Some error in functions [set_user_date], error: {error}')
 
+    def get_count_records_in_table(self, table: str) -> int | None:
+        '''Количество записей в таблице'''
+
+        query = f"SELECT count({'id_'+table}) \
+        FROM {table}"
+
+        try:
+            self.__cursor_discord = self.__db_discord.cursor()
+            self.__cursor_discord.execute(query)
+            result = self.__cursor_discord.fetchone()
+
+            return int(result[0])
+        except mysql.connector.InternalError as internal_error:
+            print(
+                f'Error with cursor in functions [get_count_records_in_table], error: {internal_error}')
+        except mysql.connector.ProgrammingError as programming_error:
+            print(
+                f'Error with code, probably with syntax in functions [get_count_records_in_table], error: {programming_error}')
+        except mysql.connector.Error as error:
+            print(
+                f'Some error in functions [get_count_records_in_table], error: {error}')
+
     def insert_users(self, values: list, new_id: int):
         '''Вставка нового пользователя в БД [users]'''
 
@@ -749,9 +825,9 @@ class DB:
         '''Добавление статистики пользователя в таблицу [stats] БД'''
 
         query = "INSERT INTO stats \
-        (count_msg, req_help, done_help, count_proj, bonus_rate, rate, idDuel, "\
-        "id_lucky_number, id_hero) \
-        VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        (idStat, count_msg, req_help, done_help, count_proj, bonus_rate, rate, idDuel, " \
+                "id_lucky_number, id_hero) \
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
         try:
             self.__cursor_discord = self.__db_discord.cursor()
@@ -773,17 +849,17 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [insert_stats], error: {error}')
-            
+
     def insert_duel(self, values: list, new_id: int):
         '''Добавление статистики для дуэлей пользователя в таблицу [duels] БД'''
 
         query = "INSERT INTO duel \
-        (idStats, all_games, win_games) \
-        VALUES ( %s, %s, %s)"
+        (idDuel, idStats, all_games, win_games) \
+        VALUES ( %s, %s, %s, %s)"
 
         try:
             self.__cursor_discord = self.__db_discord.cursor()
-            val = (new_id, values[0], values[1])
+            val = (new_id, new_id, 0, 0)
             self.__cursor_discord.execute(query, val)
             self.__db_discord.commit()
             self.__cursor_discord.close()
@@ -807,7 +883,7 @@ class DB:
         query = f'UPDATE duel \
         SET all_games = all_games + 1, win_games = win_games + {result_duel} \
         WHERE idDuel = {idStat}'
-        
+
         try:
             self.__cursor_discord = self.__db_discord.cursor()
             self.__cursor_discord.execute(query)
@@ -821,28 +897,6 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [update_duel_stats], error: {error}')
-
-    def get_count_records_in_table(self, table: str) -> int | None:
-        '''Количество записей в таблице'''
-
-        query = f"SELECT count({'id_'+table}) \
-        FROM {table}"
-
-        try:
-            self.__cursor_discord = self.__db_discord.cursor()
-            self.__cursor_discord.execute(query)
-            result = self.__cursor_discord.fetchone()
-
-            return int(result[0])
-        except mysql.connector.InternalError as internal_error:
-            print(
-                f'Error with cursor in functions [get_count_records_in_table], error: {internal_error}')
-        except mysql.connector.ProgrammingError as programming_error:
-            print(
-                f'Error with code, probably with syntax in functions [get_count_records_in_table], error: {programming_error}')
-        except mysql.connector.Error as error:
-            print(
-                f'Some error in functions [get_count_records_in_table], error: {error}')
 
     def update_table_stats(self, user_name: str, values: list):
         '''Обновление таблицы [stats] пользователя'''
@@ -873,7 +927,7 @@ class DB:
 
     def update_table_users(self, user_name: str, values: list):
         '''Обновление таблицы [users] пользователя'''
-        
+
         id_user = self.select_user(user_name)
 
         if id_user is not None:
@@ -896,7 +950,7 @@ class DB:
             except mysql.connector.Error as error:
                 print(
                     f'Some error in functions [update_table_users], error: {error}')
-    
+
     def insert_table_warns(self, values: list):
         '''Задание новых значений/столбцов для таблицы users'''
 
@@ -925,8 +979,8 @@ class DB:
         '''Задание новых значений для таблицы lucky_number'''
 
         query = "INSERT INTO lucky_number \
-        (win_games, all_games) \
-        VALUES ( %s, %s)"
+        (idLucky, win_games, all_games) \
+        VALUES ( %s, %s, %s)"
 
         try:
             self.__cursor_discord = self.__db_discord.cursor()
@@ -944,3 +998,24 @@ class DB:
         except mysql.connector.Error as error:
             print(
                 f'Some error in functions [lucky_number], error: {error}')
+
+    def update_table_lucky_number(self, user_name: str, result_lucky: int):
+        idStat = self.select_user(user_name)
+
+        query = f'UPDATE lucky_number \
+        SET all_games = all_games + 1, win_games = win_games + {result_lucky} \
+        WHERE idLucky = {idStat}'
+
+        try:
+            self.__cursor_discord = self.__db_discord.cursor()
+            self.__cursor_discord.execute(query)
+            self.__db_discord.commit()
+        except mysql.connector.InternalError as internal_error:
+            print(
+                f'Error with cursor in functions [update_duel_stats], error: {internal_error}')
+        except mysql.connector.ProgrammingError as programming_error:
+            print(
+                f'Error with code, probably with syntax in functions [update_duel_stats], error: {programming_error}')
+        except mysql.connector.Error as error:
+            print(
+                f'Some error in functions [update_duel_stats], error: {error}')
